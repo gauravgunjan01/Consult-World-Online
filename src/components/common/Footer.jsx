@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Mail, Phone } from 'lucide-react';
 import { support_email, website_name } from '../../utils/constants';
-import { generateTokenByRequestPermission } from '../../config/firebase-config';
 import { FacebookSvg, InstagramSvg, LinkdInSvg, LocationSvg, TwitterSvg, WhatsappSvg } from '../../assets/svg';
 
 import Logo from '../../assets/images/logo/logo.png';
@@ -11,21 +10,6 @@ import * as AuthActions from '../../redux/actions/authAction';
 
 const Footer = () => {
     const dispatch = useDispatch();
-
-    // Todo : Astrolger Login Start
-    const handleOpenLoginAstrologerModal = async () => {
-        if (!("Notification" in window)) {
-            alert("This browser does not support desktop notifications.");
-        } else if (Notification.permission === "granted") {
-            generateTokenByRequestPermission();
-            dispatch(AuthActions.setAstrologerLoginModalOpen(true));
-        } else if (Notification.permission === "denied") {
-            alert("You have blocked notifications. Please enable them in your browser settings.");
-
-        } else if (Notification.permission === "default") {
-            const permission = await Notification.requestPermission();
-        }
-    };
 
     return (
         <footer className='bg-primary text-white text-sm px-5 md:px-10 lg:px-20 py-20 lg:pb-24 font-light'>
@@ -45,7 +29,7 @@ const Footer = () => {
 
                             <div className='flex flex-wrap gap-x-10 gap-y-2'>
                                 <Link onClick={() => window?.scrollTo({ top: 0, behavior: 'smooth' })} to={'consultant-signup'} className='bg-gradient-to-r from-blue-700 via-primary to-[#9544EB] bg-clip-text hover:text-transparent transition-all duration-500'>Astrologer Signup</Link>
-                                <button onClick={handleOpenLoginAstrologerModal} className='bg-gradient-to-r from-blue-700 via-primary to-[#9544EB] bg-clip-text hover:text-transparent transition-all duration-500'>Astrologer login</button>
+                                <button onClick={() => dispatch(AuthActions.requestToggleAstrologerLoginModal())} className='bg-gradient-to-r from-blue-700 via-primary to-[#9544EB] bg-clip-text hover:text-transparent transition-all duration-500'>Astrologer login</button>
                             </div>
                         </div>
                     </div>

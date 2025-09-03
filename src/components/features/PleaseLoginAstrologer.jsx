@@ -15,7 +15,7 @@ const PleaseLoginAstrologer = () => {
             alert("This browser does not support desktop notifications.");
         } else if (Notification.permission === "granted") {
             generateTokenByRequestPermission();
-            dispatch(AuthActions.setAstrologerLoginModalOpen(true));
+            dispatch(AuthActions.toggleAstrologerLoginModal(true));
 
         } else if (Notification.permission === "denied") {
             alert("You have blocked notifications. Please enable them in your browser settings.");

@@ -6,11 +6,11 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { MessageCircleMore, PhoneCall, Video } from 'lucide-react';
 
 import { api_urls } from '../../utils/api-urls';
-import { generateTokenByRequestPermission } from '../../config/firebase-config';
 import { CrossSvg, HamburgerSvg, PersonSvg, ProfileSvg } from '../../assets/svg';
 
 import Logo from '../../assets/images/logo/logo.png';
 import * as AuthActions from '../../redux/actions/authAction';
+import * as CommonActions from '../../redux/actions/commonAction';
 
 Modal.setAppElement('#root');
 
@@ -20,17 +20,15 @@ const Header = () => {
     const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
 
-    const { webLanguageData } = useSelector(state => state?.commonReducer);
-    const { userCustomerDataById, userAstrologerDataById, userAstrologerPendingQueueListData, userCustomerCompletedQueueListData } = useSelector(state => state?.userReducer);
-
-    const [shownav, setShownav] = useState(false);
+    const { webLanguageData, isHamburgerMenuOpen } = useSelector(state => state?.commonReducer);
+    const { userCustomerDataById, userAstrologerDataById } = useSelector(state => state?.userReducer);
     const [screenScroll, setScreenScroll] = useState(false);
 
     //! Handle Resize and Scroll Event Listener 
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth > 500) {
-                setShownav(false)
+                dispatch(CommonActions.toggleHamburgerMenu(false));
             }
         };
 
@@ -41,7 +39,7 @@ const Header = () => {
 
         const handleClickOutside = (event) => {
             if (navRef.current && !navRef.current.contains(event.target)) {
-                setShownav(false);
+                dispatch(CommonActions.toggleHamburgerMenu(false));;
             }
         };
 
@@ -49,7 +47,7 @@ const Header = () => {
         document.addEventListener('mousedown', handleClickOutside);
         document.addEventListener('scroll', handleScroll);
 
-        if (shownav) {
+        if (isHamburgerMenuOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';
@@ -60,38 +58,7 @@ const Header = () => {
             document.removeEventListener('mousedown', handleClickOutside);
             document.removeEventListener('scroll', handleScroll);
         };
-    }, [shownav]);
-
-    // Todo : Astrolger Login Start
-    const handleOpenLoginAstrologerModal = async () => {
-        setShownav(false);
-        if (!("Notification" in window)) {
-            alert("This browser does not support desktop notifications.");
-        } else if (Notification.permission === "granted") {
-            generateTokenByRequestPermission();
-            dispatch(AuthActions.setAstrologerLoginModalOpen(true));
-        } else if (Notification.permission === "denied") {
-            alert("You have blocked notifications. Please enable them in your browser settings.");
-        } else if (Notification.permission === "default") {
-            const permission = await Notification.requestPermission();
-        }
-    };
-
-    // Todo : Customer Login Start
-    const handleOpenLoginCustomerModal = async () => {
-        setShownav(false);
-        if (!("Notification" in window)) {
-            alert("This browser does not support desktop notifications.");
-        } else if (Notification.permission === "granted") {
-            generateTokenByRequestPermission();
-            dispatch(AuthActions.setCustomerLoginModalOpen(true));
-        } else if (Notification.permission === "denied") {
-            alert("You have blocked notifications. Please enable them in your browser settings.");
-
-        } else if (Notification.permission === "default") {
-            const permission = await Notification.requestPermission();
-        }
-    };
+    }, [isHamburgerMenuOpen]);
 
     return (
         <>
@@ -136,7 +103,7 @@ const Header = () => {
                                 )}
                             </NavLink>
 
-                            {!userCustomerDataById && !userAstrologerDataById && <div onClick={handleOpenLoginCustomerModal} className='flex items-center gap-1.5 cursor-pointer text-black py-2.5 rounded-full'><div className='-mt-1'><div className='h-9 w-9 border border-primary rounded-full flex items-center justify-center bg-primary text-white'><PersonSvg h='20' w='20' /></div></div><div>Sign In</div></div>}
+                            {!userCustomerDataById && !userAstrologerDataById && <div onClick={() => dispatch(AuthActions.requestToggleCustomerLoginModal())} className='flex items-center gap-1.5 cursor-pointer text-black py-2.5 rounded-full'><div className='-mt-1'><div className='h-9 w-9 border border-primary rounded-full flex items-center justify-center bg-primary text-white'><PersonSvg h='20' w='20' /></div></div><div>Sign In</div></div>}
 
                             {userAstrologerDataById &&
                                 <div className='group relative text-black max-lg:hidden'>
@@ -184,89 +151,85 @@ const Header = () => {
                             }
                         </nav>
 
-                        <div onClick={() => setShownav(!shownav)} className={`cursor-pointer lg:hidden ${shownav == true && 'invisible'}`}><HamburgerSvg h={'30'} w={'30'} /></div>
+                        <div onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} className={`cursor-pointer lg:hidden ${isHamburgerMenuOpen == true && 'invisible'}`}><HamburgerSvg h={'30'} w={'30'} /></div>
                     </main>
 
 
-                    <main ref={navRef} className={`pb-40 flex flex-col gap-5 p-5 absolute h-full bg-white text-black border-r border-primary shadow-lg top-0 z-50 min-h-[100vh] w-[80vw] transition-all duration-500 overflow-y-scroll ${shownav ? 'left-0' : 'left-[-200vw]'}`}>
+                    <main ref={navRef} className={`pb-40 flex flex-col gap-5 p-5 absolute h-full bg-white text-black border-r border-primary shadow-lg top-0 z-50 min-h-[100vh] w-[80vw] transition-all duration-500 overflow-y-scroll ${isHamburgerMenuOpen ? 'left-0' : 'left-[-200vw]'}`}>
 
-                        <div onClick={() => setShownav(!shownav)} className='flex items-center justify-center gap-2 text-sm font-semibold cursor-pointer'>CLOSE <CrossSvg w={'20'} /></div>
+                        <div onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} className='flex items-center justify-center gap-2 text-sm font-semibold cursor-pointer'>CLOSE <CrossSvg w={'20'} /></div>
                         <div className='text-center font-semibold text-sm'>WHAT ARE YOU LOOKING FOR?</div>
 
                         <div className='flex flex-col'>
                             {userCustomerDataById && <>
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/my-account?active-tab=update-profile" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Account</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/my-account?active-tab=update-profile" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Account</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/talk-to-consultant" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Talk To Astrologer</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/talk-to-consultant" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Talk To Astrologer</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/chat-with-consultant" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Chat With Astrologer</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/chat-with-consultant" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Chat With Astrologer</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/my-message" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}><div className='flex gap-1 items-center'><p>My Message</p></div></NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/my-message" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}><div className='flex gap-1 items-center'><p>My Message</p></div></NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/book-puja" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Book Puja</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/book-puja" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Book Puja</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/astro-mall" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Astromall</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astro-mall" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Astromall</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/wallet-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Wallet</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/wallet-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Wallet</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/transaction-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Transaction</NavLink>
-                                </div>
-
-                                {/* <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/suggested-puja" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Suggested Puja</NavLink>
-                                </div> */}
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/my-order/puja" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Order</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/transaction-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Transaction</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/cart" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Cart</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/my-order/puja" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Order</NavLink>
+                                </div>
+
+                                <div className='flex items-center  border-b py-4 px-1'>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/cart" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Cart</NavLink>
                                 </div>
                             </>}
 
                             {userAstrologerDataById && <>
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/astrologer-dashboard/my-account" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Account</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/my-account" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Account</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/astrologer-dashboard/queue-list" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}><div className='flex gap-1 items-center'><p>Queue List</p> </div></NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/queue-list" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}><div className='flex gap-1 items-center'><p>Queue List</p> </div></NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/astrologer-dashboard/my-message" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Message</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/my-message" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Message</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/astrologer-dashboard/transaction-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Transaction History</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/transaction-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Transaction History</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/register-puja" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Register Puja</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/register-puja" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Register Puja</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/astrologer-dashboard/register-puja-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Register Puja History</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/register-puja-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Register Puja History</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => setShownav(!shownav)} to="/astrologer-dashboard/assigned-puja-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Assigned Puja History</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/assigned-puja-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Assigned Puja History</NavLink>
                                 </div>
                             </>}
 
@@ -279,10 +242,10 @@ const Header = () => {
                                 :
                                 <>
                                     <div className='flex items-center gap-1  border-b py-4'>
-                                        <div className='border-b-2 border-white'></div><div onClick={handleOpenLoginCustomerModal} className='cursor-pointer'>Login as Customer</div>
+                                        <div className='border-b-2 border-white'></div><div onClick={() => dispatch(AuthActions.requestToggleCustomerLoginModal())} className='cursor-pointer'>Login as Customer</div>
                                     </div>
                                     <div className='flex items-center gap-1 border-b py-4'>
-                                        <div className='border-b-2 border-white'></div><div onClick={handleOpenLoginAstrologerModal} className='cursor-pointer'>Login as Astrologer</div>
+                                        <div className='border-b-2 border-white'></div><div onClick={() => dispatch(AuthActions.requestToggleAstrologerLoginModal())} className='cursor-pointer'>Login as Astrologer</div>
                                     </div>
                                 </>
                             }
@@ -291,7 +254,7 @@ const Header = () => {
                 </article>
             </header>
 
-            {shownav && (<div className="fixed top-0 left-0 w-full h-full transition-all ease-in duration-300 bg-black bg-opacity-50 z-40" />)}
+            {isHamburgerMenuOpen && (<div className="fixed top-0 left-0 w-full h-full transition-all ease-in duration-300 bg-black bg-opacity-50 z-40" />)}
         </>
     )
 }

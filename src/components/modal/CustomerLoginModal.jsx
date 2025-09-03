@@ -21,7 +21,7 @@ const CustomerLoginModal = () => {
     const [resendTimer, setResendTimer] = useState(0);
 
     const handleLoginInputField = (value, country) => dispatch(AuthActions?.customerLoginInputField({ phone_number: value, country_code_length: country?.dialCode?.length })); //* Handle Input Field : Login
-    const handleCloseModal = () => dispatch(AuthActions.setCustomerLoginModalOpen(false));
+    const handleCloseModal = () => dispatch(AuthActions.toggleCustomerLoginModal(false));
 
     const handleLogin = () => {
         if (customerLoginInputFieldDetail?.phone_number?.length > 5) {

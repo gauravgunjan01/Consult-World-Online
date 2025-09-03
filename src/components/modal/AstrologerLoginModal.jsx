@@ -20,7 +20,7 @@ const AstrologerLoginModal = () => {
         setAstroFieldDetail({ ...astroFieldDetail, [name]: value })
     };
 
-    const handleCloseModal = () => dispatch(AuthActions.setAstrologerLoginModalOpen(false));
+    const handleCloseModal = () => dispatch(AuthActions.toggleAstrologerLoginModal(false));
 
     const handleLoginAstrolger = async () => {
         console.log(astroFieldDetail);
@@ -50,7 +50,7 @@ const AstrologerLoginModal = () => {
 
     return (
         <>
-            <Modal isOpen={isAstrologerLoginModalOpen} className="modal-content" overlayClassName="modal-overlay" closeTimeoutMS={200} style={{ content: { backgroundColor: 'transparent' } }}>
+            <Modal isOpen={isAstrologerLoginModalOpen} className="modal-content" onRequestClose={handleCloseModal} overlayClassName="modal-overlay" closeTimeoutMS={200} style={{ content: { backgroundColor: 'transparent' } }}>
                 <section className="relative flex items-center justify-center max-md:p-5 bg-white rounded-lg">
                     <div onClick={() => handleCloseModal()} className='cursor-pointer absolute text-primary right-5 top-5 z-10' ><CrossSvg strokeWidth='3' /></div>
 

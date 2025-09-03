@@ -5,11 +5,11 @@ const initialState = {
     socketConnectionStatus: false,
     isdownloadOurAppModalOpen: false,
     webLanguageData: null,
+    isHamburgerMenuOpen: false
 };
 
 const commonReducer = (state = initialState, actions) => {
     const { payload, type } = actions;
-    // console.log("Type ::: ", type);
 
     switch (type) {
         case actionTypes.SET_IS_LOADING:
@@ -26,6 +26,9 @@ const commonReducer = (state = initialState, actions) => {
 
         case actionTypes.WEB_LANGUAGE:
             return { ...state, webLanguageData: payload };
+
+        case actionTypes.TOGGLE_HAMBURGER_MENU:
+            return { ...state, isHamburgerMenuOpen: payload };
 
         default: {
             return state;

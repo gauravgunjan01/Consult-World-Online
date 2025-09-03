@@ -21,7 +21,7 @@ const ConsultantCard = ({ astrologer }) => {
             alert("This browser does not support desktop notifications.");
         } else if (Notification.permission === "granted") {
             generateTokenByRequestPermission();
-            dispatch(AuthActions.setCustomerLoginModalOpen(true));
+            dispatch(AuthActions.toggleCustomerLoginModal(true));
         } else if (Notification.permission === "denied") {
             alert("You have blocked notifications. Please enable them in your browser settings.");
 

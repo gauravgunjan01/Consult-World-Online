@@ -13,10 +13,10 @@ const authReducer = (state = initialState, actions) => {
         case actionTypes.CUSTOMER_LOGIN_INPUT_FIELD:
             return { ...state, customerLoginInputFieldDetail: payload };
 
-        case actionTypes.IS_CUSTOMER_LOGIN_MODAL_OPEN:
+        case actionTypes.TOGGLE_CUSTOMER_LOGIN_MODAL:
             return { ...state, isCustomerLoginModalOpen: payload };
 
-        case actionTypes.IS_ASTROLOGER_LOGIN_MODAL_OPEN:
+        case actionTypes.TOGGLE_ASTROLOGER_LOGIN_MODAL:
             return { ...state, isAstrologerLoginModalOpen: payload };
 
         default:
