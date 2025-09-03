@@ -5,7 +5,6 @@ import { Autocomplete } from '@react-google-maps/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { toaster } from '../../../utils/services/toast-service';
 import TopHeaderSection from '../../../components/common/TopHeaderSection';
-import { generateTokenByRequestPermission } from '../../../config/firebase-config';
 import * as UserActions from '../../../redux/actions/userAction';
 import * as AuthActions from '../../../redux/actions/authAction';
 
@@ -87,7 +86,7 @@ const Enquiry = () => {
         if (handleValidation()) {
             const payload = {
                 data: {
-                    customerId: userCustomerDataById?._id, full_name, gender, date_of_birth, time_of_birth, place_of_birth, latitude, longitude, email, mobile, amount: discount_amount,type
+                    customerId: userCustomerDataById?._id, full_name, gender, date_of_birth, time_of_birth, place_of_birth, latitude, longitude, email, mobile, amount: discount_amount, type
                 },
                 onComplete: () => navigate('/premium-service')
             }
@@ -97,21 +96,6 @@ const Enquiry = () => {
 
         } else {
             console.log('Validation Error !!!');
-        }
-    };
-
-    // Todo : Customer Login Start
-    const handleOpenLoginCustomerModal = async () => {
-        if (!("Notification" in window)) {
-            alert("This browser does not support desktop notifications.");
-        } else if (Notification.permission === "granted") {
-            generateTokenByRequestPermission();
-            dispatch(AuthActions.toggleCustomerLoginModal(true));
-        } else if (Notification.permission === "denied") {
-            alert("You have blocked notifications. Please enable them in your browser settings.");
-
-        } else if (Notification.permission === "default") {
-            const permission = await Notification.requestPermission();
         }
     };
 
@@ -190,11 +174,8 @@ const Enquiry = () => {
                     </div>
 
                     <div onClick={() => {
-                        if (userCustomerDataById) {
-                            handleSubmit()
-                        } else {
-                            handleOpenLoginCustomerModal();
-                        }
+                        if (userCustomerDataById) handleSubmit();
+                        else dispatch(AuthActions.requestToggleCustomerLoginModal());
                     }} className="cursor-pointer basis-full text-center bg-yellow-400 text-black font-semibold px-6 py-3 rounded hover:bg-yellow-300 transition">Proceed</div>
                 </form>
             </section>

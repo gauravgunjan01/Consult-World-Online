@@ -6,14 +6,16 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+
 import { Color } from '../../../assets/colors';
 import { api_urls } from '../../../utils/api-urls';
 import { CallSvg, ChatSvg } from '../../../assets/svg';
 import { IndianRupee } from '../../../utils/common-function';
-import { generateTokenByRequestPermission } from '../../../config/firebase-config';
+
 import OnlinePing from '../../../components/features/OnlinePing';
 import OfflinePing from '../../../components/features/OfflinePing';
 import DataNotFound from '../../../components/common/DataNotFound';
+
 import * as AuthActions from '../../../redux/actions/authAction';
 import * as AstrologerActions from '../../../redux/actions/astrologerAction';
 
@@ -50,20 +52,6 @@ const SingleAstrologer = () => {
         dispatch(AstrologerActions?.getAstrologerFollowedStatusByCustomer({ customerId: userCustomerDataById?._id, astrologerId }));
 
     }, []);
-
-    const handleOpenLoginCustomerModal = async () => {
-        if (!("Notification" in window)) {
-            alert("This browser does not support desktop notifications.");
-        } else if (Notification.permission === "granted") {
-            generateTokenByRequestPermission();
-            dispatch(AuthActions.toggleCustomerLoginModal(true));
-        } else if (Notification.permission === "denied") {
-            alert("You have blocked notifications. Please enable them in your browser settings.");
-
-        } else if (Notification.permission === "default") {
-            await Notification.requestPermission();
-        }
-    };
 
     return (
         <>
@@ -125,7 +113,6 @@ const SingleAstrologer = () => {
                 </section>
                 :
                 <section className='text-[15px] space-y-3'>
-                    {/* Top Section: Profile Info */}
                     <div className='flex gap-5 max-md:flex-col justify-between rounded-b-[3px] bg-[#F6F6F6] p-3 flex-1'>
                         <div className='flex max-md:flex-col gap-[20px]'>
                             <img className='max-md:rounded-[3px] rounded-md h-[300px] max-md:h-[300px] max-md:w-full w-[300px] border-2 border-primary_text_dark' src={api_urls + astrologerDataById?.profileImage} />
@@ -147,21 +134,8 @@ const SingleAstrologer = () => {
                                             const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", confirmButtonColor: Color.primary, cancelButtonText: "Cancel", showCancelButton: true, cancelButtonColor: Color.darkgrey });
                                             if (result.isConfirmed) navigate('/recharge');
                                         } else {
-                                            if (!("Notification" in window)) {
-                                                alert("This browser does not support desktop notifications.");
-                                            } else if (Notification.permission === "granted") {
-                                                if (userCustomerDataById) {
-                                                    navigate(`/astrologer/intake-form/${astrologerDataById?._id}?type=call`);
-                                                } else {
-                                                    handleOpenLoginCustomerModal();
-                                                }
-                                            } else if (Notification.permission === "denied") {
-                                                alert("You have blocked notifications. Please enable them in your browser settings.");
-
-                                            } else if (Notification.permission === "default") {
-                                                console.log('Requesting Notification Permission');
-                                                await Notification.requestPermission();
-                                            }
+                                            if (userCustomerDataById) navigate(`/astrologer/intake-form/${astrologerDataById?._id}?type=call`);
+                                            else dispatch(AuthActions.requestToggleCustomerLoginModal());
                                         }
                                     }} className={`flex items-center gap-2 bg-primary text-black px-2 py-[7px] rounded-full w-[280px]`}>
                                         <div className='bg-white p-2 rounded-full'><CallSvg h='25' w='25' color={Color?.black} /></div>
@@ -179,26 +153,12 @@ const SingleAstrologer = () => {
                                             const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", confirmButtonColor: Color.primary, cancelButtonText: "Cancel", showCancelButton: true, cancelButtonColor: Color.darkgrey });
                                             if (result.isConfirmed) navigate('/recharge');
                                         } else {
-                                            if (!("Notification" in window)) {
-                                                alert("This browser does not support desktop notifications.");
-                                            } else if (Notification.permission === "granted") {
-                                                if (userCustomerDataById) {
-                                                    navigate(`/astrologer/intake-form/${astrologerDataById?._id}?type=chat`);
-                                                } else {
-                                                    handleOpenLoginCustomerModal();
-                                                }
-                                            } else if (Notification.permission === "denied") {
-                                                alert("You have blocked notifications. Please enable them in your browser settings.");
-
-                                            } else if (Notification.permission === "default") {
-                                                console.log('Requesting Notification Permission');
-                                                await Notification.requestPermission();
-                                            }
+                                            if (userCustomerDataById) navigate(`/astrologer/intake-form/${astrologerDataById?._id}?type=chat`);
+                                            else dispatch(AuthActions.requestToggleCustomerLoginModal());
                                         }
                                     }} className={`flex items-center gap-2 bg-primary text-black px-2 py-[7px] rounded-full w-[280px]`}>
                                         <div className='bg-white p-2 rounded-full'><ChatSvg h='25' w='25' color={Color?.black} /></div>
                                         <div className='flex justify-center items-center flex-1'>
-                                            {/* <div className='line-clamp-1 text-center pr-5 text-white'>Start Chat</div> */}
                                             <div className='flex flex-col text-white'>
                                                 <div className='line-clamp-1 text-center pr-5 text-white'>Start Chat</div>
                                                 <div className='pr-5'><span className='font-semibold'>{IndianRupee(Number(astrologerDataById?.chat_price) + Number(astrologerDataById?.commission_chat_price))}</span>/min</div>
@@ -211,11 +171,8 @@ const SingleAstrologer = () => {
                         </div>
 
                         <button onClick={() => {
-                            if (!userCustomerDataById) {
-                                handleOpenLoginCustomerModal();
-                            } else {
-                                dispatch(AstrologerActions?.followUnfollowAstrologer({ customerId: userCustomerDataById?._id, astrologerId, action: !astrologerFollowedStatusByCustomer ? 'follow' : 'unfollow' }))
-                            }
+                            if (!userCustomerDataById) dispatch(AuthActions.requestToggleCustomerLoginModal())
+                            else dispatch(AstrologerActions?.followUnfollowAstrologer({ customerId: userCustomerDataById?._id, astrologerId, action: !astrologerFollowedStatusByCustomer ? 'follow' : 'unfollow' }))
                         }} className='bg-primary text-white max-md:hidden px-[50px] py-[7px] rounded-[30px] self-start'>{!astrologerFollowedStatusByCustomer ? 'Follow' : 'Unfollowed'}</button>
                     </div>
 

@@ -1,31 +1,12 @@
 // import { Link } from 'react-router-dom';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { BotSvg, EmailSvg, FacebookSvg, InstagramSvg, LinkedinSvg, SecureSvg, YoutubeSvg } from '../../assets/svg';
-// import { generateTokenByRequestPermission } from '../../config/firebase-config';
 // import { current_year, support_email, website_name } from '../../utils/constants';
 // import * as AuthActions from '../../redux/actions/authAction';
 
 // const Footer = ({ scrollToSection }) => {
 //     const { userCustomerDataById, userAstrologerDataById } = useSelector(state => state?.userReducer);
 //     const dispatch = useDispatch();
-
-//     // Todo : Astrolger Login Start
-//     const handleOpenLoginAstrologerModal = async () => {
-//         console.log('Astrologer login button clicked');
-
-//         if (!("Notification" in window)) {
-//             alert("This browser does not support desktop notifications.");
-//         } else if (Notification.permission === "granted") {
-//             generateTokenByRequestPermission();
-//             dispatch(AuthActions.toggleAstrologerLoginModal(true));
-//         } else if (Notification.permission === "denied") {
-//             alert("You have blocked notifications. Please enable them in your browser settings.");
-
-//         } else if (Notification.permission === "default") {
-//             console.log('Requesting Notification Permission');
-//             const permission = await Notification.requestPermission();
-//         }
-//     };
 
 //     return (
 //         <>
@@ -102,7 +83,7 @@
 //                         {!userCustomerDataById && !userAstrologerDataById && <main className='flex flex-col gap-3'>
 //                             <span className='text-[17px] font-[500] border-b-2 border-primary inline-block pb-1 self-start'>Consultant</span>
 //                             <Link onClick={() => window?.scrollTo({ top: 0, behavior: 'smooth' })} to={'consultant-signup'} className='cursor-pointer'>Consultant Signup</Link>
-//                             <div onClick={handleOpenLoginAstrologerModal} className='cursor-pointer'>Consultant Login</div>
+//                             <div onClick={() => dispatch(AuthActions.requestToggleCustomerLoginModal())} className='cursor-pointer'>Consultant Login</div>
 //                             {/* <Link onClick={()=>window?.scrollTo({top:0, behavior:'smooth'})} to=''>Astrologer Registration</Link> */}
 //                         </main>}
 
@@ -161,28 +142,12 @@
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { BotSvg, EmailSvg, FacebookSvg, InstagramSvg, LinkedinSvg, SecureSvg, YoutubeSvg } from '../../assets/svg';
-import { generateTokenByRequestPermission } from '../../config/firebase-config';
 import { current_year, support_email, website_name } from '../../utils/constants';
 import * as AuthActions from '../../redux/actions/authAction';
 
 const Footer = () => {
     const dispatch = useDispatch();
     const { userCustomerDataById, userAstrologerDataById } = useSelector(state => state?.userReducer);
-
-    // Todo : Astrolger Login Start
-    const handleOpenLoginAstrologerModal = async () => {
-        if (!("Notification" in window)) {
-            alert("This browser does not support desktop notifications.");
-        } else if (Notification.permission === "granted") {
-            generateTokenByRequestPermission();
-            dispatch(AuthActions.toggleAstrologerLoginModal(true));
-        } else if (Notification.permission === "denied") {
-            alert("You have blocked notifications. Please enable them in your browser settings.");
-
-        } else if (Notification.permission === "default") {
-            const permission = await Notification.requestPermission();
-        }
-    };
 
     return (
         <>
@@ -247,7 +212,7 @@ const Footer = () => {
                     <div className="text-center text-base font-medium">Astrologer</div>
                     <main className="flex flex-wrap justify-center text-center gap-x-3 gap-y-2 border-b border-gray-300 pb-3">
                         <Link onClick={() => window?.scrollTo({ top: 0, behavior: 'smooth' })} to={'consultant-signup'} className='hover:text-secondary hover:bg-white bg-secondary text-white px-5 py-0.5 rounded-full cursor-pointer transition-all duration-500'>Astrologer Signup</Link>
-                        <div onClick={handleOpenLoginAstrologerModal} className='hover:text-secondary hover:bg-white bg-secondary text-white px-5 py-0.5 rounded-full cursor-pointer transition-all duration-500'>Astrologer Login</div>
+                        <div onClick={() => dispatch(AuthActions.requestToggleCustomerLoginModal())} className='hover:text-secondary hover:bg-white bg-secondary text-white px-5 py-0.5 rounded-full cursor-pointer transition-all duration-500'>Astrologer Login</div>
                     </main>
                 </>}
 

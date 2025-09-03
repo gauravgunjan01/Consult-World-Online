@@ -1,34 +1,21 @@
 import Swal from 'sweetalert2';
+import { LucideVideo } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+
 import { Color } from '../../../assets/colors';
 import { api_urls } from '../../../utils/api-urls';
 import { CallSvg, ChatSvg } from '../../../assets/svg';
-import WebLogo from '../../../assets/images/logo/logo.png';
 import { IndianRupee } from '../../../utils/common-function';
-import { generateTokenByRequestPermission } from '../../../config/firebase-config';
+
+import WebLogo from '../../../assets/images/logo/logo.png';
 import * as AuthActions from '../../../redux/actions/authAction';
-import { LucideVideo } from 'lucide-react';
 
 const ConsultantCard = ({ astrologer }) => {
     const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { userCustomerDataById } = useSelector(state => state?.userReducer);
-
-    const handleOpenLoginCustomerModal = async () => {
-        if (!("Notification" in window)) {
-            alert("This browser does not support desktop notifications.");
-        } else if (Notification.permission === "granted") {
-            generateTokenByRequestPermission();
-            dispatch(AuthActions.toggleCustomerLoginModal(true));
-        } else if (Notification.permission === "denied") {
-            alert("You have blocked notifications. Please enable them in your browser settings.");
-
-        } else if (Notification.permission === "default") {
-            await Notification.requestPermission();
-        }
-    };
 
     return (
         <>
@@ -65,21 +52,8 @@ const ConsultantCard = ({ astrologer }) => {
                                 const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", confirmButtonColor: Color.secondary, cancelButtonText: "Cancel", showCancelButton: true, cancelButtonColor: 'grey' });
                                 if (result.isConfirmed) navigate('/recharge');
                             } else {
-                                if (!("Notification" in window)) {
-                                    alert("This browser does not support desktop notifications.");
-                                } else if (Notification.permission === "granted") {
-                                    if (userCustomerDataById) {
-                                        navigate(`/astrologer/intake-form/${astrologer?._id}?type=chat`);
-                                    } else {
-                                        handleOpenLoginCustomerModal();
-                                    }
-                                } else if (Notification.permission === "denied") {
-                                    alert("You have blocked notifications. Please enable them in your browser settings.");
-
-                                } else if (Notification.permission === "default") {
-                                    console.log('Requesting Notification Permission');
-                                    await Notification.requestPermission();
-                                }
+                                if (userCustomerDataById) navigate(`/astrologer/intake-form/${astrologer?._id}?type=chat`);
+                                else dispatch(AuthActions.requestToggleCustomerLoginModal());
                             }
                         }} className={`relative px-3 py-0.5 flex gap-1 justify-center items-center border ${astrologer?.chat_status == 'online' ? 'text-[#27AE60] border-[#27AE60]' : 'text-red-500 border-red-500'} rounded-full`}>
                             <ChatSvg h='13' w='13' color={astrologer?.chat_status == 'online' ? '#27AE60' : 'red'} />
@@ -91,21 +65,8 @@ const ConsultantCard = ({ astrologer }) => {
                                 const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", confirmButtonColor: Color.secondary, cancelButtonText: "Cancel", showCancelButton: true, cancelButtonColor: 'grey' });
                                 if (result.isConfirmed) navigate('/recharge');
                             } else {
-                                if (!("Notification" in window)) {
-                                    alert("This browser does not support desktop notifications.");
-                                } else if (Notification.permission === "granted") {
-                                    if (userCustomerDataById) {
-                                        navigate(`/astrologer/intake-form/${astrologer?._id}?type=voice-call`);
-                                    } else {
-                                        handleOpenLoginCustomerModal();
-                                    }
-                                } else if (Notification.permission === "denied") {
-                                    alert("You have blocked notifications. Please enable them in your browser settings.");
-
-                                } else if (Notification.permission === "default") {
-                                    console.log('Requesting Notification Permission');
-                                    await Notification.requestPermission();
-                                }
+                                if (userCustomerDataById) navigate(`/astrologer/intake-form/${astrologer?._id}?type=voice-call`);
+                                else dispatch(AuthActions.requestToggleCustomerLoginModal());
                             }
                         }} className={`relative px-3 py-0.5 flex gap-1 justify-center items-center border ${astrologer?.call_status == 'online' ? 'text-[#27AE60] border-[#27AE60]' : 'text-red-500 border-red-500'} rounded-full`}>
                             <CallSvg h='13' w='13' color={astrologer?.call_status == 'online' ? '#27AE60' : 'red'} />
@@ -117,21 +78,8 @@ const ConsultantCard = ({ astrologer }) => {
                                 const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", confirmButtonColor: Color.secondary, cancelButtonText: "Cancel", showCancelButton: true, cancelButtonColor: 'grey' });
                                 if (result.isConfirmed) navigate('/recharge');
                             } else {
-                                if (!("Notification" in window)) {
-                                    alert("This browser does not support desktop notifications.");
-                                } else if (Notification.permission === "granted") {
-                                    if (userCustomerDataById) {
-                                        navigate(`/astrologer/intake-form/${astrologer?._id}?type=video-call`);
-                                    } else {
-                                        handleOpenLoginCustomerModal();
-                                    }
-                                } else if (Notification.permission === "denied") {
-                                    alert("You have blocked notifications. Please enable them in your browser settings.");
-
-                                } else if (Notification.permission === "default") {
-                                    console.log('Requesting Notification Permission');
-                                    await Notification.requestPermission();
-                                }
+                                if (userCustomerDataById) navigate(`/astrologer/intake-form/${astrologer?._id}?type=video-call`);
+                                else dispatch(AuthActions.requestToggleCustomerLoginModal());
                             }
                         }} className={`relative px-3 py-0.5 flex gap-1 justify-center items-center border ${astrologer?.video_call_status == 'online' ? 'text-[#27AE60] border-[#27AE60]' : 'text-red-500 border-red-500'} rounded-full`}>
                             <LucideVideo size={16} color={astrologer?.video_call_status == 'online' ? '#27AE60' : 'red'} />
