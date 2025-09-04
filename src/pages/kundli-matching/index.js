@@ -9,7 +9,7 @@ import * as ProfileActions from '../../redux/actions/profileAction';
 const KundliMatching = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
 
     //! Male 
     const [maleInputField, setMaleInputField] = useState({ name: '', birth_date_time: '', place_of_birth: '' });
@@ -91,10 +91,10 @@ const KundliMatching = () => {
     const handleGetReport = () => {
         console.log({ maleInputField, femaleInputField });
 
-        if (userCustomerDataById) {
+        if (userCustomerDetails) {
             const payload = {
                 data: {
-                    customerId: userCustomerDataById?._id,
+                    customerId: userCustomerDetails?._id,
                     maleKundliData: {
                         name: maleInputField?.name,
                         dob: maleInputField?.birth_date_time,

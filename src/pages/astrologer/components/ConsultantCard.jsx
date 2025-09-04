@@ -15,7 +15,7 @@ const ConsultantCard = ({ astrologer }) => {
     const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
 
     return (
         <>
@@ -48,11 +48,11 @@ const ConsultantCard = ({ astrologer }) => {
 
                     <div className='flex items-center flex-wrap text-nowrap gap-2 pt-2'>
                         {(location?.pathname === '/chat-with-consultant' || (location?.pathname !== '/chat-with-consultant' && location?.pathname !== '/talk-to-consultant' && location?.pathname !== '/video-call-with-consultant')) && <button onClick={async () => {
-                            if (Number(userCustomerDataById?.wallet_balance) < (Number(astrologer?.chat_price) + Number(astrologer?.commission_chat_price)) * 5) {
+                            if (Number(userCustomerDetails?.wallet_balance) < (Number(astrologer?.chat_price) + Number(astrologer?.commission_chat_price)) * 5) {
                                 const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", confirmButtonColor: Color.secondary, cancelButtonText: "Cancel", showCancelButton: true, cancelButtonColor: 'grey' });
                                 if (result.isConfirmed) navigate('/recharge');
                             } else {
-                                if (userCustomerDataById) navigate(`/astrologer/intake-form/${astrologer?._id}?type=chat`);
+                                if (userCustomerDetails) navigate(`/astrologer/intake-form/${astrologer?._id}?type=chat`);
                                 else dispatch(AuthActions.requestToggleCustomerLoginModal());
                             }
                         }} className={`relative px-3 py-0.5 flex gap-1 justify-center items-center border ${astrologer?.chat_status == 'online' ? 'text-[#27AE60] border-[#27AE60]' : 'text-red-500 border-red-500'} rounded-full`}>
@@ -61,11 +61,11 @@ const ConsultantCard = ({ astrologer }) => {
                         </button>}
 
                         {(location?.pathname === '/talk-to-consultant' || (location?.pathname !== '/chat-with-consultant' && location?.pathname !== '/talk-to-consultant' && location?.pathname !== '/video-call-with-consultant')) && <button onClick={async () => {
-                            if (Number(userCustomerDataById?.wallet_balance) < (Number(astrologer?.call_price) + Number(astrologer?.commission_call_price)) * 5) {
+                            if (Number(userCustomerDetails?.wallet_balance) < (Number(astrologer?.call_price) + Number(astrologer?.commission_call_price)) * 5) {
                                 const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", confirmButtonColor: Color.secondary, cancelButtonText: "Cancel", showCancelButton: true, cancelButtonColor: 'grey' });
                                 if (result.isConfirmed) navigate('/recharge');
                             } else {
-                                if (userCustomerDataById) navigate(`/astrologer/intake-form/${astrologer?._id}?type=voice-call`);
+                                if (userCustomerDetails) navigate(`/astrologer/intake-form/${astrologer?._id}?type=voice-call`);
                                 else dispatch(AuthActions.requestToggleCustomerLoginModal());
                             }
                         }} className={`relative px-3 py-0.5 flex gap-1 justify-center items-center border ${astrologer?.call_status == 'online' ? 'text-[#27AE60] border-[#27AE60]' : 'text-red-500 border-red-500'} rounded-full`}>
@@ -74,11 +74,11 @@ const ConsultantCard = ({ astrologer }) => {
                         </button>}
 
                         {(location?.pathname === '/video-call-with-consultant' || (location?.pathname !== '/chat-with-consultant' && location?.pathname !== '/talk-to-consultant' && location?.pathname !== '/video-call-with-consultant')) && <button onClick={async () => {
-                            if (Number(userCustomerDataById?.wallet_balance) < (Number(astrologer?.chat_price) + Number(astrologer?.commission_chat_price)) * 5) {
+                            if (Number(userCustomerDetails?.wallet_balance) < (Number(astrologer?.chat_price) + Number(astrologer?.commission_chat_price)) * 5) {
                                 const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", confirmButtonColor: Color.secondary, cancelButtonText: "Cancel", showCancelButton: true, cancelButtonColor: 'grey' });
                                 if (result.isConfirmed) navigate('/recharge');
                             } else {
-                                if (userCustomerDataById) navigate(`/astrologer/intake-form/${astrologer?._id}?type=video-call`);
+                                if (userCustomerDetails) navigate(`/astrologer/intake-form/${astrologer?._id}?type=video-call`);
                                 else dispatch(AuthActions.requestToggleCustomerLoginModal());
                             }
                         }} className={`relative px-3 py-0.5 flex gap-1 justify-center items-center border ${astrologer?.video_call_status == 'online' ? 'text-[#27AE60] border-[#27AE60]' : 'text-red-500 border-red-500'} rounded-full`}>

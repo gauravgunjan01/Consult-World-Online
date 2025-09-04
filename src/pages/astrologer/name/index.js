@@ -30,8 +30,8 @@ const SingleAstrologer = () => {
 
     const dispatch = useDispatch();
     const { isLoading } = useSelector(state => state?.commonReducer);
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
-    const { astrologerDataById, astrologerReviewDataById, astrologerFollowedStatusByCustomer } = useSelector(state => state?.astrologerReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
+    const { AstrologerDetails, astrologerReviewDataById, astrologerFollowedStatusByCustomer } = useSelector(state => state?.astrologerReducer);
 
     const [showMore, setShowMore] = useState(false);
 
@@ -49,7 +49,7 @@ const SingleAstrologer = () => {
         //! Dispatching API For Getting Single Astrologer Review
         dispatch(AstrologerActions.getAstrologerReviewById({ astrologerId: astrologerId }));
 
-        dispatch(AstrologerActions?.getAstrologerFollowedStatusByCustomer({ customerId: userCustomerDataById?._id, astrologerId }));
+        dispatch(AstrologerActions?.getAstrologerFollowedStatusByCustomer({ customerId: userCustomerDetails?._id, astrologerId }));
 
     }, []);
 
@@ -115,26 +115,26 @@ const SingleAstrologer = () => {
                 <section className='text-[15px] space-y-3'>
                     <div className='flex gap-5 max-md:flex-col justify-between rounded-b-[3px] bg-[#F6F6F6] p-3 flex-1'>
                         <div className='flex max-md:flex-col gap-[20px]'>
-                            <img className='max-md:rounded-[3px] rounded-md h-[300px] max-md:h-[300px] max-md:w-full w-[300px] border-2 border-primary_text_dark' src={api_urls + astrologerDataById?.profileImage} />
+                            <img className='max-md:rounded-[3px] rounded-md h-[300px] max-md:h-[300px] max-md:w-full w-[300px] border-2 border-primary_text_dark' src={api_urls + AstrologerDetails?.profileImage} />
 
                             <main className='flex flex-col justify-center gap-1.5 text-lg rounded-[3px] p-[15px]'>
-                                <div className='line-clamp-1 font-semibold text-2xl capitalize'>{astrologerDataById?.astrologerName}</div>
-                                <div className='line-clamp-1'>{astrologerDataById?.skill?.length > 0 && astrologerDataById?.skill?.map(value => value?.skill)?.join(' , ')}</div>
-                                <div className='line-clamp-1'>{astrologerDataById?.language?.length > 0 ? astrologerDataById?.language?.join(' , ') : "Hindi"}</div>
-                                <div>Exp : {astrologerDataById?.experience} Years</div>
+                                <div className='line-clamp-1 font-semibold text-2xl capitalize'>{AstrologerDetails?.astrologerName}</div>
+                                <div className='line-clamp-1'>{AstrologerDetails?.skill?.length > 0 && AstrologerDetails?.skill?.map(value => value?.skill)?.join(' , ')}</div>
+                                <div className='line-clamp-1'>{AstrologerDetails?.language?.length > 0 ? AstrologerDetails?.language?.join(' , ') : "Hindi"}</div>
+                                <div>Exp : {AstrologerDetails?.experience} Years</div>
 
                                 <div className='flex items-center gap-5 my-3'>
-                                    <div className='flex items-center gap-2'><ChatSvg color={Color?.black} /> {(astrologerDataById?.totalChatDuration / 6000)?.toFixed(1)}k mins</div>
-                                    <div className='flex items-center gap-2'><CallSvg color={Color?.black} /> {(astrologerDataById?.totalCallDuration / 6000)?.toFixed(1)}k mins</div>
+                                    <div className='flex items-center gap-2'><ChatSvg color={Color?.black} /> {(AstrologerDetails?.totalChatDuration / 6000)?.toFixed(1)}k mins</div>
+                                    <div className='flex items-center gap-2'><CallSvg color={Color?.black} /> {(AstrologerDetails?.totalCallDuration / 6000)?.toFixed(1)}k mins</div>
                                 </div>
 
                                 <div className='flex max-lg:flex-wrap gap-[20px]'>
                                     <button onClick={async () => {
-                                        if (Number(userCustomerDataById?.wallet_balance) < (Number(astrologerDataById?.call_price) + Number(astrologerDataById?.commission_call_price)) * 5) {
+                                        if (Number(userCustomerDetails?.wallet_balance) < (Number(AstrologerDetails?.call_price) + Number(AstrologerDetails?.commission_call_price)) * 5) {
                                             const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", confirmButtonColor: Color.primary, cancelButtonText: "Cancel", showCancelButton: true, cancelButtonColor: Color.darkgrey });
                                             if (result.isConfirmed) navigate('/recharge');
                                         } else {
-                                            if (userCustomerDataById) navigate(`/astrologer/intake-form/${astrologerDataById?._id}?type=call`);
+                                            if (userCustomerDetails) navigate(`/astrologer/intake-form/${AstrologerDetails?._id}?type=call`);
                                             else dispatch(AuthActions.requestToggleCustomerLoginModal());
                                         }
                                     }} className={`flex items-center gap-2 bg-primary text-black px-2 py-[7px] rounded-full w-[280px]`}>
@@ -142,18 +142,18 @@ const SingleAstrologer = () => {
                                         <div className='flex justify-center items-center flex-1'>
                                             <div className='flex flex-col text-white'>
                                                 <div className='line-clamp-1 text-center pr-5 text-white'>Start Call</div>
-                                                <div className='pr-5'><span className='font-semibold'>{IndianRupee(Number(astrologerDataById?.call_price) + Number(astrologerDataById?.commission_call_price))}</span>/min</div>
+                                                <div className='pr-5'><span className='font-semibold'>{IndianRupee(Number(AstrologerDetails?.call_price) + Number(AstrologerDetails?.commission_call_price))}</span>/min</div>
                                             </div>
-                                            {astrologerDataById?.call_status == 'online' ? <OnlinePing /> : <OfflinePing />}
+                                            {AstrologerDetails?.call_status == 'online' ? <OnlinePing /> : <OfflinePing />}
                                         </div>
                                     </button>
 
                                     <button onClick={async () => {
-                                        if (Number(userCustomerDataById?.wallet_balance) < (Number(astrologerDataById?.chat_price) + Number(astrologerDataById?.commission_chat_price)) * 5) {
+                                        if (Number(userCustomerDetails?.wallet_balance) < (Number(AstrologerDetails?.chat_price) + Number(AstrologerDetails?.commission_chat_price)) * 5) {
                                             const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", confirmButtonColor: Color.primary, cancelButtonText: "Cancel", showCancelButton: true, cancelButtonColor: Color.darkgrey });
                                             if (result.isConfirmed) navigate('/recharge');
                                         } else {
-                                            if (userCustomerDataById) navigate(`/astrologer/intake-form/${astrologerDataById?._id}?type=chat`);
+                                            if (userCustomerDetails) navigate(`/astrologer/intake-form/${AstrologerDetails?._id}?type=chat`);
                                             else dispatch(AuthActions.requestToggleCustomerLoginModal());
                                         }
                                     }} className={`flex items-center gap-2 bg-primary text-black px-2 py-[7px] rounded-full w-[280px]`}>
@@ -161,9 +161,9 @@ const SingleAstrologer = () => {
                                         <div className='flex justify-center items-center flex-1'>
                                             <div className='flex flex-col text-white'>
                                                 <div className='line-clamp-1 text-center pr-5 text-white'>Start Chat</div>
-                                                <div className='pr-5'><span className='font-semibold'>{IndianRupee(Number(astrologerDataById?.chat_price) + Number(astrologerDataById?.commission_chat_price))}</span>/min</div>
+                                                <div className='pr-5'><span className='font-semibold'>{IndianRupee(Number(AstrologerDetails?.chat_price) + Number(AstrologerDetails?.commission_chat_price))}</span>/min</div>
                                             </div>
-                                            {astrologerDataById?.chat_status == 'online' ? <OnlinePing /> : <OfflinePing />}
+                                            {AstrologerDetails?.chat_status == 'online' ? <OnlinePing /> : <OfflinePing />}
                                         </div>
                                     </button>
                                 </div>
@@ -171,15 +171,15 @@ const SingleAstrologer = () => {
                         </div>
 
                         <button onClick={() => {
-                            if (!userCustomerDataById) dispatch(AuthActions.requestToggleCustomerLoginModal())
-                            else dispatch(AstrologerActions?.followUnfollowAstrologer({ customerId: userCustomerDataById?._id, astrologerId, action: !astrologerFollowedStatusByCustomer ? 'follow' : 'unfollow' }))
+                            if (!userCustomerDetails) dispatch(AuthActions.requestToggleCustomerLoginModal())
+                            else dispatch(AstrologerActions?.followUnfollowAstrologer({ customerId: userCustomerDetails?._id, astrologerId, action: !astrologerFollowedStatusByCustomer ? 'follow' : 'unfollow' }))
                         }} className='bg-primary text-white max-md:hidden px-[50px] py-[7px] rounded-[30px] self-start'>{!astrologerFollowedStatusByCustomer ? 'Follow' : 'Unfollowed'}</button>
                     </div>
 
                     {/* About Section */}
                     <div className='bg-[#F6F6F6] p-3 space-y-3 rounded-[3px]'>
                         <h5 className='font-medium text-2xl'>About</h5>
-                        <div className={`text-grey tracking-wide ${showMore ? '' : 'line-clamp-2'} transition-all duration-500`}>{astrologerDataById?.long_bio}</div>
+                        <div className={`text-grey tracking-wide ${showMore ? '' : 'line-clamp-2'} transition-all duration-500`}>{AstrologerDetails?.long_bio}</div>
 
                         <button onClick={() => setShowMore(!showMore)} className="text-blue-600 flex items-center gap-1 text-sm font-medium" >
                             {showMore ? (<><Shrink size={14} /> Show Less</>) : (<><Expand size={14} /> Show More</>)}

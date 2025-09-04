@@ -26,7 +26,7 @@ export const offerData = [{ name: 'Active' }, { name: 'Inactive' }];
 const Astrologer = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
     const { astrologerSkillData, astrologerMainExpertiseData } = useSelector(state => state?.astrologerReducer);
     const [showFilter, setShowFilter] = useState(false);
 
@@ -210,9 +210,9 @@ const Astrologer = () => {
                             <input value={searchText} onChange={(e) => setSearchText(e?.target?.value)} type='search' placeholder='Search here..' className='border border-[#DDDDDD] outline-none px-3 py-2.5 text-[16px] max-md:text-[16px] rounded-s-[3px] h-full w-[100%] md:w-[200px] lg:w-[300px]' />
                             <button className='bg-primary border border-primary rounded-e-[3px] flex items-center justify-center p-2 px-3 w-[50px] h-full text-white'><SearchSvg w='20' h='20' /></button>
                         </div>
-                        
+
                         <div className='flex flex-wrap gap-3'>
-                            {userCustomerDataById && <p className='max-md:basis-full text-nowrap self-center px-1'>Available balance: {IndianRupee(userCustomerDataById?.wallet_balance)}</p>}
+                            {userCustomerDetails && <p className='max-md:basis-full text-nowrap self-center px-1'>Available balance: {IndianRupee(userCustomerDetails?.wallet_balance)}</p>}
                             <button onClick={() => navigate('/recharge')} className='border border-green-500 text-green-500 px-5 rounded-[3px] flex items-center justify-center max-md:py-1 cursor-pointer'>Recharge</button>
                             <button onClick={() => setShowFilter(!showFilter)} className='border border-green-500 text-green-500 px-5 rounded-[3px] flex items-center justify-center max-md:py-1 cursor-pointer'>{showFilter ? 'Hide' : 'Show'} Filter</button>
                         </div>

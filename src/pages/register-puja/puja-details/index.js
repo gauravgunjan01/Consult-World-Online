@@ -15,17 +15,17 @@ const PujaDetails = () => {
     const mode = location.state && location?.state?.mode;
     console.log("Puja Data ::: ", puja);
 
-    const { userAstrologerDataById } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails } = useSelector(state => state?.userReducer);
 
     const [inputFieldDetail, setInputFieldDetail] = useState({ pujaDateTime: '', duration: '' });
     const handleInputFieldDetail = (event) => setInputFieldDetail({ ...inputFieldDetail, [event?.target?.name]: event?.target?.value });
 
     const handleRegisterPuja = () => {
-        if (!userAstrologerDataById) {
+        if (!userAstrologerDetails) {
             toaster.info({ text: 'Please login as a astrologer' })
         } else {
             const payload = {
-                data: { astrologerId: userAstrologerDataById?._id, pujaId: puja?._id },
+                data: { astrologerId: userAstrologerDetails?._id, pujaId: puja?._id },
                 onComplete: () => navigate('/astrologer-dashboard/register-puja-history')
             };
 

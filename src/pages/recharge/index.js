@@ -7,7 +7,7 @@ import { api_urls } from "../../utils/api-urls";
 
 const Recharge = () => {
     const navigate = useNavigate();
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
     const [planData, setPlanData] = useState([]);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ const Recharge = () => {
                 <div className="bg-white p-3 rounded-b-[3px]">
                     <div className='text-2xl text-center font-[600]'>Add Money to Wallet</div>
                     <div className='text-l text-center font-[400] mt-2 text-grey'>Available balance:</div>
-                    <div className="flex justify-center items-center text-xl text-center font-[400] mt-2 text-black">{IndianRupee(userCustomerDataById?.wallet_balance || 0)}</div>
+                    <div className="flex justify-center items-center text-xl text-center font-[400] mt-2 text-black">{IndianRupee(userCustomerDetails?.wallet_balance || 0)}</div>
                 </div>
 
                 <main className="grid grid-cols-2 md:grid-cols-5 gap-3 bg-white p-3 rounded-t-[3px]">

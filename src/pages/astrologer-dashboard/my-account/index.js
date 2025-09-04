@@ -14,42 +14,42 @@ import DataNotFound from '../../../components/common/DataNotFound';
 const MyAccount = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { userAstrologerDataById, userAstrologerTransactionHistoryData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userAstrologerTransactionHistoryData } = useSelector(state => state?.userReducer);
 
     const [searchText, setSearchText] = useState('');
     const filteredData = DeepSearchSpace(userAstrologerTransactionHistoryData, searchText);
     const [withdrawalModelOpen, setWithdrawalModelOpen] = useState(false);
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserAstrologerTransactionHistory({ count: 5 }));
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerTransactionHistory({ count: 5 }));
+    }, [userAstrologerDetails]);
 
     return (
         <section className='space-y-3'>
             <div className='py-5 px-5 bg-[#E5D18E90] border border-primary rounded-[3px] flex items-center justify-between flex-wrap gap-10'>
                 <div className='flex gap-10 items-end justify-between flex-wrap'>
-                    <img src={api_urls + userAstrologerDataById?.profileImage} className='h-40 w-40 object-contain border border-white rounded-md' />
+                    <img src={api_urls + userAstrologerDetails?.profileImage} className='h-40 w-40 object-contain border border-white rounded-md' />
 
                     <div className='text-[15px] pb-2'>
-                        <div className='font-semibold text-lg text-primary'>{userAstrologerDataById?.astrologerName}</div>
-                        <div>{userAstrologerDataById?.email}</div>
-                        <div>{userAstrologerDataById?.phoneNumber}</div>
-                        <div>{userAstrologerDataById?.gender}, {moment(userAstrologerDataById?.dateOfBirth)?.format('DD-MMM-YYYY')}</div>
-                        <div>{userAstrologerDataById?.city + ','} {userAstrologerDataById?.state + ','} {userAstrologerDataById?.country + '-'} {userAstrologerDataById?.zipCode}</div>
+                        <div className='font-semibold text-lg text-primary'>{userAstrologerDetails?.astrologerName}</div>
+                        <div>{userAstrologerDetails?.email}</div>
+                        <div>{userAstrologerDetails?.phoneNumber}</div>
+                        <div>{userAstrologerDetails?.gender}, {moment(userAstrologerDetails?.dateOfBirth)?.format('DD-MMM-YYYY')}</div>
+                        <div>{userAstrologerDetails?.city + ','} {userAstrologerDetails?.state + ','} {userAstrologerDetails?.country + '-'} {userAstrologerDetails?.zipCode}</div>
                     </div>
                 </div>
 
                 <div className='flex flex-col gap-2 min-w-64'>
-                    <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Chat Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerChatStatus({ data: { astrologerId: userAstrologerDataById?._id, chat_status: userAstrologerDataById?.chat_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDataById?.chat_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div>
-                    <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Call Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerCallStatus({ data: { astrologerId: userAstrologerDataById?._id, call_status: userAstrologerDataById?.call_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDataById?.call_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div>
-                    <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Video Call Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerVideoCallStatus({ data: { astrologerId: userAstrologerDataById?._id, video_call_status: userAstrologerDataById?.video_call_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDataById?.video_call_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div>
+                    <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Chat Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerChatStatus({ data: { astrologerId: userAstrologerDetails?._id, chat_status: userAstrologerDetails?.chat_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDetails?.chat_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div>
+                    <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Call Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerCallStatus({ data: { astrologerId: userAstrologerDetails?._id, call_status: userAstrologerDetails?.call_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDetails?.call_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div>
+                    <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Video Call Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerVideoCallStatus({ data: { astrologerId: userAstrologerDetails?._id, video_call_status: userAstrologerDetails?.video_call_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDetails?.video_call_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div>
                 </div>
             </div>
 
             <div className='border border-primary rounded-[3px] p-5 flex items-center justify-between flex-wrap gap-5 bg-[#E5D18E90]'>
                 <div className='flex gap-5 items-center flex-wrap text-nowrap'>
-                    <div className='flex items-center gap-3'><WalletSvg /> Today's Earning : {IndianRupee(userAstrologerDataById?.today_earnings?.earnings)}</div>
-                    <div className='flex items-center gap-3'><WalletSvg /> Total Earning : {IndianRupee(userAstrologerDataById?.wallet_balance)}</div>
+                    <div className='flex items-center gap-3'><WalletSvg /> Today's Earning : {IndianRupee(userAstrologerDetails?.today_earnings?.earnings)}</div>
+                    <div className='flex items-center gap-3'><WalletSvg /> Total Earning : {IndianRupee(userAstrologerDetails?.wallet_balance)}</div>
                 </div>
             </div>
 

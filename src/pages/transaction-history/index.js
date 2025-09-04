@@ -14,14 +14,14 @@ import DataNotFound from '../../components/common/DataNotFound';
 const TransactionHistory = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { userCustomerDataById, userCustomerTransactionHistoryData } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails, userCustomerTransactionHistoryData } = useSelector(state => state?.userReducer);
 
     const [searchText, setSearchText] = useState('');
     const filteredData = DeepSearchSpace(userCustomerTransactionHistoryData, searchText);
 
     useEffect(() => {
-        userCustomerDataById && dispatch(UserActions?.getUserCustomerTransactionHistory());
-    }, [userCustomerDataById]);
+        userCustomerDetails && dispatch(UserActions?.getUserCustomerTransactionHistory());
+    }, [userCustomerDetails]);
 
     const handleShareToWhatsApp = (value) => {
         const text = `${web_urls}transaction-history/whatsapp-chat-summary?customer_id=${value?.customerId?._id}&astrologer_id=${value?.astrologerId?._id}&duration=${value?.duration}&astrologerName=${value?.astrologerId?.astrologerName?.split(' ')?.join('-')?.toLowerCase()}&astrologerProfileImage=${api_urls + value?.astrologerId?.profileImage}`

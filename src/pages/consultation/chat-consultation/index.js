@@ -35,7 +35,7 @@ const Chat = () => {
     const { currentRequestData } = useSelector(state => state?.consultationReducer);
     const { socketConnectionStatus } = useSelector(state => state?.commonReducer);
     const { hideChatMessageInputField, astrologerRatingVisibility } = useSelector(state => state?.consultationReducer)
-    const { userAstrologerDataById, userAstrologerRegisteredPujaHistoryData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userAstrologerRegisteredPujaHistoryData } = useSelector(state => state?.userReducer);
 
     const [inputField, setInputField] = useState('');
 
@@ -208,8 +208,8 @@ const Chat = () => {
     let [showRegisterPuja, setShowRegisterPuja] = useState(false);
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserAstrologerRegisteredPujaHistory());
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerRegisteredPujaHistory());
+    }, [userAstrologerDetails]);
 
     // !Scroll Down the Chat
     useEffect(() => {
@@ -383,7 +383,7 @@ const Chat = () => {
                     <span onClick={() => dispatch(ConsultationActions.endCurrentRequest({ roomId: localStorage.getItem('chatId'), currentUser, chat_id, type: 'chat' }))} className="bg-red-600 p-2 rounded-full cursor-pointer m-1 md:hidden"><ChatCloseSvg color={Color?.white} /></span>
                     <input type="file" multiple accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
                     <button onClick={() => fileInputRef.current.click()} className="p-2 text-primary rounded-lg"><AttachmentBtnSvg /></button>
-                    {/* {userAstrologerDataById && <button onClick={() => setShowRegisterPuja(true)} className="p-2 text-primary rounded-lg"><PujaSvg /></button>} */}
+                    {/* {userAstrologerDetails && <button onClick={() => setShowRegisterPuja(true)} className="p-2 text-primary rounded-lg"><PujaSvg /></button>} */}
 
                     <input type="text" value={inputField} placeholder="Type a message" className="flex-grow p-2 mx-2 border border-gray-300 rounded-lg outline-none" onChange={(e) => setInputField(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') { handleSend(e.target.value); e.target.value = ''; setInputField('') } }} />
                     <button onClick={() => handleSend(inputField)} className="p-2 text-primary rounded-lg"><SendBtnSvg /></button>

@@ -26,7 +26,7 @@ const FreeKundli = () => {
     console.log("params ::: ", { full_name, gender, date_of_birth, time_of_birth, place_of_birth, latitude, longitude });
 
     const { kundliData } = useSelector(state => state?.kundliReducer);
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
     const [searchText, setSearchText] = useState('');
     const filteredData = DeepSearchSpace(kundliData, searchText);
 
@@ -105,11 +105,11 @@ const FreeKundli = () => {
         if (handleValidation()) {
             const payload = {
                 data: {
-                    customerId: userCustomerDataById?._id, name: full_name, gender, dob: date_of_birth, tob: `${date_of_birth}T${time_of_birth}`, place: place_of_birth,
-                    // customerId: userCustomerDataById?._id, name: full_name, gender, dob: date_of_birth, tob: ParseDateTime(moment(date_of_birth).format('YYYY-MM-DD'), moment(time_of_birth, 'HH:mm').format('HH:mm')), place: place_of_birth,
+                    customerId: userCustomerDetails?._id, name: full_name, gender, dob: date_of_birth, tob: `${date_of_birth}T${time_of_birth}`, place: place_of_birth,
+                    // customerId: userCustomerDetails?._id, name: full_name, gender, dob: date_of_birth, tob: ParseDateTime(moment(date_of_birth).format('YYYY-MM-DD'), moment(time_of_birth, 'HH:mm').format('HH:mm')), place: place_of_birth,
                     lat: latitude, lon: longitude,
                 },
-                customerId: userCustomerDataById?._id,
+                customerId: userCustomerDetails?._id,
                 onComplete: () => setSearchParams(`full-name=&gender=&date-of-birth=&time-of-birth=&place-of-birth=&latitude=&longitude=`),
                 navigate
             }
@@ -124,8 +124,8 @@ const FreeKundli = () => {
 
     useEffect(() => {
         //! Dispatching API For Getting Kundli Data;
-        userCustomerDataById && dispatch(KundliActions?.getKundli({ customerId: userCustomerDataById?._id }));
-    }, [userCustomerDataById]);
+        userCustomerDetails && dispatch(KundliActions?.getKundli({ customerId: userCustomerDetails?._id }));
+    }, [userCustomerDetails]);
 
     return (
         <>
@@ -185,7 +185,7 @@ const FreeKundli = () => {
                         </div>
 
                         <div onClick={(e) => {
-                            if (userCustomerDataById) handleSubmit(e);
+                            if (userCustomerDetails) handleSubmit(e);
                             else alert('Please login');
                         }} className='basis-full bg-primary text-center text-white font-[500] rounded-[3px] p-2 py-2.5 text-sm cursor-pointer'>Generate Kundli</div>
                     </div>
@@ -208,7 +208,7 @@ const FreeKundli = () => {
                                     <p className="text-gray-700">{data?.place}</p>
                                 </div>
 
-                                <div onClick={() => dispatch(KundliActions?.deleteKundli({ kundliId: data?._id, customerId: userCustomerDataById?._id }))} className='cursor-pointer text-white bg-red-500 self-start p-1.5 rounded-full'><DeleteSvg w='14' h='14' /></div>
+                                <div onClick={() => dispatch(KundliActions?.deleteKundli({ kundliId: data?._id, customerId: userCustomerDetails?._id }))} className='cursor-pointer text-white bg-red-500 self-start p-1.5 rounded-full'><DeleteSvg w='14' h='14' /></div>
                             </div>
                         ))}
 

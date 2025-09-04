@@ -12,7 +12,7 @@ import * as UserActions from '../../../redux/actions/userAction';
 
 const AssignPujaHistory = () => {
     const dispatch = useDispatch();
-    const { userAstrologerDataById, userAstrologerBookedPujaHistoryData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userAstrologerBookedPujaHistoryData } = useSelector(state => state?.userReducer);
 
     const [searchText, setSearchText] = useState('');
     const filteredData = DeepSearchSpace(userAstrologerBookedPujaHistoryData, searchText);
@@ -103,8 +103,8 @@ const AssignPujaHistory = () => {
     // setImages(prevImages => [...prevImages, ...updatedImages]);
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserAstrologerBookedPujaHistory());
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerBookedPujaHistory());
+    }, [userAstrologerDetails]);
 
     return (
         <>
@@ -158,7 +158,7 @@ const AssignPujaHistory = () => {
                                             <td className="w-[200px] p-[8px_10px] box-border text-[14px] outline-none capitalize text-wrap h-full">{IndianRupee(value?.astrologerPrice)}</td>
                                             <td className="w-[200px] p-[8px_10px] box-border text-[14px] outline-none capitalize text-wrap h-full">{IndianRupee(value?.adminCommission)}</td>
                                             <td className="w-[200px] p-[8px_10px] box-border text-[14px] outline-none capitalize"><div className='flex gap-3 h-full justify-center items-center w-60'>{value?.images?.map((image, idx) => <img key={idx} src={api_urls + image} className='h-10 w-10 rounded-full' />)}</div></td >
-                                            <td className="w-[200px] p-[8px_10px] box-border text-[14px] outline-none capitalize">{value?.videos[0] &&  <video controls className='h-20 min-w-24'><source src={api_urls + value?.videos[0]} /></video>}</td >
+                                            <td className="w-[200px] p-[8px_10px] box-border text-[14px] outline-none capitalize">{value?.videos[0] && <video controls className='h-20 min-w-24'><source src={api_urls + value?.videos[0]} /></video>}</td >
                                             <td className="w-[200px] p-[8px_10px] box-border text-[14px] outline-none capitalize text-wrap h-full cursor-pointer" onClick={() => setModalData({ ismodalOpen: true, modalData: value })}><UploadSvg /></td>
                                             <td className="w-[200px] p-[8px_10px] box-border text-[14px] outline-none capitalize">{value?.status?.toLowerCase() || 'N/A'}</td>
                                         </tr>

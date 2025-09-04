@@ -9,14 +9,14 @@ import * as UserActions from '../../../redux/actions/userAction';
 
 const WalletHistory = () => {
     const dispatch = useDispatch();
-    const { userAstrologerDataById, userAstrologerWalletHistoryData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userAstrologerWalletHistoryData } = useSelector(state => state?.userReducer);
 
     const [searchText, setSearchText] = useState('');
     const filteredData = DeepSearchSpace(userAstrologerWalletHistoryData, searchText);
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserAstrologerWalletHistory());
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerWalletHistory());
+    }, [userAstrologerDetails]);
 
     return (
         <>

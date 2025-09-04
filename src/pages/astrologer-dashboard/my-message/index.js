@@ -8,11 +8,11 @@ import * as UserActions from '../../../redux/actions/userAction';
 const MyMessage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { userAstrologerDataById, userAstrologerCompletedQueueListData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userAstrologerCompletedQueueListData } = useSelector(state => state?.userReducer);
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserAstrologerCompletedQueueList());
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerCompletedQueueList());
+    }, [userAstrologerDetails]);
 
     return (
         <>

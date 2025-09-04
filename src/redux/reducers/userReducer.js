@@ -2,7 +2,7 @@ import * as actionTypes from "../action-types";
 
 const initialState = {
     //! Customer 
-    userCustomerDataById: null,
+    userCustomerDetails: null,
     useCustomerCompletedQueueListData: null,
     userCustomerWalletHistoryData: [],
     userCustomerTransactionHistoryData: [],
@@ -11,7 +11,7 @@ const initialState = {
     userCustomerAstromallHistoryData: [],
     userCustomerAddressData: [],
     //! Astrologer 
-    userAstrologerDataById: null,
+    userAstrologerDetails: null,
     userAstrologerPendingQueueListData: null,
     userAstrologerCompletedQueueListData: null,
     userAstrologerWalletHistoryData: [],
@@ -29,8 +29,8 @@ const userReducer = (state = initialState, actions) => {
 
     switch (type) {
         //! Customer 
-        case actionTypes.SET_USER_CUSTOMER_BY_ID:
-            return { ...state, userCustomerDataById: payload };
+        case actionTypes.SET_USER_CUSTOMER_DETAILS:
+            return { ...state, userCustomerDetails: payload };
 
         case actionTypes.SET_USER_CUSTOMER_COMPLETED_QUEUE_LIST:
             return { ...state, userCustomerCompletedQueueListData: payload };
@@ -54,8 +54,8 @@ const userReducer = (state = initialState, actions) => {
             return { ...state, userCustomerAddressData: payload };
 
         //! Astrologer 
-        case actionTypes.SET_USER_ASTROLOGER_BY_ID:
-            return { ...state, userAstrologerDataById: payload };
+        case actionTypes.SET_USER_ASTROLOGER_DETAILS:
+            return { ...state, userAstrologerDetails: payload };
 
         case actionTypes.SET_USER_ASTROLOGER_PENDING_QUEUE_LIST:
             return { ...state, userAstrologerPendingQueueListData: payload };

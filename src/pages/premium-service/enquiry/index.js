@@ -18,9 +18,9 @@ const Enquiry = () => {
     const amount = location.state?.amount;
     const discount_amount = location.state?.discount_amount;
 
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
 
-    const [inputFieldDetail, setInputFieldDetail] = useState({ full_name: userCustomerDataById?.customerName || '', gender: userCustomerDataById?.gender, date_of_birth: moment(userCustomerDataById?.dateOfBirth)?.format('YYYY-MM-DD') || '', time_of_birth: moment(userCustomerDataById?.timeOfBirth)?.format('HH:mm') || '', place_of_birth: '', latitude: '', longitude: '', email: userCustomerDataById?.email, mobile: userCustomerDataById?.phoneNumber });
+    const [inputFieldDetail, setInputFieldDetail] = useState({ full_name: userCustomerDetails?.customerName || '', gender: userCustomerDetails?.gender, date_of_birth: moment(userCustomerDetails?.dateOfBirth)?.format('YYYY-MM-DD') || '', time_of_birth: moment(userCustomerDetails?.timeOfBirth)?.format('HH:mm') || '', place_of_birth: '', latitude: '', longitude: '', email: userCustomerDetails?.email, mobile: userCustomerDetails?.phoneNumber });
     const { full_name, gender, date_of_birth, time_of_birth, place_of_birth, latitude, longitude, email, mobile } = inputFieldDetail;
     const handleInputFieldDetail = (event) => setInputFieldDetail({ ...inputFieldDetail, [event?.target?.name]: event?.target?.value });
 
@@ -81,12 +81,12 @@ const Enquiry = () => {
 
     //! Handle Submit : Generate Kundli
     const handleSubmit = async () => {
-        console.log({ ...inputFieldDetail, customerId: userCustomerDataById?._id, });
+        console.log({ ...inputFieldDetail, customerId: userCustomerDetails?._id, });
 
         if (handleValidation()) {
             const payload = {
                 data: {
-                    customerId: userCustomerDataById?._id, full_name, gender, date_of_birth, time_of_birth, place_of_birth, latitude, longitude, email, mobile, amount: discount_amount, type
+                    customerId: userCustomerDetails?._id, full_name, gender, date_of_birth, time_of_birth, place_of_birth, latitude, longitude, email, mobile, amount: discount_amount, type
                 },
                 onComplete: () => navigate('/premium-service')
             }
@@ -174,7 +174,7 @@ const Enquiry = () => {
                     </div>
 
                     <div onClick={() => {
-                        if (userCustomerDataById) handleSubmit();
+                        if (userCustomerDetails) handleSubmit();
                         else dispatch(AuthActions.requestToggleCustomerLoginModal());
                     }} className="cursor-pointer basis-full text-center bg-yellow-400 text-black font-semibold px-6 py-3 rounded hover:bg-yellow-300 transition">Proceed</div>
                 </form>

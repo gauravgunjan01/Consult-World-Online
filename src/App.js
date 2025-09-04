@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { LoadScript } from '@react-google-maps/api';
-import { google_api_keys } from './utils/constants';
+import { google_api_keys, user_role } from './utils/constants';
 import { generateTokenByRequestPermission, onMessageListener } from './config/firebase-config';
 import SocketService from './utils/services/socket-service';
 import * as UserActions from './redux/actions/userAction';
@@ -132,7 +132,7 @@ const App = () => {
   const dispatch = useDispatch();
   const { i18n } = useTranslation();
 
-  const { userCustomerDataById, userAstrologerDataById } = useSelector(state => state?.userReducer);
+  const { userCustomerDetails, userAstrologerDetails } = useSelector(state => state?.userReducer);
   const { callIntakeDetailData } = useSelector(state => state?.consultationReducer);
   const { webLanguageData } = useSelector(state => state?.commonReducer);
   const { initiatedRequestData, incomingRequestData, astrologerRatingVisibility } = useSelector(state => state?.consultationReducer);
@@ -141,32 +141,31 @@ const App = () => {
     generateTokenByRequestPermission();
     onMessageListener(navigate, dispatch); //! Listen for foreground messages
 
-    if (userCustomerDataById?._id) {
+    if (userCustomerDetails?._id) {
       //! Initialize Socket for customer
       console.log(`Initialize Socket for customer`);
-      SocketService.initializeSocket(dispatch, navigate, userCustomerDataById._id, 'Customer');
-    } else if (userAstrologerDataById?._id) {
+      SocketService.initializeSocket(dispatch, navigate, userCustomerDetails._id, 'Customer');
+    } else if (userAstrologerDetails?._id) {
       //! Initialize Socket for astrologer
       console.log(`Initialize Socket for astrologer`);
-      SocketService.initializeSocket(dispatch, navigate, userAstrologerDataById?._id, 'Astrologer');
+      SocketService.initializeSocket(dispatch, navigate, userAstrologerDetails?._id, 'Astrologer');
     }
 
-  }, [dispatch, navigate, userCustomerDataById, userAstrologerDataById]);
+  }, [dispatch, navigate, userCustomerDetails, userAstrologerDetails]);
 
   useEffect(() => {
-    userCustomerDataById && dispatch(UserActions?.getUserCustomerCompletedQueueList());
-  }, [userCustomerDataById]);
+    userCustomerDetails && dispatch(UserActions?.getUserCustomerCompletedQueueList());
+  }, [userCustomerDetails]);
 
   useEffect(() => {
-    userAstrologerDataById && dispatch(UserActions?.getUserAstrologerPendingQueueList());
-  }, [userAstrologerDataById]);
+    userAstrologerDetails && dispatch(UserActions?.getUserAstrologerPendingQueueList());
+  }, [userAstrologerDetails]);
 
   useEffect(() => {
-    const user_type = localStorage.getItem('user_type');
-    const current_user_id = localStorage.getItem('current_user_id');
+    const local_user_role = localStorage.getItem(user_role);
 
-    if (user_type == 'customer') dispatch(UserActions.getUserCustomerById({ customerId: current_user_id }));
-    if (user_type == 'astrologer') dispatch(UserActions.getUserAstrologerById({ astrologerId: current_user_id }));
+    if (local_user_role == 'Customer') dispatch(UserActions.getUserCustomerDetails());
+    if (local_user_role == 'Astrologer') dispatch(UserActions.getUserAstrologerDetails());
 
     // TODO: Remove Focus On Wheel Rotation - Input type:number
     const handleWheel = (e) => {

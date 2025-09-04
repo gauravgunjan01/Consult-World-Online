@@ -10,11 +10,11 @@ import * as UserActions from '../../../redux/actions/userAction';
 const Queuelist = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { userAstrologerDataById, userAstrologerPendingQueueListData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userAstrologerPendingQueueListData } = useSelector(state => state?.userReducer);
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserAstrologerPendingQueueList());
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerPendingQueueList());
+    }, [userAstrologerDetails]);
 
     return (
         <>

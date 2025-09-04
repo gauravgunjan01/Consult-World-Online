@@ -15,7 +15,7 @@ const QueueChatMessage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const customerId = searchParams.get('id');
     const customer_name = searchParams.get('name');
-    const { userAstrologerDataById, userQueuePredefinedMessageData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userQueuePredefinedMessageData } = useSelector(state => state?.userReducer);
     const userQueuePredefinedMessageDataFilter = userQueuePredefinedMessageData && userQueuePredefinedMessageData?.filter(value => value?.type == "Astrologer")
 
     const [isOpenPredefinedMessage, setIsOpenPredefinedMessage] = useState(false);
@@ -26,11 +26,11 @@ const QueueChatMessage = () => {
     const fileInputRef = useRef(null);
 
     const currentUser = {
-        _id: userAstrologerDataById?._id,
-        name: userAstrologerDataById?.astrologerName,
-        image: userAstrologerDataById?.profileImage,
+        _id: userAstrologerDetails?._id,
+        name: userAstrologerDetails?.astrologerName,
+        image: userAstrologerDetails?.profileImage,
     };
-    const queue_chat_id = `customer_${customerId}_astrologer_${userAstrologerDataById?._id}`;
+    const queue_chat_id = `customer_${customerId}_astrologer_${userAstrologerDetails?._id}`;
 
     // Todo : Get Message From Database 
     useEffect(() => {
@@ -73,8 +73,8 @@ const QueueChatMessage = () => {
     };
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserQueuePredefinedMessage());
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserQueuePredefinedMessage());
+    }, [userAstrologerDetails]);
 
     //! Scroll Down the Chat 
     useEffect(() => {

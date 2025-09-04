@@ -1,5 +1,7 @@
 export const access_token = process.env.REACT_APP_ACCESS_TOKEN;
 export const refresh_token = process.env.REACT_APP_REFRESH_TOKEN;
+export const user_name = process.env.REACT_APP_USER_NAME;
+export const user_role = process.env.REACT_APP_USER_ROLE;
 export const api_urls_http = process.env.REACT_APP_API_URLS_HTTP;
 export const api_urls_https = process.env.REACT_APP_API_URLS_HTTPS;
 export const google_api_keys = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;

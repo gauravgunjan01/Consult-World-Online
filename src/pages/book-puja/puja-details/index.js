@@ -14,13 +14,13 @@ const PujaDetails = () => {
     const pujaData = location.state && location?.state?.pujaData;
     const astrologerId = location.state && location?.state?.astrologerId;
 
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
     const [inputFieldDetail, setInputFieldDetail] = useState({ pujaDateTime: '', duration: '' });
     const handleInputFieldDetail = (event) => setInputFieldDetail({ ...inputFieldDetail, [event?.target?.name]: event?.target?.value });
 
 
     const handleBookPuja = () => {
-        if (!userCustomerDataById) {
+        if (!userCustomerDetails) {
             toaster.info({ text: 'Please login as a customer' })
         } else {
             const { pujaDateTime, duration } = inputFieldDetail;
@@ -31,7 +31,7 @@ const PujaDetails = () => {
 
             const payload = {
                 data: {
-                    customerId: userCustomerDataById?._id, astrologerId: astrologerId || '', quantity: 1, pujaId: pujaData?._id, pujaDate: moment(pujaDateTime).format(), pujaTime: moment(pujaDateTime).format()
+                    customerId: userCustomerDetails?._id, astrologerId: astrologerId || '', quantity: 1, pujaId: pujaData?._id, pujaDate: moment(pujaDateTime).format(), pujaTime: moment(pujaDateTime).format()
                 },
                 onComplete: () => {
                     navigate('/cart')

@@ -16,14 +16,14 @@ const ProductDetails = () => {
     const product = location.state && location.state.productDetails;
     console.log(product)
     const dispatch = useDispatch();
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
 
     const handleAddToCart = () => {
-        if (!userCustomerDataById) {
+        if (!userCustomerDetails) {
             toaster.info({ text: 'Please login as a customer' })
         } else {
             const payload = {
-                data: { productId: product?._id, customerId: userCustomerDataById?._id },
+                data: { productId: product?._id, customerId: userCustomerDetails?._id },
                 onComplete: () => navigate('/astro-mall/cart')
             }
 

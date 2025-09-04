@@ -26,7 +26,7 @@ const CustomerLoginModal = () => {
     const handleLogin = () => {
         if (customerLoginInputFieldDetail?.phone_number?.length > 5) {
             dispatch(AuthActions.customerLogin({
-                data: { phoneNumber: String(customerLoginInputFieldDetail?.phone_number)?.substring(customerLoginInputFieldDetail?.country_code_length) },
+                data: { phone_number: String(customerLoginInputFieldDetail?.phone_number)?.substring(customerLoginInputFieldDetail?.country_code_length) },
                 onComplete: () => (setOtpScreen(true), setResendTimer(30))
             }));
         } else {
@@ -39,7 +39,7 @@ const CustomerLoginModal = () => {
         setResendTimer(30);
         setCustomerOtp(null);
         dispatch(AuthActions.customerLogin({
-            data: { phoneNumber: String(customerLoginInputFieldDetail?.phone_number)?.substring(customerLoginInputFieldDetail?.country_code_length) },
+            data: { phone_number: String(customerLoginInputFieldDetail?.phone_number)?.substring(customerLoginInputFieldDetail?.country_code_length) },
             onComplete: () => (setOtpScreen(true), setResendTimer(30))
         }));
     };
@@ -49,7 +49,7 @@ const CustomerLoginModal = () => {
     const handleSubmitOtp = () => {
         if (customerOtp && customerOtp?.length == 4) {
             dispatch(AuthActions.customerLoginOtp({
-                data: { phoneNumber: String(customerLoginInputFieldDetail?.phone_number)?.substring(2), webFcmToken: localStorage.getItem('fcm_token'), device_id: 'device_id', otp: customerOtp, },
+                data: { phone_number: String(customerLoginInputFieldDetail?.phone_number)?.substring(2), webFcmToken: localStorage.getItem('fcm_token'), device_id: 'device_id', otp: customerOtp, },
                 onComplete: () => (setOtpScreen(false), handleCloseModal(), setCustomerOtp(''), setResendTimer(30), dispatch(AuthActions?.customerLoginInputField({ phone_number: '', country_code_length: '' })))
             }));
         } else {

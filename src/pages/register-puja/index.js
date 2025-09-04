@@ -16,7 +16,7 @@ const RegisterPuja = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { isLoading } = useSelector(state => state?.commonReducer);
-    const { userAstrologerDataById, userAstrologerRegisteredPujaHistoryData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userAstrologerRegisteredPujaHistoryData } = useSelector(state => state?.userReducer);
     const { pujaData } = useSelector(state => state?.ecommerceReducer);
 
     const [searchText, setSearchText] = useState('');
@@ -30,8 +30,8 @@ const RegisterPuja = () => {
 
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserAstrologerRegisteredPujaHistory());
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerRegisteredPujaHistory());
+    }, [userAstrologerDetails]);
 
     return (
         <>

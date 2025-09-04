@@ -13,15 +13,15 @@ import RecordNotFound from '../../../components/features/RecordNotFound';
 const AssginedPujaHistory = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { userAstrologerDataById, userAstrologerAssignedPujaHistoryData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userAstrologerAssignedPujaHistoryData } = useSelector(state => state?.userReducer);
 
     const [searchText, setSearchText] = useState('');
     const handleSearch = (event) => setSearchText(event?.target?.value);
     const filteredData = DeepSearchSpace(userAstrologerAssignedPujaHistoryData, searchText);
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserAstrologerAssignedPujaHistory());
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerAssignedPujaHistory());
+    }, [userAstrologerDetails]);
 
     return (
         <section className='space-y-3'>

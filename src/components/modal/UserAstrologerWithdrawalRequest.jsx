@@ -9,7 +9,7 @@ Modal.setAppElement('#root');
 
 const UserAstrologerWithdrawalRequest = ({ isOpen, handleClose }) => {
     const dispatch = useDispatch();
-    const { userAstrologerDataById } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails } = useSelector(state => state?.userReducer);
     const [inputFieldDetail, setInputFieldDetail] = useState({ amount: '', reason: '' });
 
     //* Handle Input
@@ -24,8 +24,8 @@ const UserAstrologerWithdrawalRequest = ({ isOpen, handleClose }) => {
             toaster.warning({ text: 'Please enter amount' });
             return isValid = false
         }
-        if (amount > userAstrologerDataById?.wallet_balance) {
-            toaster.warning({ text: `Please enter amount less than wallet balance, Your balance : ${userAstrologerDataById?.wallet_balance?.toFixed(2)}` });
+        if (amount > userAstrologerDetails?.wallet_balance) {
+            toaster.warning({ text: `Please enter amount less than wallet balance, Your balance : ${userAstrologerDetails?.wallet_balance?.toFixed(2)}` });
             return isValid = false
         }
         if (!reason) {
@@ -42,7 +42,7 @@ const UserAstrologerWithdrawalRequest = ({ isOpen, handleClose }) => {
 
         const payload = {
             data: {
-                astrologerId: userAstrologerDataById?._id, amount, reason
+                astrologerId: userAstrologerDetails?._id, amount, reason
             },
             onComplete: () => {
                 handleClose();

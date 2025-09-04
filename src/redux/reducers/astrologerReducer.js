@@ -2,7 +2,7 @@ import * as actionTypes from "../action-types";
 
 const initialState = {
     astrologerData: [],
-    astrologerDataById: [],
+    AstrologerDetails: [],
     astrologerReviewDataById: [],
     astrologerSkillData: [],
     astrologerMainExpertiseData: [],
@@ -17,7 +17,7 @@ const astrologerReducer = (state = initialState, actions) => {
             return { ...state, astrologerData: payload };
 
         case actionTypes.SET_ASTROLOGER_BY_ID:
-            return { ...state, astrologerDataById: payload };
+            return { ...state, AstrologerDetails: payload };
 
         case actionTypes.SET_ASTROLOGER_REVIEW_BY_ID:
             return { ...state, astrologerReviewDataById: payload };

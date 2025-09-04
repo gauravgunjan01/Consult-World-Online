@@ -392,7 +392,7 @@ function* closeCurrentRequest(action) {
                     if (user_type == 'customer') {
                         localStorage.removeItem('initiatedRequestData');
                         yield put({ type: actionTypes.SET_CHAT_INVOICE_VISIBILITY, payload: true });
-                        yield put({ type: actionTypes.GET_USER_CUSTOMER_BY_ID, payload: { customerId: localStorage.getItem('current_user_id') } });
+                        yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } });
                     }
                     if (user_type == 'astrologer') {
                         localStorage.removeItem('incomingRequestData');
@@ -416,7 +416,7 @@ function* closeCurrentRequest(action) {
                     localStorage.removeItem('roomId');
                     localStorage.removeItem('initiatedRequestData');
                     // yield put({ type: actionTypes.SET_CHAT_INVOICE_VISIBILITY, payload: true });
-                    // yield put({ type: actionTypes.GET_USER_CUSTOMER_BY_ID, payload: { customerId: localStorage.getItem('current_user_id') } });
+                    // yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } });
                 }
                 if (user_type == 'astrologer') {
                     localStorage.removeItem('roomId');

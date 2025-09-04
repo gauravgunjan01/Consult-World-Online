@@ -9,7 +9,7 @@ import * as UserActions from '../../redux/actions/userAction';
 const MyMessage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { userCustomerDataById, userCustomerCompletedQueueListData } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails, userCustomerCompletedQueueListData } = useSelector(state => state?.userReducer);
 
     const [lastMessages, setLastMessages] = useState({});
     const [messageCounts, setMessageCounts] = useState({});
@@ -42,8 +42,8 @@ const MyMessage = () => {
     };
 
     useEffect(() => {
-        userCustomerDataById && dispatch(UserActions?.getUserCustomerCompletedQueueList());
-    }, [userCustomerDataById]);
+        userCustomerDetails && dispatch(UserActions?.getUserCustomerCompletedQueueList());
+    }, [userCustomerDetails]);
 
     useEffect(() => {
         if (userCustomerCompletedQueueListData) {

@@ -16,12 +16,12 @@ const IntakeForm = () => {
     const query = new URLSearchParams(searchParams);
     const type = query.get('type') || 'Chat';
 
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
-    const { astrologerDataById } = useSelector(state => state?.astrologerReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
+    const { AstrologerDetails } = useSelector(state => state?.astrologerReducer);
 
     const autocompleteRef = useRef(null);
     const [connectionType, setConnectionType] = useState(type);
-    const [chatIntakeDetail, setChatIntakeDetail] = useState({ isNewProfile: true, first_name: userCustomerDataById?.customerName?.split(' ')[0] || '', last_name: userCustomerDataById?.customerName?.split(' ')[1] || '', gender: userCustomerDataById?.gender || '', date_of_birth: moment(userCustomerDataById?.dateOfBirth)?.format('YYYY-MM-DD') || '', time_of_birth: moment(userCustomerDataById?.timeOfBirth)?.format('HH:mm') || '', place_of_birth: userCustomerDataById?.address?.birthPlace || '', marital_status: 'Unmarried', type_of_concern: 'Career', latitude: userCustomerDataById?.address?.latitude || '', longitude: userCustomerDataById?.address?.longitude || '', description: 'Description' });
+    const [chatIntakeDetail, setChatIntakeDetail] = useState({ isNewProfile: true, first_name: userCustomerDetails?.customerName?.split(' ')[0] || '', last_name: userCustomerDetails?.customerName?.split(' ')[1] || '', gender: userCustomerDetails?.gender || '', date_of_birth: moment(userCustomerDetails?.dateOfBirth)?.format('YYYY-MM-DD') || '', time_of_birth: moment(userCustomerDetails?.timeOfBirth)?.format('HH:mm') || '', place_of_birth: userCustomerDetails?.address?.birthPlace || '', marital_status: 'Unmarried', type_of_concern: 'Career', latitude: userCustomerDetails?.address?.latitude || '', longitude: userCustomerDetails?.address?.longitude || '', description: 'Description' });
 
     const handleChatIntakeDetail = (e) => setChatIntakeDetail({ ...chatIntakeDetail, [e.target?.name]: e.target?.value }) //* Handle Input : Chat Intake Form Data
 
@@ -91,12 +91,12 @@ const IntakeForm = () => {
                 isNewProfile,
                 profileData: { firstName: first_name, lastName: last_name, gender: gender, dateOfBirth: date_of_birth, timeOfBirth: ParseDateTime(date_of_birth, time_of_birth), placeOfBirth: place_of_birth, maritalStatus: marital_status, topic_of_concern: type_of_concern, latitude, longitude, description },
                 selectedProfileId: null,
-                chatPrice: Number(astrologerDataById?.chat_price) + Number(astrologerDataById?.commission_chat_price),
+                chatPrice: Number(AstrologerDetails?.chat_price) + Number(AstrologerDetails?.commission_chat_price),
                 astrologerId: astrologerId,
-                astrologerName: astrologerDataById?.astrologerName?.toLowerCase(),
-                astrologerProfileImage: astrologerDataById?.profileImage,
-                customerName: userCustomerDataById?.customerName,
-                customerProfileImage: 'uploads/' + userCustomerDataById?.image,
+                astrologerName: AstrologerDetails?.astrologerName?.toLowerCase(),
+                astrologerProfileImage: AstrologerDetails?.profileImage,
+                customerName: userCustomerDetails?.customerName,
+                customerProfileImage: 'uploads/' + userCustomerDetails?.image,
                 type: connectionType,
                 onComplete: () => navigate(-1)
             }
@@ -177,7 +177,7 @@ const IntakeForm = () => {
                     <div className='flex items-center'>
                         <input onChange={(event) => {
                             if (event?.target?.checked) { setChatIntakeDetail({ ...chatIntakeDetail, date_of_birth: moment(new Date())?.format('YYYY-MM-DD') }) }
-                            else { setChatIntakeDetail({ ...chatIntakeDetail, date_of_birth: moment(userCustomerDataById?.dateOfBirth)?.format('YYYY-MM-DD') || '' }) }
+                            else { setChatIntakeDetail({ ...chatIntakeDetail, date_of_birth: moment(userCustomerDetails?.dateOfBirth)?.format('YYYY-MM-DD') || '' }) }
                         }} id='date_of_birth' type='checkbox' className='-mt-0.5 cursor-pointer' />
                         <label htmlFor='date_of_birth' className='pl-2 cursor-pointer'>Don't know my date of birth</label>
                     </div>
@@ -185,14 +185,14 @@ const IntakeForm = () => {
                     <div className='flex items-center'>
                         <input onChange={(event) => {
                             if (event?.target?.checked) { setChatIntakeDetail({ ...chatIntakeDetail, time_of_birth: moment(new Date()?.setHours(12, 0, 0, 0))?.format('HH:mm') }) }
-                            else { setChatIntakeDetail({ ...chatIntakeDetail, time_of_birth: moment(userCustomerDataById?.timeOfBirth)?.format('HH:mm') || '' }) }
+                            else { setChatIntakeDetail({ ...chatIntakeDetail, time_of_birth: moment(userCustomerDetails?.timeOfBirth)?.format('HH:mm') || '' }) }
                         }} id='time_of_birth' type='checkbox' className='-mt-0.5 cursor-pointer' />
                         <label htmlFor='time_of_birth' className='pl-2 cursor-pointer'>Don't know my time of birth</label>
                     </div>
                 </main>
 
                 <div className='flex justify-center pb-5'>
-                    <button onClick={() => handleSubmitChatIntakeForm()} className='self-center cursor-pointer bg-primary border border-primary text-center text-white rounded-mds px-14 py-2 transition-all duration-500'>Start {connectionType?.split('-')?.join(' ')} with <span className='capitalize'>{astrologerDataById?.astrologerName?.toLowerCase()}</span></button>
+                    <button onClick={() => handleSubmitChatIntakeForm()} className='self-center cursor-pointer bg-primary border border-primary text-center text-white rounded-mds px-14 py-2 transition-all duration-500'>Start {connectionType?.split('-')?.join(' ')} with <span className='capitalize'>{AstrologerDetails?.astrologerName?.toLowerCase()}</span></button>
                 </div>
             </section>
         </>

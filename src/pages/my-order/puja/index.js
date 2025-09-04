@@ -15,15 +15,15 @@ const MyOrderPuja = () => {
     const query = new URLSearchParams(searchParams);
 
     const dispatch = useDispatch();
-    const { userCustomerDataById, userCustomerPujaBookHistoryData } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails, userCustomerPujaBookHistoryData } = useSelector(state => state?.userReducer);
 
     const [state, setState] = useState({ productModelOpen: false, productModelData: null });
     const { productModelOpen, productModelData } = state;
 
     useEffect(() => {
-        userCustomerDataById && dispatch(UserActions?.getUserCustomerOrderHistory());
-        userCustomerDataById && dispatch(UserActions?.getUserCustomerPujaBookHistory());
-    }, [userCustomerDataById]);
+        userCustomerDetails && dispatch(UserActions?.getUserCustomerOrderHistory());
+        userCustomerDetails && dispatch(UserActions?.getUserCustomerPujaBookHistory());
+    }, [userCustomerDetails]);
 
     return (
         <>

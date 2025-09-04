@@ -11,7 +11,7 @@ import * as AstrologerActions from '../../redux/actions/astrologerAction';
 const PremiumService = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { astrologerDataById } = useSelector(state => state?.astrologerReducer);
+    const { AstrologerDetails } = useSelector(state => state?.astrologerReducer);
 
     const steps = [
         "Enter Your Birth Details",
@@ -62,17 +62,17 @@ const PremiumService = () => {
                         <div className="flex-1">
                             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                                 Get Your Queries Answered by Our Principal Astrologer -{" "}
-                                <span className="text-yellow-600 underline decoration-yellow-400 decoration-4 underline-offset-2">{astrologerDataById?.astrologerName}</span>
+                                <span className="text-yellow-600 underline decoration-yellow-400 decoration-4 underline-offset-2">{AstrologerDetails?.astrologerName}</span>
                             </h2>
 
                             <div className="flex items-start gap-4 mt-6">
-                                <img src={api_urls + astrologerDataById?.profileImage} alt={astrologerDataById?.astrologerName} className="rounded-md w-36 h-40 object-cover" />
-                                <p className="text-gray-700 md:text-lg">{astrologerDataById?.long_bio}</p>
+                                <img src={api_urls + AstrologerDetails?.profileImage} alt={AstrologerDetails?.astrologerName} className="rounded-md w-36 h-40 object-cover" />
+                                <p className="text-gray-700 md:text-lg">{AstrologerDetails?.long_bio}</p>
                             </div>
 
                             <div className="flex flex-wrap gap-3 mt-6">
-                                {astrologerDataById && astrologerDataById?.skill?.length > 0 &&
-                                    astrologerDataById?.skill?.map((value, index) => {
+                                {AstrologerDetails && AstrologerDetails?.skill?.length > 0 &&
+                                    AstrologerDetails?.skill?.map((value, index) => {
                                         const skillName = value?.skill || "Unknown";
                                         const color = colorClasses[index % colorClasses.length];
 
@@ -95,7 +95,7 @@ const PremiumService = () => {
                                 Now You Can Consult Our Principal Astrologer Easily
                             </h2>
 
-                            <p className="">Ask your questions regarding career, health, marriage, relationships, or any other area of life. And, get answers with a high level of accuracy and effective remedial measures from our Principal Astrologer, {astrologerDataById?.astrologerName}.</p>
+                            <p className="">Ask your questions regarding career, health, marriage, relationships, or any other area of life. And, get answers with a high level of accuracy and effective remedial measures from our Principal Astrologer, {AstrologerDetails?.astrologerName}.</p>
 
                             <ul className="space-y-3 text-gray-800">
                                 <li className="flex items-center gap-2">
@@ -122,7 +122,7 @@ const PremiumService = () => {
                                 How Consult Our Principal Astrologer Works
                             </h2>
 
-                            <p className="">It’s really easy! Just follow the steps given below and your query will reach our {astrologerDataById?.astrologerName} in no time!</p>
+                            <p className="">It’s really easy! Just follow the steps given below and your query will reach our {AstrologerDetails?.astrologerName} in no time!</p>
 
                             <div className="max-w-2xl mx-auto mt-10 px-4 space-y-4">
                                 {steps.map((step, index) => (

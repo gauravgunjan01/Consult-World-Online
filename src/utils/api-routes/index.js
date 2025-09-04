@@ -1,12 +1,12 @@
 //! Auth
 //* Customer Auth
-export const customer_login = 'api/customers/customer-login';
-export const customer_login_otp = 'api/customers/verify_web_customer';
+export const customer_login = 'api/auth/send-otp-to-customer';
+export const customer_login_otp = 'api/auth/verify-customer-otp';
 export const customer_update_profile = 'api/customers/update_profile_intake';
 export const customer_change_picture = 'api/customers/change_profile';
 
 //* Astrologer Auth
-export const astrologer_login = 'api/astrologer/astrologer_web_login';
+export const astrologer_login = 'api/auth/astrologer-login';
 
 //* Logout
 export const user_logout = 'api/logout';
@@ -15,7 +15,7 @@ export const user_logout = 'api/logout';
 export const enquiry_premium_service = 'api/customers/customer_consult';
 
 //! User
-export const get_user_customer_by_id = 'api/customers/get-customer-detail';
+export const get_user_customer_details = 'api/auth/customer-details';
 export const recharge_user_customer_wallet = 'api/customers/check_razorpay_payment_status';
 export const get_user_customer_completed_queue_list = 'api/customers/get_customer_completed_queues';
 export const update_user_customer_completed_queue_list_read_status = 'api/customers/update_queue_read_status';
@@ -29,7 +29,7 @@ export const create_user_customer_address = 'api/puja/add_address_puja';
 export const update_user_customer_address = 'api/puja/update_address_puja';
 export const delete_user_customer_address = 'api/puja/delete_address_puja';
 
-export const get_user_astrologer_by_id = 'api/astrologer/get-astrologer-details';
+export const get_user_astrologer_details = 'api/auth/astrologer-details';
 export const change_user_astrologer_chat_status = 'api/astrologer/change-chat-status';
 export const change_user_astrologer_call_status = 'api/astrologer/change-call-status';
 export const change_user_astrologer_video_call_status = 'api/admin/change_videocall_status';

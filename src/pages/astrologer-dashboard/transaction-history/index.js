@@ -10,14 +10,14 @@ import DataNotFound from '../../../components/common/DataNotFound';
 
 const TransactionHistory = () => {
     const dispatch = useDispatch();
-    const { userAstrologerDataById, userAstrologerTransactionHistoryData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userAstrologerTransactionHistoryData } = useSelector(state => state?.userReducer);
 
     const [searchText, setSearchText] = useState('');
     const filteredData = DeepSearchSpace(userAstrologerTransactionHistoryData, searchText);
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserAstrologerTransactionHistory());
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerTransactionHistory());
+    }, [userAstrologerDetails]);
 
     return (
         <>

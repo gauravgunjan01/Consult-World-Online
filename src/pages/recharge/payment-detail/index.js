@@ -10,18 +10,18 @@ const PaymentDetail = () => {
     const stateData = location?.state?.stateData;
 
     const dispatch = useDispatch();
-    const { userCustomerDataById } = useSelector(state => state?.userReducer)
+    const { userCustomerDetails } = useSelector(state => state?.userReducer)
 
     const handlePayment = async () => {
         const payload = {
             data: {
-                customerId: userCustomerDataById?._id,
+                customerId: userCustomerDetails?._id,
                 amount: stateData?.amount + stateData?.amount * .18,
                 rechargePlanId: stateData?._id,
                 profitPercentage: stateData?.percentage,
                 gst: 18
             },
-            user: userCustomerDataById,
+            user: userCustomerDetails,
             onComplete: () => navigate('/wallet-history')
         }
 

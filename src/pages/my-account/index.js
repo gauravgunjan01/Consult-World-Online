@@ -15,7 +15,7 @@ const MyAccount = () => {
     const query = new URLSearchParams(searchParams);
     const activeHead = query.get('active-tab') || 'Change Picture';
 
-    const { userCustomerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails } = useSelector(state => state?.userReducer);
 
     const autocompleteRef = useRef(null);
     const [inputFieldDetail, setInputFieldDetail] = useState({ first_name: '', last_name: '', email: '', phone: '', gender: '', date_of_birth: '', time_of_birth: '', date_of_birth_and_time: '', place_of_birth: '', marital_status: '', type_of_concern: '', latitude: '', longitude: '', description: '' });
@@ -98,7 +98,7 @@ const MyAccount = () => {
         const { first_name, last_name, email, gender, date_of_birth_and_time, place_of_birth, marital_status, type_of_concern, description, latitude, longitude } = inputFieldDetail;
 
         const payload = {
-            customerId: userCustomerDataById?._id,
+            customerId: userCustomerDetails?._id,
             firstName: first_name?.trim(),
             lastName: last_name?.trim(),
             email, gender,
@@ -118,12 +118,12 @@ const MyAccount = () => {
     const handleChangePicture = () => {
         if (image?.file) {
             const formdata = new FormData();
-            formdata.append('customerId', userCustomerDataById?._id);
+            formdata.append('customerId', userCustomerDetails?._id);
             formdata.append('image', image?.byte);
 
             const payload = {
                 data: formdata,
-                customerId: userCustomerDataById?._id
+                customerId: userCustomerDetails?._id
             }
 
             //! Dispatching API To Update Customer Profile Picture
@@ -135,10 +135,10 @@ const MyAccount = () => {
     };
 
     useEffect(() => {
-        userCustomerDataById && setInputFieldDetail({ ...inputFieldDetail, first_name: userCustomerDataById?.customerName?.split(' ')[0], last_name: userCustomerDataById?.customerName?.split(' ')[1] || '', email: userCustomerDataById?.email || '', phone: userCustomerDataById?.phoneNumber || '', gender: userCustomerDataById?.gender || '', date_of_birth_and_time: userCustomerDataById?.dateOfBirth || '', place_of_birth: userCustomerDataById?.address?.birthPlace || '', marital_status: userCustomerDataById?.maritalStatus || '', type_of_concern: userCustomerDataById?.topic_of_concern || '', latitude: userCustomerDataById?.address?.latitude || '', longitude: userCustomerDataById?.address?.longitude || '', description: userCustomerDataById?.description || '' });
+        userCustomerDetails && setInputFieldDetail({ ...inputFieldDetail, first_name: userCustomerDetails?.customerName?.split(' ')[0], last_name: userCustomerDetails?.customerName?.split(' ')[1] || '', email: userCustomerDetails?.email || '', phone: userCustomerDetails?.phoneNumber || '', gender: userCustomerDetails?.gender || '', date_of_birth_and_time: userCustomerDetails?.dateOfBirth || '', place_of_birth: userCustomerDetails?.address?.birthPlace || '', marital_status: userCustomerDetails?.maritalStatus || '', type_of_concern: userCustomerDetails?.topic_of_concern || '', latitude: userCustomerDetails?.address?.latitude || '', longitude: userCustomerDetails?.address?.longitude || '', description: userCustomerDetails?.description || '' });
 
-        userCustomerDataById && userCustomerDataById?.image && setImage({ file: api_urls + 'uploads/' + userCustomerDataById?.image });
-    }, [userCustomerDataById]);
+        userCustomerDetails && userCustomerDetails?.image && setImage({ file: api_urls + 'uploads/' + userCustomerDetails?.image });
+    }, [userCustomerDetails]);
 
     return (
         <>

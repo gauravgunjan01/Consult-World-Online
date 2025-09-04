@@ -13,16 +13,16 @@ const Cart = () => {
     const dispatch = useDispatch();
     const { cartData } = useSelector(state => state?.ecommerceReducer);
     const { cartId, cart: cartDataArray, totalPrice } = cartData;
-    const { userCustomerDataById } = useSelector(state => state?.userReducer)
+    const { userCustomerDetails } = useSelector(state => state?.userReducer)
     console.log('cartDataArray', cartDataArray);
 
     const handleOrderCart = async () => {
         const payload = {
             amount: totalPrice,
             data: {
-                customerId: userCustomerDataById?._id,
+                customerId: userCustomerDetails?._id,
             },
-            user: userCustomerDataById,
+            user: userCustomerDetails,
             onComplete: () => navigate('/astro-mall')
         }
 
@@ -65,9 +65,9 @@ const Cart = () => {
                                     </div>
                                     <div className='flex justify-between gap-5 basis-[45%] max-md:basis-[100%]'>
                                         <div className="flex items-center gap-2 mt-2">
-                                            <button onClick={() => dispatch(EcommerceActions.updateCartQuantity({ customerId: userCustomerDataById?._id, pujaId: value?.pujaId?._id, action: 'decrement' }))} className="bg-red-600 w-8 h-8 flex justify-center items-center rounded-md text-white">-</button>
+                                            <button onClick={() => dispatch(EcommerceActions.updateCartQuantity({ customerId: userCustomerDetails?._id, pujaId: value?.pujaId?._id, action: 'decrement' }))} className="bg-red-600 w-8 h-8 flex justify-center items-center rounded-md text-white">-</button>
                                             <div className="text-lg">{value?.quantity}</div>
-                                            <button disabled={value?.quantity == 100} onClick={() => dispatch(EcommerceActions.updateCartQuantity({ customerId: userCustomerDataById?._id, pujaId: value?.pujaId?._id, action: 'increment' }))} className={`${value?.quantity == 100 ? 'bg-gray-400' : 'bg-green-700'} w-8 h-8 flex justify-center items-center rounded-md text-white`}>+</button>
+                                            <button disabled={value?.quantity == 100} onClick={() => dispatch(EcommerceActions.updateCartQuantity({ customerId: userCustomerDetails?._id, pujaId: value?.pujaId?._id, action: 'increment' }))} className={`${value?.quantity == 100 ? 'bg-gray-400' : 'bg-green-700'} w-8 h-8 flex justify-center items-center rounded-md text-white`}>+</button>
                                         </div>
                                         <div className="flex gap-2 items-center">
                                             <span className="text-xl font-bold text-green-700">{IndianRupee(value?.totalPujaPrice)}</span>

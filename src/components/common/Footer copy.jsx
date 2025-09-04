@@ -5,7 +5,7 @@
 // import * as AuthActions from '../../redux/actions/authAction';
 
 // const Footer = ({ scrollToSection }) => {
-//     const { userCustomerDataById, userAstrologerDataById } = useSelector(state => state?.userReducer);
+//     const { userCustomerDetails, userAstrologerDetails } = useSelector(state => state?.userReducer);
 //     const dispatch = useDispatch();
 
 //     return (
@@ -80,7 +80,7 @@
 //                             <Link className='hover:text-primary' onClick={() => window?.scrollTo({ top: 0, behavior: 'smooth' })} to='/important-links'>{website_name} Sitemap</Link>
 //                         </main>
 
-//                         {!userCustomerDataById && !userAstrologerDataById && <main className='flex flex-col gap-3'>
+//                         {!userCustomerDetails && !userAstrologerDetails && <main className='flex flex-col gap-3'>
 //                             <span className='text-[17px] font-[500] border-b-2 border-primary inline-block pb-1 self-start'>Consultant</span>
 //                             <Link onClick={() => window?.scrollTo({ top: 0, behavior: 'smooth' })} to={'consultant-signup'} className='cursor-pointer'>Consultant Signup</Link>
 //                             <div onClick={() => dispatch(AuthActions.requestToggleCustomerLoginModal())} className='cursor-pointer'>Consultant Login</div>
@@ -147,7 +147,7 @@ import * as AuthActions from '../../redux/actions/authAction';
 
 const Footer = () => {
     const dispatch = useDispatch();
-    const { userCustomerDataById, userAstrologerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails, userAstrologerDetails } = useSelector(state => state?.userReducer);
 
     return (
         <>
@@ -208,7 +208,7 @@ const Footer = () => {
                 </article> */}
 
                 {/* Astrologer Section */}
-                {!userCustomerDataById && !userAstrologerDataById && <>
+                {!userCustomerDetails && !userAstrologerDetails && <>
                     <div className="text-center text-base font-medium">Astrologer</div>
                     <main className="flex flex-wrap justify-center text-center gap-x-3 gap-y-2 border-b border-gray-300 pb-3">
                         <Link onClick={() => window?.scrollTo({ top: 0, behavior: 'smooth' })} to={'consultant-signup'} className='hover:text-secondary hover:bg-white bg-secondary text-white px-5 py-0.5 rounded-full cursor-pointer transition-all duration-500'>Astrologer Signup</Link>

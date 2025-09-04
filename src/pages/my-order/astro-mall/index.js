@@ -10,14 +10,14 @@ import * as UserActions from '../../../redux/actions/userAction';
 
 const MyOrderAstromall = () => {
     const dispatch = useDispatch();
-    const { userCustomerDataById, userCustomerAstromallHistoryData } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails, userCustomerAstromallHistoryData } = useSelector(state => state?.userReducer);
 
     const [state, setState] = useState({ productModelOpen: false, productModelData: null, address: null });
     const { productModelOpen, productModelData, address } = state;
 
     useEffect(() => {
-        userCustomerDataById && dispatch(UserActions?.getUserCustomerAstromallHistory());
-    }, [userCustomerDataById]);
+        userCustomerDetails && dispatch(UserActions?.getUserCustomerAstromallHistory());
+    }, [userCustomerDetails]);
 
     return (
         <>

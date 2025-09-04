@@ -21,7 +21,7 @@ const Header = () => {
     const { t, i18n } = useTranslation();
 
     const { webLanguageData, isHamburgerMenuOpen } = useSelector(state => state?.commonReducer);
-    const { userCustomerDataById, userAstrologerDataById } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails, userAstrologerDetails } = useSelector(state => state?.userReducer);
     const [screenScroll, setScreenScroll] = useState(false);
 
     //! Handle Resize and Scroll Event Listener 
@@ -103,17 +103,17 @@ const Header = () => {
                                 )}
                             </NavLink>
 
-                            {!userCustomerDataById && !userAstrologerDataById && <div onClick={() => dispatch(AuthActions.requestToggleCustomerLoginModal())} className='flex items-center gap-1.5 cursor-pointer text-black py-2.5 rounded-full'><div className='-mt-1'><div className='h-9 w-9 border border-primary rounded-full flex items-center justify-center bg-primary text-white'><PersonSvg h='20' w='20' /></div></div><div>Sign In</div></div>}
+                            {!userCustomerDetails && !userAstrologerDetails && <div onClick={() => dispatch(AuthActions.requestToggleCustomerLoginModal())} className='flex items-center gap-1.5 cursor-pointer text-black py-2.5 rounded-full'><div className='-mt-1'><div className='h-9 w-9 border border-primary rounded-full flex items-center justify-center bg-primary text-white'><PersonSvg h='20' w='20' /></div></div><div>Sign In</div></div>}
 
-                            {userAstrologerDataById &&
+                            {userAstrologerDetails &&
                                 <div className='group relative text-black max-lg:hidden'>
-                                    <div className='flex items-center gap-1 cursor-pointer'>{userAstrologerDataById?.profileImage ? <img src={api_urls + userAstrologerDataById?.profileImage} className='h-9 w-9 rounded-full' /> : <ProfileSvg h='40' w='40' />}</div>
+                                    <div className='flex items-center gap-1 cursor-pointer'>{userAstrologerDetails?.profileImage ? <img src={api_urls + userAstrologerDetails?.profileImage} className='h-9 w-9 rounded-full' /> : <ProfileSvg h='40' w='40' />}</div>
 
                                     <div className='font-normal absolute overflow-hidden top-[85px] right-0 bg-white w-52 h-0 rounded-lg group-hover:h-[400px] text-nowrap custom-zero-scrollbar overflow-y-scroll transition-all duration-500 ease-in group-hover:border-b-[5px] group-hover:border-t border-primary shadow-2xl'>
                                         <div className='flex flex-col items-center gap-1.5 py-5'>
-                                            {userAstrologerDataById?.profileImage ? <img src={api_urls + userAstrologerDataById?.profileImage} className='h-11 w-11 rounded-full' /> : <ProfileSvg h='40' w='40' />}
-                                            <div className='text-[16px]'>{userAstrologerDataById?.astrologerName}</div>
-                                            <div className='text-sm'>XXXXXX{userAstrologerDataById?.phoneNumber?.toString()?.substring(6, 10)}</div>
+                                            {userAstrologerDetails?.profileImage ? <img src={api_urls + userAstrologerDetails?.profileImage} className='h-11 w-11 rounded-full' /> : <ProfileSvg h='40' w='40' />}
+                                            <div className='text-[16px]'>{userAstrologerDetails?.astrologerName}</div>
+                                            <div className='text-sm'>XXXXXX{userAstrologerDetails?.phoneNumber?.toString()?.substring(6, 10)}</div>
                                         </div>
                                         <div onClick={() => navigate('/astrologer-dashboard/my-account')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Account</div></div>
                                         <div onClick={() => navigate('/astrologer-dashboard/queue-list')} className='flex items-center gap-1 border-t py-2 px-5 cursor-pointer hover:text-primary'><p>Queue List</p></div>
@@ -127,15 +127,15 @@ const Header = () => {
                                 </div>
                             }
 
-                            {userCustomerDataById &&
+                            {userCustomerDetails &&
                                 <div className='group relative text-black max-lg:hidden'>
-                                    <div className='flex items-center gap-1 cursor-pointer text-black'>{userCustomerDataById?.image ? <img src={api_urls + 'uploads/' + userCustomerDataById?.image} className='h-14 w-14 object-contain rounded-full bg-primary shadow-md' /> : <ProfileSvg h='40' w='40' />}</div>
+                                    <div className='flex items-center gap-1 cursor-pointer text-black'>{userCustomerDetails?.image ? <img src={api_urls + 'uploads/' + userCustomerDetails?.image} className='h-14 w-14 object-contain rounded-full bg-primary shadow-md' /> : <ProfileSvg h='40' w='40' />}</div>
 
                                     <div className='font-normal absolute overflow-hidden top-[85px] right-0 bg-white w-56 h-0 rounded-lg group-hover:h-[400px] overflow-y-scroll custom-zero-scrollbar transition-all duration-500 ease-in group-hover:border-b-[5px] group-hover:border-t border-primary shadow-2xl'>
                                         <div className='flex flex-col items-center gap-1.5 py-5'>
-                                            {userCustomerDataById?.image ? <img src={api_urls + 'uploads/' + userCustomerDataById?.image} className='h-11 w-11 object-contain rounded-full bg-gray-100' /> : <ProfileSvg h='40' w='40' />}
-                                            <div className='text-[16px]'>{userCustomerDataById?.customerName}</div>
-                                            <div className='text-sm'>XXXXXX{userCustomerDataById?.phoneNumber?.toString()?.substring(6, 10)}</div>
+                                            {userCustomerDetails?.image ? <img src={api_urls + 'uploads/' + userCustomerDetails?.image} className='h-11 w-11 object-contain rounded-full bg-gray-100' /> : <ProfileSvg h='40' w='40' />}
+                                            <div className='text-[16px]'>{userCustomerDetails?.customerName}</div>
+                                            <div className='text-sm'>XXXXXX{userCustomerDetails?.phoneNumber?.toString()?.substring(6, 10)}</div>
                                         </div>
                                         <div onClick={() => navigate('/my-account?active-tab=update-profile')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Account</div></div>
                                         <div onClick={() => navigate('/my-message')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><p>My Message</p></div>
@@ -161,7 +161,7 @@ const Header = () => {
                         <div className='text-center font-semibold text-sm'>WHAT ARE YOU LOOKING FOR?</div>
 
                         <div className='flex flex-col'>
-                            {userCustomerDataById && <>
+                            {userCustomerDetails && <>
                                 <div className='flex items-center  border-b py-4 px-1'>
                                     <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/my-account?active-tab=update-profile" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Account</NavLink>
                                 </div>
@@ -203,7 +203,7 @@ const Header = () => {
                                 </div>
                             </>}
 
-                            {userAstrologerDataById && <>
+                            {userAstrologerDetails && <>
                                 <div className='flex items-center  border-b py-4 px-1'>
                                     <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/my-account" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Account</NavLink>
                                 </div>
@@ -233,7 +233,7 @@ const Header = () => {
                                 </div>
                             </>}
 
-                            {userAstrologerDataById || userCustomerDataById ?
+                            {userAstrologerDetails || userCustomerDetails ?
                                 <>
                                     <div className='flex items-center gap-1  border-b py-4'>
                                         <div className='border-b-2 border-white'></div><div onClick={() => dispatch(AuthActions.userLogout({ onComplete: () => navigate('/') }))} className='cursor-pointer'>Logout</div>

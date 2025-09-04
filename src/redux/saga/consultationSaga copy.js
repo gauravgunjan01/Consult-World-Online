@@ -316,7 +316,7 @@ function* closeCurrentRequest(action) {
 
                     if (user_type == 'customer') {
                         yield put({ type: actionTypes.SET_CHAT_INVOICE_VISIBILITY, payload: true });
-                        yield put({ type: actionTypes.GET_USER_CUSTOMER_BY_ID, payload: { customerId: localStorage.getItem('current_user_id') } });
+                        yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } });
                     }
                     if (user_type == 'astrologer') {
                         yield put({ type: actionTypes.SET_ASTROLOGER_CHAT_INVOICE_VISIBILITY, payload: true });
@@ -577,7 +577,7 @@ function* closeChatMessage(action) {
 
                 if (user_type == 'customer') {
                     yield put({ type: actionTypes.SET_CHAT_INVOICE_VISIBILITY, payload: true });
-                    yield put({ type: actionTypes.GET_USER_CUSTOMER_BY_ID, payload: { customerId: localStorage.getItem('current_user_id') } });
+                    yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } });
                 }
                 if (user_type == 'astrologer') {
                     yield put({ type: actionTypes.SET_ASTROLOGER_CHAT_INVOICE_VISIBILITY, payload: true });

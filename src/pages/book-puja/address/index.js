@@ -15,7 +15,7 @@ const Address = () => {
     const totalPrice = location?.state?.totalPrice;
     const cartId = location?.state?.cartId;
 
-    const { userCustomerDataById, userCustomerAddressData } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails, userCustomerAddressData } = useSelector(state => state?.userReducer);
 
     const [inputfieldDetail, setInputfieldDetail] = useState({ name: '', phone: '', pincode: '', house: '', state: '', city: '', area: '' });
 
@@ -62,7 +62,7 @@ const Address = () => {
         const { name, phone: mobile, pincode, house: houseNo, state, city, area: landmark } = inputfieldDetail;
 
         const payload = {
-            data: { name, mobile, houseNo, landmark, city, pincode, state, customerId: userCustomerDataById?._id },
+            data: { name, mobile, houseNo, landmark, city, pincode, state, customerId: userCustomerDetails?._id },
             onComplete: () => setInputfieldDetail({ name: '', phone: '', pincode: '', house: '', state: '', city: '', area: '' })
         };
 
@@ -72,8 +72,8 @@ const Address = () => {
     const handleOrderCart = async (addressId) => {
         const payload = {
             amount: totalPrice,
-            data: { customerId: userCustomerDataById?._id, addressId, cartId },
-            user: userCustomerDataById,
+            data: { customerId: userCustomerDetails?._id, addressId, cartId },
+            user: userCustomerDetails,
             onComplete: () => navigate('/my-order/puja')
         }
 
@@ -82,8 +82,8 @@ const Address = () => {
     }
 
     useEffect(() => {
-        userCustomerDataById && dispatch(UserActions?.getUserCustomerAddress());
-    }, [userCustomerDataById]);
+        userCustomerDetails && dispatch(UserActions?.getUserCustomerAddress());
+    }, [userCustomerDetails]);
 
     return (
         <>

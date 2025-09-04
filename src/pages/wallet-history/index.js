@@ -12,14 +12,14 @@ import DataNotFound from '../../components/common/DataNotFound';
 const WalletHistory = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { userCustomerDataById, userCustomerWalletHistoryData } = useSelector(state => state?.userReducer);
+    const { userCustomerDetails, userCustomerWalletHistoryData } = useSelector(state => state?.userReducer);
 
     const [searchText, setSearchText] = useState('');
     const filteredData = DeepSearchSpace(userCustomerWalletHistoryData, searchText);
 
     useEffect(() => {
-        userCustomerDataById && dispatch(UserActions?.getUserCustomerWalletHistory());
-    }, [userCustomerDataById]);
+        userCustomerDetails && dispatch(UserActions?.getUserCustomerWalletHistory());
+    }, [userCustomerDetails]);
 
     return (
         <>
@@ -40,7 +40,7 @@ const WalletHistory = () => {
                         <div>Check your balance, add money and see your complete transaction history here</div>
 
                         <div className='border border-primary rounded-md p-5 flex items-center justify-between gap-5 bg-[#E5D18E90]'>
-                            <div className='flex items-center gap-7'><WalletSvg /> Wallet : {IndianRupee(userCustomerDataById?.wallet_balance || 0)}</div>
+                            <div className='flex items-center gap-7'><WalletSvg /> Wallet : {IndianRupee(userCustomerDetails?.wallet_balance || 0)}</div>
                             <div onClick={() => navigate('/recharge')} className='cursor-pointer bg-primary border border-primary text-center text-sm rounded-md text-white font-semibold px-3 py-1.5 transition-all duration-500'>Add Money</div>
                         </div>
                     </article>

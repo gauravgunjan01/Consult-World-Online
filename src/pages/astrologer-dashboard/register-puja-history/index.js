@@ -14,15 +14,15 @@ import { Section } from 'lucide-react';
 const RegisterPujaHistory = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { userAstrologerDataById, userAstrologerRegisteredPujaHistoryData } = useSelector(state => state?.userReducer);
+    const { userAstrologerDetails, userAstrologerRegisteredPujaHistoryData } = useSelector(state => state?.userReducer);
 
     const [searchText, setSearchText] = useState('');
     const handleSearch = (event) => setSearchText(event?.target?.value);
     const filteredData = DeepSearchSpace(userAstrologerRegisteredPujaHistoryData, searchText);
 
     useEffect(() => {
-        userAstrologerDataById && dispatch(UserActions?.getUserAstrologerRegisteredPujaHistory());
-    }, [userAstrologerDataById]);
+        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerRegisteredPujaHistory());
+    }, [userAstrologerDetails]);
 
     return (
         <section className='space-y-3'>

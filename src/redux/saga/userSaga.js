@@ -4,7 +4,7 @@ import * as actionTypes from "../action-types";
 import { toaster } from '../../utils/services/toast-service';
 import { call, put, select, takeLeading } from 'redux-saga/effects';
 import { getAPI, postAPI, razorpayPayment } from '../../utils/api-function';
-import { change_user_astrologer_call_status, change_user_astrologer_chat_status, change_user_astrologer_video_call_status, complete_booked_puja_history, create_user_customer_address, delete_user_customer_address, enquiry_premium_service, get_user_astrologer_assigned_puja_history, get_user_astrologer_booked_puja_history, get_user_astrologer_by_id, get_user_astrologer_completed_queue_list, get_user_astrologer_pending_queue_list, get_user_astrologer_registered_puja_history, get_user_astrologer_transaction_history, get_user_astrologer_wallet_history, get_user_customer_address, get_user_customer_astro_mall_history, get_user_customer_by_id, get_user_customer_completed_queue_list, get_user_customer_order_history, get_user_customer_puja_book_history, get_user_customer_transaction_history, get_user_customer_wallet_history, get_user_queue_predefined_message, recharge_user_customer_wallet, update_user_astrologer_pending_queue_list_status, update_user_customer_address, update_user_customer_completed_queue_list_read_status, user_astrologer_withdrawal_request } from '../../utils/api-routes';
+import { change_user_astrologer_call_status, change_user_astrologer_chat_status, change_user_astrologer_video_call_status, complete_booked_puja_history, create_user_customer_address, delete_user_customer_address, enquiry_premium_service, get_user_astrologer_assigned_puja_history, get_user_astrologer_booked_puja_history, get_user_astrologer_details, get_user_astrologer_completed_queue_list, get_user_astrologer_pending_queue_list, get_user_astrologer_registered_puja_history, get_user_astrologer_transaction_history, get_user_astrologer_wallet_history, get_user_customer_address, get_user_customer_astro_mall_history, get_user_customer_details, get_user_customer_completed_queue_list, get_user_customer_order_history, get_user_customer_puja_book_history, get_user_customer_transaction_history, get_user_customer_wallet_history, get_user_queue_predefined_message, recharge_user_customer_wallet, update_user_astrologer_pending_queue_list_status, update_user_customer_address, update_user_customer_completed_queue_list_read_status, user_astrologer_withdrawal_request } from '../../utils/api-routes';
 
 function* enquiryPremiumService(action) {
     try {
@@ -20,7 +20,7 @@ function* enquiryPremiumService(action) {
 
             if (data?.success) {
                 toaster({ text: 'Enquiry created successfully.' });
-                yield put({ type: actionTypes.GET_USER_CUSTOMER_BY_ID, payload: { customerId: localStorage.getItem('current_user_id') } })
+                yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } })
                 yield call(payload?.onComplete);
             }
         } else toaster?.error({ text: 'Payment Failed.' });
@@ -32,16 +32,16 @@ function* enquiryPremiumService(action) {
 };
 
 //! Customer
-function* getUserCustomerById(action) {
+function* getUserCustomerDetails(action) {
     try {
         const { payload } = action;
         // console.log("Get User Customer By Id Payload ::: ", payload);
 
-        const { data } = yield postAPI(get_user_customer_by_id, payload);
+        const { data } = yield getAPI(get_user_customer_details, payload);
         // console.log("Get User Customer By Id Saga Response ::: ", data);
 
         if (data?.success) {
-            yield put({ type: actionTypes.SET_USER_CUSTOMER_BY_ID, payload: data?.customersDetail });
+            yield put({ type: actionTypes.SET_USER_CUSTOMER_DETAILS, payload: data?.customersDetail });
         }
 
     } catch (error) {
@@ -52,7 +52,7 @@ function* getUserCustomerById(action) {
 
 function* getUserCustomerCompletedQueueList() {
     try {
-        const userCustomer = yield select(state => state?.userReducer?.userCustomerDataById);
+        const userCustomer = yield select(state => state?.userReducer?.userCustomerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_customer_completed_queue_list, { customerId: userCustomer?._id });
@@ -84,7 +84,7 @@ function* updateUserCustomerCompletedQueueListReadStatus(action) {
 
 function* getUserCustomerWalletHistory() {
     try {
-        const userCustomer = yield select(state => state?.userReducer?.userCustomerDataById);
+        const userCustomer = yield select(state => state?.userReducer?.userCustomerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_customer_wallet_history, { customerId: userCustomer?._id });
@@ -115,7 +115,7 @@ function* rechargeUserCustomerWallet(action) {
 
             if (data?.status) {
                 toaster({ text: data?.message });
-                yield put({ type: actionTypes.GET_USER_CUSTOMER_BY_ID, payload: { customerId: localStorage.getItem('current_user_id') } })
+                yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } })
                 yield call(payload?.onComplete);
             }
         } else toaster?.error({ text: 'Payment Failed.' });
@@ -128,7 +128,7 @@ function* rechargeUserCustomerWallet(action) {
 
 function* getUserCustomerTransactionHistory() {
     try {
-        const userCustomer = yield select(state => state?.userReducer?.userCustomerDataById);
+        const userCustomer = yield select(state => state?.userReducer?.userCustomerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_customer_transaction_history, { customerId: userCustomer?._id });
@@ -147,7 +147,7 @@ function* getUserCustomerTransactionHistory() {
 
 function* getUserCustomerOrderHistory() {
     try {
-        const userCustomer = yield select(state => state?.userReducer?.userCustomerDataById);
+        const userCustomer = yield select(state => state?.userReducer?.userCustomerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_customer_order_history, { customerId: userCustomer?._id });
@@ -166,7 +166,7 @@ function* getUserCustomerOrderHistory() {
 
 function* getUserCustomerPujaBookHistory() {
     try {
-        const userCustomer = yield select(state => state?.userReducer?.userCustomerDataById);
+        const userCustomer = yield select(state => state?.userReducer?.userCustomerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_customer_puja_book_history, { customerId: userCustomer?._id });
@@ -185,7 +185,7 @@ function* getUserCustomerPujaBookHistory() {
 
 function* getUserCustomerAstromallHistory() {
     try {
-        const userCustomer = yield select(state => state?.userReducer?.userCustomerDataById);
+        const userCustomer = yield select(state => state?.userReducer?.userCustomerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_customer_astro_mall_history, { customerId: userCustomer?._id });
@@ -204,7 +204,7 @@ function* getUserCustomerAstromallHistory() {
 
 function* getUserCustomerAddress() {
     try {
-        const userCustomer = yield select(state => state?.userReducer?.userCustomerDataById);
+        const userCustomer = yield select(state => state?.userReducer?.userCustomerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_customer_address, { customerId: userCustomer?._id });
@@ -284,16 +284,16 @@ function* deleteUserCustomerAddress(action) {
 };
 
 //! Astrologer
-function* getUserAstrologerById(action) {
+function* getUserAstrologerDetails(action) {
     try {
         const { payload } = action;
         // console.log("Get User Astrologer By Payload ::: ", payload);
 
-        const { data } = yield postAPI(get_user_astrologer_by_id, payload);
+        const { data } = yield getAPI(get_user_astrologer_details, payload);
         // console.log("Get User Astrologer By Id Saga Response ::: ", data);
 
         if (data?.success) {
-            yield put({ type: actionTypes.SET_USER_ASTROLOGER_BY_ID, payload: data?.astrologer });
+            yield put({ type: actionTypes.SET_USER_ASTROLOGER_DETAILS, payload: data?.astrologer });
         }
 
     } catch (error) {
@@ -305,7 +305,7 @@ function* changeUserAstrologerChatStatus(action) {
     try {
         const { payload } = action;
         // console.log("Payload ::: ", payload);
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById)
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails)
 
         const result = yield Swal.fire({ title: `Are you sure ?`, text: `You want to change chat status!!!`, icon: "warning", showCancelButton: true, confirmButtonColor: Color.primary, cancelButtonColor: 'grey', confirmButtonText: "Yes", cancelButtonText: "No" });
 
@@ -316,7 +316,7 @@ function* changeUserAstrologerChatStatus(action) {
             if (data?.success) {
                 if (data?.type == 'Not Verified') toaster?.info({ text: data?.message });
                 else toaster?.success({ text: 'Chat status has been updated' });
-                yield put({ type: actionTypes.GET_USER_ASTROLOGER_BY_ID, payload: { astrologerId: userAstrologer?._id } });
+                yield put({ type: actionTypes.GET_USER_ASTROLOGER_DETAILS, payload: { astrologerId: userAstrologer?._id } });
             }
         }
 
@@ -330,7 +330,7 @@ function* changeUserAstrologerCallStatus(action) {
     try {
         const { payload } = action;
         // console.log("Payload ::: ", payload);
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById)
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails)
 
         const result = yield Swal.fire({
             title: `Are you sure ?`, text: `You want to change call status!!!`,
@@ -344,7 +344,7 @@ function* changeUserAstrologerCallStatus(action) {
             if (data?.success) {
                 if (data?.type == 'Not Verified') toaster?.info({ text: data?.message });
                 else toaster?.success({ text: 'Call status has been updated' });
-                yield put({ type: actionTypes.GET_USER_ASTROLOGER_BY_ID, payload: { astrologerId: userAstrologer?._id } });
+                yield put({ type: actionTypes.GET_USER_ASTROLOGER_DETAILS, payload: { astrologerId: userAstrologer?._id } });
             }
         }
 
@@ -358,7 +358,7 @@ function* changeUserAstrologerVideoCallStatus(action) {
     try {
         const { payload } = action;
         // console.log("Payload ::: ", payload);
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById)
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails)
 
         const result = yield Swal.fire({
             title: `Are you sure ?`, text: `You want to change video call status!!!`,
@@ -372,7 +372,7 @@ function* changeUserAstrologerVideoCallStatus(action) {
             if (data?.success) {
                 if (data?.type == 'Not Verified') toaster?.info({ text: data?.message });
                 else toaster?.success({ text: 'Video call status has been updated' });
-                yield put({ type: actionTypes.GET_USER_ASTROLOGER_BY_ID, payload: { astrologerId: userAstrologer?._id } });
+                yield put({ type: actionTypes.GET_USER_ASTROLOGER_DETAILS, payload: { astrologerId: userAstrologer?._id } });
             }
         }
 
@@ -403,7 +403,7 @@ function* userAstrologerWithdrawalRequest(action) {
 
 function* getUserAstrologerPendingQueueList() {
     try {
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById);
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_astrologer_pending_queue_list, { astrologerId: userAstrologer?._id });
@@ -423,7 +423,7 @@ function* getUserAstrologerPendingQueueList() {
 
 function* getUserAstrologerCompletedQueueList() {
     try {
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById);
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_astrologer_completed_queue_list, { astrologerId: userAstrologer?._id });
@@ -444,7 +444,7 @@ function* getUserAstrologerCompletedQueueList() {
 function* updateUserAstrologerPendingQueueListStatus(action) {
     try {
         const { payload } = action;
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById)
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails)
 
         const { data } = yield postAPI(update_user_astrologer_pending_queue_list_status, { astrologerId: userAstrologer?._id, queueId: payload?.queueId });
         console.log("Update User Astrologer Pending Queue List Status Saga Response ::: ", data);
@@ -457,7 +457,7 @@ function* updateUserAstrologerPendingQueueListStatus(action) {
 
 function* getUserAstrologerWalletHistory() {
     try {
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById);
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_astrologer_wallet_history, { astrologerId: userAstrologer?._id });
@@ -477,7 +477,7 @@ function* getUserAstrologerWalletHistory() {
 function* getUserAstrologerTransactionHistory(action) {
     try {
         const { payload } = action;
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById);
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_astrologer_transaction_history, { astrologerId: userAstrologer?._id, count: payload?.count });
@@ -496,7 +496,7 @@ function* getUserAstrologerTransactionHistory(action) {
 
 function* getUserAstrologerRegisteredPujaHistory() {
     try {
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById);
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails);
 
         // yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_astrologer_registered_puja_history, { astrologerId: userAstrologer?._id });
@@ -515,7 +515,7 @@ function* getUserAstrologerRegisteredPujaHistory() {
 
 function* getUserAstrologerAssignedPujaHistory() {
     try {
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById);
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails);
 
         // yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_astrologer_assigned_puja_history, { astrologerId: userAstrologer?._id });
@@ -534,7 +534,7 @@ function* getUserAstrologerAssignedPujaHistory() {
 
 function* getUserAstrologerBookedPujaHistory() {
     try {
-        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDataById);
+        const userAstrologer = yield select(state => state?.userReducer?.userAstrologerDetails);
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield postAPI(get_user_astrologer_booked_puja_history, { astrologerId: userAstrologer?._id });
@@ -593,7 +593,7 @@ function* getUserQueuePredefinedMessage() {
 export default function* userSaga() {
     yield takeLeading(actionTypes?.ENQUIRY_PREMIUM_SERVICE, enquiryPremiumService);
 
-    yield takeLeading(actionTypes?.GET_USER_CUSTOMER_BY_ID, getUserCustomerById);
+    yield takeLeading(actionTypes?.GET_USER_CUSTOMER_DETAILS, getUserCustomerDetails);
     yield takeLeading(actionTypes?.GET_USER_CUSTOMER_COMPLETED_QUEUE_LIST, getUserCustomerCompletedQueueList);
     yield takeLeading(actionTypes?.UPDATE_USER_CUSTOMER_COMPLETED_QUEUE_LIST_READ_STATUS, updateUserCustomerCompletedQueueListReadStatus);
     yield takeLeading(actionTypes?.GET_USER_CUSTOMER_WALLET_HISTORY, getUserCustomerWalletHistory);
@@ -608,7 +608,7 @@ export default function* userSaga() {
     yield takeLeading(actionTypes?.UPDATE_USER_CUSTOMER_ADDRESS, updateUserCustomerAddress);
     yield takeLeading(actionTypes?.DELETE_USER_CUSTOMER_ADDRESS, deleteUserCustomerAddress);
 
-    yield takeLeading(actionTypes?.GET_USER_ASTROLOGER_BY_ID, getUserAstrologerById);
+    yield takeLeading(actionTypes?.GET_USER_ASTROLOGER_DETAILS, getUserAstrologerDetails);
     yield takeLeading(actionTypes?.CHANGE_USER_ASTROLOGER_CHAT_STATUS, changeUserAstrologerChatStatus);
     yield takeLeading(actionTypes?.CHANGE_USER_ASTROLOGER_CALL_STATUS, changeUserAstrologerCallStatus);
     yield takeLeading(actionTypes?.CHANGE_USER_ASTROLOGER_VIDEO_CALL_STATUS, changeUserAstrologerVideoCallStatus);
