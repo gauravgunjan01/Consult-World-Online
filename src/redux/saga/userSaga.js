@@ -18,7 +18,7 @@ function* enquiryPremiumService(action) {
             const { data } = yield postAPI(enquiry_premium_service, { ...payload?.data, paymentId: razorpayResponse?.result?.razorpay_payment_id, });
             console.log("Final Response :: ", data);
 
-            if (data?.success) {
+            if (data?.status) {
                 toaster({ text: 'Enquiry created successfully.' });
                 yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } })
                 yield call(payload?.onComplete);
@@ -27,28 +27,20 @@ function* enquiryPremiumService(action) {
 
     } catch (error) {
         toaster?.error({ text: 'Payment Failed.' });
-        console.log("Handle Payment Saga Error ::: ", error);
+        console.log("Handle Payment Saga Error ::: ", error?.response?.data?.message);
     }
 };
 
 //! Customer
-function* getUserCustomerDetails(action) {
+function* getUserCustomerDetails() {
     try {
-        const { payload } = action;
-        // console.log("Get User Customer By Id Payload ::: ", payload);
-
-        const { data } = yield getAPI(get_user_customer_details, payload);
-        // console.log("Get User Customer By Id Saga Response ::: ", data);
-
-        if (data?.success) {
-            yield put({ type: actionTypes.SET_USER_CUSTOMER_DETAILS, payload: data?.customersDetail });
-        }
+        const { data } = yield getAPI(get_user_customer_details);
+        if (data?.status) yield put({ type: actionTypes.SET_USER_CUSTOMER_DETAILS, payload: data?.result });
 
     } catch (error) {
-        // console.log("Get User Customer By Id Saga Error ::: ", error);
+        console.log("Get User Customer Details Saga Error ::: ", error?.response?.data?.message);
     }
 };
-
 
 function* getUserCustomerCompletedQueueList() {
     try {
@@ -58,7 +50,7 @@ function* getUserCustomerCompletedQueueList() {
         const { data } = yield postAPI(get_user_customer_completed_queue_list, { customerId: userCustomer?._id });
         console.log("Get User Customer Completed Queue List Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_CUSTOMER_COMPLETED_QUEUE_LIST, payload: data?.results?.reverse() });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -78,7 +70,7 @@ function* updateUserCustomerCompletedQueueListReadStatus(action) {
         yield put({ type: actionTypes.GET_USER_CUSTOMER_COMPLETED_QUEUE_LIST, payload: null });
 
     } catch (error) {
-        console.log("Update User Customer Completed Queue List Read Status Saga Error ::: ", error);
+        console.log("Update User Customer Completed Queue List Read Status Saga Error ::: ", error?.response?.data?.message);
     }
 };
 
@@ -90,7 +82,7 @@ function* getUserCustomerWalletHistory() {
         const { data } = yield postAPI(get_user_customer_wallet_history, { customerId: userCustomer?._id });
         // console.log("Get User Customer Wallet History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_CUSTOMER_WALLET_HISTORY, payload: data?.walletHistory });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -122,7 +114,7 @@ function* rechargeUserCustomerWallet(action) {
 
     } catch (error) {
         toaster?.error({ text: 'Payment Failed.' });
-        console.log("Handle Payment Saga Error ::: ", error);
+        console.log("Handle Payment Saga Error ::: ", error?.response?.data?.message);
     }
 };
 
@@ -134,7 +126,7 @@ function* getUserCustomerTransactionHistory() {
         const { data } = yield postAPI(get_user_customer_transaction_history, { customerId: userCustomer?._id });
         // console.log("Get User Customer Transaction History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_CUSTOMER_TRANSACTION_HISTORY, payload: data?.data });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -153,7 +145,7 @@ function* getUserCustomerOrderHistory() {
         const { data } = yield postAPI(get_user_customer_order_history, { customerId: userCustomer?._id });
         // console.log("Get User Customer Order History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_CUSTOMER_ORDER_HISTORY, payload: data?.getProductOrder?.reverse() });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -172,7 +164,7 @@ function* getUserCustomerPujaBookHistory() {
         const { data } = yield postAPI(get_user_customer_puja_book_history, { customerId: userCustomer?._id });
         // console.log("Get User Customer Puja Book History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_CUSTOMER_PUJA_BOOK_HISTORY, payload: data?.data });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -191,7 +183,7 @@ function* getUserCustomerAstromallHistory() {
         const { data } = yield postAPI(get_user_customer_astro_mall_history, { customerId: userCustomer?._id });
         console.log("Get User Customer Astromall History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_CUSTOMER_ASTRO_MALL_HISTORY, payload: data?.data?.reverse() });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -210,7 +202,7 @@ function* getUserCustomerAddress() {
         const { data } = yield postAPI(get_user_customer_address, { customerId: userCustomer?._id });
         // console.log("Get User Customer Address Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_CUSTOMER_ADDRESS, payload: data?.address });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -229,7 +221,7 @@ function* createUserCustomerAddress(action) {
         const { data } = yield postAPI(create_user_customer_address, payload?.data);
         // console.log("Create User Customer Address Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             toaster?.success({ text: 'Address created successfully.' });
             yield put({ type: actionTypes?.GET_USER_CUSTOMER_ADDRESS, payload: null });
             yield call(payload?.onComplete);
@@ -249,7 +241,7 @@ function* updateUserCustomerAddress(action) {
         const { data } = yield postAPI(update_user_customer_address, payload?.data);
         // console.log("Update User Customer Address Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             toaster?.success({ text: 'Address updated successfully.' });
             yield put({ type: actionTypes?.GET_USER_CUSTOMER_ADDRESS, payload: null });
         }
@@ -271,7 +263,7 @@ function* deleteUserCustomerAddress(action) {
             const { data } = yield postAPI(delete_user_customer_address, payload);
             // console.log("Delete User Customer Address Saga Response ::: ", data);
 
-            if (data?.success) {
+            if (data?.status) {
                 toaster?.success({ text: 'Address deleted successfully.' });
                 yield put({ type: actionTypes?.GET_USER_CUSTOMER_ADDRESS, payload: null });
             }
@@ -284,20 +276,13 @@ function* deleteUserCustomerAddress(action) {
 };
 
 //! Astrologer
-function* getUserAstrologerDetails(action) {
+function* getUserAstrologerDetails() {
     try {
-        const { payload } = action;
-        // console.log("Get User Astrologer By Payload ::: ", payload);
-
-        const { data } = yield getAPI(get_user_astrologer_details, payload);
-        // console.log("Get User Astrologer By Id Saga Response ::: ", data);
-
-        if (data?.success) {
-            yield put({ type: actionTypes.SET_USER_ASTROLOGER_DETAILS, payload: data?.astrologer });
-        }
+        const { data } = yield getAPI(get_user_astrologer_details);
+        if (data?.status) yield put({ type: actionTypes.SET_USER_ASTROLOGER_DETAILS, payload: data?.result });
 
     } catch (error) {
-        console.log("Get User Astrologer By Id Saga Error ::: ", error);
+        console.log("Get User Astrologer Details Saga Error ::: ", error?.response?.data?.message);
     }
 };
 
@@ -313,7 +298,7 @@ function* changeUserAstrologerChatStatus(action) {
             const { data } = yield postAPI(change_user_astrologer_chat_status, payload?.data);
             // console.log("Change User Astrologer Chat Status Saga Response ::: ", data);
 
-            if (data?.success) {
+            if (data?.status) {
                 if (data?.type == 'Not Verified') toaster?.info({ text: data?.message });
                 else toaster?.success({ text: 'Chat status has been updated' });
                 yield put({ type: actionTypes.GET_USER_ASTROLOGER_DETAILS, payload: { astrologerId: userAstrologer?._id } });
@@ -341,7 +326,7 @@ function* changeUserAstrologerCallStatus(action) {
             const { data } = yield postAPI(change_user_astrologer_call_status, payload?.data);
             // console.log("Change User Astrologer Call Status Saga Response ::: ", data);
 
-            if (data?.success) {
+            if (data?.status) {
                 if (data?.type == 'Not Verified') toaster?.info({ text: data?.message });
                 else toaster?.success({ text: 'Call status has been updated' });
                 yield put({ type: actionTypes.GET_USER_ASTROLOGER_DETAILS, payload: { astrologerId: userAstrologer?._id } });
@@ -369,7 +354,7 @@ function* changeUserAstrologerVideoCallStatus(action) {
             const { data } = yield postAPI(change_user_astrologer_video_call_status, payload?.data);
             // console.log("Change User Astrologer Video Call Status Saga Response ::: ", data);
 
-            if (data?.success) {
+            if (data?.status) {
                 if (data?.type == 'Not Verified') toaster?.info({ text: data?.message });
                 else toaster?.success({ text: 'Video call status has been updated' });
                 yield put({ type: actionTypes.GET_USER_ASTROLOGER_DETAILS, payload: { astrologerId: userAstrologer?._id } });
@@ -390,7 +375,7 @@ function* userAstrologerWithdrawalRequest(action) {
         const { data } = yield postAPI(user_astrologer_withdrawal_request, payload?.data);
         // console.log("User Astrologer Withdrawal Request Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             toaster?.success({ text: 'Withdrawal request has been sent' });
         }
         yield call(payload?.onComplete);
@@ -409,7 +394,7 @@ function* getUserAstrologerPendingQueueList() {
         const { data } = yield postAPI(get_user_astrologer_pending_queue_list, { astrologerId: userAstrologer?._id });
         console.log("Get User Astrologer Pending Queue List Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_ASTROLOGER_PENDING_QUEUE_LIST, payload: data?.results?.reverse() });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -429,7 +414,7 @@ function* getUserAstrologerCompletedQueueList() {
         const { data } = yield postAPI(get_user_astrologer_completed_queue_list, { astrologerId: userAstrologer?._id });
         console.log("Get User Astrologer Completed Queue List Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_ASTROLOGER_COMPLETED_QUEUE_LIST, payload: data?.results?.reverse() });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -463,7 +448,7 @@ function* getUserAstrologerWalletHistory() {
         const { data } = yield postAPI(get_user_astrologer_wallet_history, { astrologerId: userAstrologer?._id });
         // console.log("Get User Astrologer Wallet History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_ASTROLOGER_WALLET_HISTORY, payload: data?.results?.reverse() });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -483,7 +468,7 @@ function* getUserAstrologerTransactionHistory(action) {
         const { data } = yield postAPI(get_user_astrologer_transaction_history, { astrologerId: userAstrologer?._id, count: payload?.count });
         // console.log("Get User Astrologer Transaction History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_ASTROLOGER_TRANSACTION_HISTORY, payload: data?.data });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -502,7 +487,7 @@ function* getUserAstrologerRegisteredPujaHistory() {
         const { data } = yield postAPI(get_user_astrologer_registered_puja_history, { astrologerId: userAstrologer?._id });
         console.log("Get User Astrologer Registered Puja History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_ASTROLOGER_REGISTERED_PUJA_HISTORY, payload: data?.data?.reverse() });
         }
         // yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -521,7 +506,7 @@ function* getUserAstrologerAssignedPujaHistory() {
         const { data } = yield postAPI(get_user_astrologer_assigned_puja_history, { astrologerId: userAstrologer?._id });
         console.log("Get User Astrologer Assigned Puja History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_ASTROLOGER_ASSIGNED_PUJA_HISTORY, payload: data?.data?.reverse() });
         }
         // yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -540,7 +525,7 @@ function* getUserAstrologerBookedPujaHistory() {
         const { data } = yield postAPI(get_user_astrologer_booked_puja_history, { astrologerId: userAstrologer?._id });
         // console.log("Get User Astrologer Booked Puja History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_ASTROLOGER_BOOKED_PUJA_HISTORY, payload: data?.results?.reverse() });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
@@ -559,7 +544,7 @@ function* completeBookedPujaHistory(action) {
         const { data } = yield postAPI(complete_booked_puja_history, payload?.data);
         // console.log("Complete Booked Puja History Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             toaster?.success({ text: 'Puja completed successfully.' });
             yield put({ type: actionTypes.GET_USER_ASTROLOGER_BOOKED_PUJA_HISTORY, payload: null });
             yield call(payload?.onComplete);
@@ -578,7 +563,7 @@ function* getUserQueuePredefinedMessage() {
         const { data } = yield getAPI(get_user_queue_predefined_message);
         console.log("Get User Queue Predefined Message Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             yield put({ type: actionTypes.SET_USER_QUEUE_PREDEFINED_MESSAGE, payload: data?.result?.reverse() });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });

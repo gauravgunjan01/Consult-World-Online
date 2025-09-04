@@ -170,13 +170,7 @@ function* customerChangePicture(action) {
 function* userLogout(action) {
     try {
         const { payload } = action;
-        console.log('Payload ::: ', payload);
-
-        const result = yield Swal.fire({
-            icon: 'warning', text: 'Do you want to logout ?', showConfirmButton: true, timer: 20000,
-            confirmButtonText: 'Yes', confirmButtonColor: Color.primary, cancelButtonText: 'No', showCancelButton: true, cancelButtonColor: Color.darkgrey
-        });
-        console.log('result', result);
+        const result = yield Swal.fire({ icon: 'warning', text: 'Do you want to logout ?', showConfirmButton: true, timer: 20000, confirmButtonText: 'Yes', confirmButtonColor: Color.primary, cancelButtonText: 'No', showCancelButton: true, cancelButtonColor: Color.darkgrey });
 
         if (result.isConfirmed) {
             localStorage.removeItem('current_user_data');
@@ -185,7 +179,7 @@ function* userLogout(action) {
 
             yield put({ type: actionTypes.SET_USER_CUSTOMER_DETAILS, payload: null });
             yield put({ type: actionTypes.SET_USER_ASTROLOGER_DETAILS, payload: null });
-            toaster.info({ text: 'Logout successfully' });
+            Swal.fire({ icon: 'success', text: 'Logout successfully', showConfirmButton: false, timer: 2000 });
             SocketService.disconnect();
             yield call(payload?.onComplete);
         }

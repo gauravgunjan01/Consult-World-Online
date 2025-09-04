@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
-import { CrossSvg, EditSvg } from '../../assets/svg';
+import { CrossSvg, EditSvg, LeftArrowSvg } from '../../assets/svg';
 import { toaster } from '../../utils/services/toast-service';
 import AuthBg from '../../assets/images/auth/auth-bg.png';
-import LoginImage from '../../assets/images/auth/login-image.png';
+import Logo from '../../assets/images/logo/logo.png';
 import * as AuthActions from '../../redux/actions/authAction';
 
 Modal.setAppElement('#root');
@@ -76,60 +76,70 @@ const CustomerLoginModal = () => {
     }, []);
 
     return (
-        <Modal isOpen={isCustomerLoginModalOpen} className="modal-content" onRequestClose={handleCloseModal} overlayClassName="modal-overlay" closeTimeoutMS={200} style={{ content: { backgroundColor: 'transparent' } }}>
-            <section className="relative flex justify-center bg-white rounded-lg">
-                <div onClick={() => (handleCloseModal(), setOtpScreen())} className='cursor-pointer absolute text-primary right-5 top-5 z-10'> <CrossSvg strokeWidth='3' /></div>
-                <main className="rounded-lg max-w-4xl w-full flex bg-contain bg-center bg-no-repeat" style={{ backgroundImage: `url(${AuthBg})` }}>
-                    <div className='basis-full md:basis-[55%] flex flex-col p-8 max-md:px-0 pt-16 pb-32'>
-                        {otpScreen ?
-                            <main className='flex flex-col gap-4 px-10 text-center'>
-                                <div className='text-black text-[30px] font-[500]'>OTP Verification</div>
-                                <div className='text-gray-800 flex flex-col gap-1'>
-                                    <div className='text-[#757373] text-nowrap'>A OTP(One Time Password) has been sent to</div>
-                                    <div className='text-[#757373] flex items-center justify-center gap-1'>{customerLoginInputFieldDetail?.phone_number?.substring(customerLoginInputFieldDetail?.country_code_length)}.<div onClick={() => setOtpScreen(false)} className='bg-primary text-white rounded-full p-1.5  cursor-pointer'><EditSvg h='12' w='12' /></div></div>
-                                </div>
-                                <div className='flex flex-col items-center justify-center gap-3 mt-5'>
-                                    <OtpInput value={customerOtp} onChange={setCustomerOtp} numInputs={4} renderSeparator={<span>-</span>} renderInput={(props) => (<input {...props} onKeyDown={(e) => e.key === 'Enter' && handleSubmitOtp()} className='border-2 outline-none text-center rounded-md' style={{ height: '40px', width: '40px' }} />)} />
-                                </div>
-                                <div className=' text-green-700 text-sm text-right'>
-                                    {resendTimer > 0 ?
-                                        `Resend OTP in ${resendTimer} seconds`
-                                        :
-                                        <button onClick={handleResendOtp} className='text-green-700  text-sm  cursor-pointer hover:text-green-600'>Resend OTP</button>
-                                    }
-                                </div>
-                                <button onClick={handleSubmitOtp} className="w-full h-[45px] shadow-lg bg-primary hover:bg-primary focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded-[10px] transition duration-300 transform hover:scale-95]" type="submit">Submit</button>
-                            </main>
-                            :
-                            <div className='flex flex-col items-center gap-5 px-10 text-center'>
-                                <div>
-                                    <div className='text-black text-[30px] font-[500]'>Continue with Phone</div>
-                                    <div className='text-[#757373] px-10'>You will receive a 4 digit code for verification</div>
-                                </div>
-                                <PhoneInput
-                                    country={'in'}
-                                    placeholder='Enter mobile no'
-                                    value={customerLoginInputFieldDetail?.phone_number}
-                                    onChange={handleLoginInputField}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-                                    // onlyCountries={['in']}
-                                    disableCountryCode={false}
-                                    countryCodeEditable={false}
-                                    disableDropdown={false}
-                                    inputStyle={{ width: '100%', height: '55px', fontSize: "15px", backgroundColor: "#FFF", borderRadius: '3px' }}
-                                />
+        <Modal isOpen={isCustomerLoginModalOpen} className="modal-content-small" onRequestClose={handleCloseModal} overlayClassName="modal-overlay" closeTimeoutMS={200} style={{ content: { backgroundColor: 'transparent' } }}>
+            <section className="relative flex items-center justify-center max-md:p-5 bg-white rounded-lg">
+                <div onClick={() => handleCloseModal()} className='absolute bg-red-600 text-white p-[5px] rounded-full right-5 top-5 cursor-pointer'><CrossSvg h={16} w={16} /></div>
 
-                                <button onClick={handleLogin} className="w-full h-[45px] shadow-lg bg-primary hover:bg-primary focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded-[3px] transition duration-300 transform hover:scale-95]" type="submit">GET OTP</button>
+                <article className="rounded-lg overflow-hidden max-w-4xl w-full">
+                    <main className="rounded-lg max-w-4xl w-full py-10 flex bg-contain bg-center bg-no-repeat" style={{ backgroundImage: `url(${AuthBg})` }}>
+                        <div className='basis-full flex flex-col px-10'>
+                            <div className='min-h-[50px] max-h-[50px]'><img className="object-contain h-full w-full" src={Logo} /></div>
 
-                                <div className='text-[14px] font-[500] text-[#0858F7]'>By Signing, you agree to our <Link to={'/terms-conditions'} onClick={() => handleCloseModal()} className='underline'>Terms of Use</Link> and <Link to={'/privacy-policy'} onClick={() => handleCloseModal()} className='underline'>Privacy Policy</Link></div>
-                            </div>
-                        }
-                    </div>
+                            {otpScreen ?
+                                <main className='flex flex-col gap-4 px-10 text-center'>
+                                    <h6 className='text-black text-xl font-medium tracking-tight'>OTP Verification</h6>
+                                    <div className='text-gray-800 flex flex-col gap-1 text-sm'>
+                                        <div className='text-grey line-clamp-1'>A OTP(One Time Password) has been sent to</div>
+                                        <div className='text-grey flex items-center justify-center gap-1'>{customerLoginInputFieldDetail?.phone_number?.substring(customerLoginInputFieldDetail?.country_code_length)}.<div onClick={() => setOtpScreen(false)} className='bg-primary text-white rounded-full p-1.5  cursor-pointer'><EditSvg h='12' w='12' /></div></div>
+                                    </div>
 
-                    <div className='basis-[45%] hidden md:flex justify-center'>
-                        <div className='absolute top-10'><img className="object-contain w-[80%] h-[80%]" src={LoginImage} /></div>
-                    </div>
-                </main>
+                                    <div className='flex flex-col gap-3'>
+                                        <div className='flex flex-col items-center justify-center gap-3'>
+                                            <OtpInput value={customerOtp} onChange={setCustomerOtp} numInputs={4} renderSeparator={<span>-</span>} renderInput={(props) => (<input {...props} onKeyDown={(e) => e.key === 'Enter' && handleSubmitOtp()} className='border-2 outline-none text-center rounded-md' style={{ height: '40px', width: '40px' }} />)} />
+                                        </div>
+                                        <div className=' text-green-700 text-[12px] text-right'>
+                                            {resendTimer > 0 ?
+                                                `Resend OTP in ${resendTimer} seconds`
+                                                :
+                                                <button onClick={handleResendOtp} className='text-green-700 cursor-pointer hover:text-green-600'>Resend OTP</button>
+                                            }
+                                        </div>
+                                        <button onClick={handleSubmitOtp} className="w-full shadow-lg bg-gradient-to-r from-primary to-secondary hover:brightness-125 focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded transition duration-500 transform" type="submit">Login</button>
+                                    </div>
+                                </main>
+                                :
+                                <main className='flex flex-col gap-5 py-5'>
+                                    <div className='flex items-center gap-3'><div onClick={() => handleCloseModal()} className='pt-0.5 cursor-pointer'><LeftArrowSvg /></div> <h6 className='text-black text-xl font-medium text-center tracking-tight'>Continue with Mobile</h6></div>
+                                    <p className='text-grey text-[14px]'>You will receive a 4 digit code for verification</p>
+
+                                    <div className='flex flex-col gap-5'>
+                                        <PhoneInput
+                                            country={'in'}
+                                            placeholder='Enter mobile no'
+                                            value={customerLoginInputFieldDetail?.phone_number}
+                                            onChange={handleLoginInputField}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+                                            enableSearch
+                                            onlyCountries={['in']}
+                                            disableCountryCode={false}
+                                            countryCodeEditable={false}
+                                            disableDropdown={false}
+                                            inputStyle={{ width: '100%', height: '42px', fontSize: "15px", backgroundColor: "#FFF", borderRadius: '4px' }}
+                                            containerClass='text-left'
+                                            searchClass='w-[100%] text-sm p-2 flex item-center'
+                                            searchPlaceholder='Search for country'
+                                            searchNotFound='Please search another country.'
+                                        />
+
+                                        <button onClick={handleLogin} className="w-full shadow-lg bg-gradient-to-r from-primary to-secondary hover:brightness-125 focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded transition duration-500 transform" type="submit">GET OTP</button>
+                                    </div>
+                                </main>
+                            }
+
+                            <div className='text-xs text-center text-[#0858F7] font-medium'>By Signing, you agree to our <Link to={'/terms-of-use'} onClick={() => handleCloseModal()} className=''>Terms of Use</Link> and <Link to={'/privacy-policy'} onClick={() => handleCloseModal()} className=''>Privacy Policy</Link></div>
+                        </div>
+                    </main>
+                </article>
             </section>
         </Modal>
     );
