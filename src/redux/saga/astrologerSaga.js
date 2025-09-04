@@ -2,16 +2,16 @@ import Swal from 'sweetalert2';
 import * as actionTypes from "../action-types";
 import { put, call, takeLeading, delay } from 'redux-saga/effects';
 import { getAPI, postAPI } from '../../utils/api-function';
-import { follow_unfollow_astrologer, get_astrologer, get_astrologer_by_id, get_astrologer_followed_status_by_customer, get_astrologer_main_expertise, get_astrologer_review_by_id, get_astrologer_skill } from '../../utils/api-routes';
+import { } from '../../utils/api-routes';
 import { toaster } from '../../utils/services/toast-service';
 
-function* getAstrologer() {
+function* getAstrologers() {
     try {
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         const { data } = yield getAPI(get_astrologer);
         console.log('Get Astrologer Saga Response ::: ', data);
 
-        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER, payload: data?.results });
+        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGERS, payload: data?.results });
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
 
     } catch (error) {
@@ -20,16 +20,16 @@ function* getAstrologer() {
     }
 };
 
-function* getAstrologerById(action) {
+function* getAstrologerDetails(action) {
     try {
         const { payload } = action;
 
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
         yield delay(100);
-        const { data } = yield postAPI(get_astrologer_by_id, payload);
+        const { data } = yield postAPI(GET_ASTROLOGER_DETAILS, payload);
 
         if (data?.success) {
-            yield put({ type: actionTypes.SET_ASTROLOGER_BY_ID, payload: { ...data?.astrologer, totalChatTime: ((data?.totalChatTime) / 6000)?.toFixed(1), totalCallTime: ((data?.totalCallTime) / 6000)?.toFixed(0) } });
+            yield put({ type: actionTypes.SET_ASTROLOGER_DETAILS, payload: { ...data?.astrologer, totalChatTime: ((data?.totalChatTime) / 6000)?.toFixed(1), totalCallTime: ((data?.totalCallTime) / 6000)?.toFixed(0) } });
         } else {
             toaster.info({ text: data?.message })
         }
@@ -41,25 +41,25 @@ function* getAstrologerById(action) {
     }
 };
 
-function* getAstrologerReviewById(action) {
+function* getAstrologerReviews(action) {
     try {
         const { payload } = action;
 
-        const { data } = yield postAPI(get_astrologer_review_by_id, payload);
-        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER_REVIEW_BY_ID, payload: data?.reviews?.reverse() });
+        const { data } = yield postAPI(GET_ASTROLOGER_REVIEWS, payload);
+        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER_REVIEWS, payload: data?.reviews?.reverse() });
 
     } catch (error) {
-        yield put({ type: actionTypes.SET_ASTROLOGER_REVIEW_BY_ID, payload: [] });
+        yield put({ type: actionTypes.SET_ASTROLOGER_REVIEWS, payload: [] });
     }
 };
 
-function* getAstrologerSkill(action) {
+function* getAstrologerSkills(action) {
     try {
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
-        const { data } = yield getAPI(get_astrologer_skill);
+        const { data } = yield getAPI(GET_ASTROLOGER_SKILLS);
         console.log('Get Astrologer Skill Saga Response ::: ', data);
 
-        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER_SKILL, payload: data?.skills });
+        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER_SKILLS, payload: data?.skills });
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
 
     } catch (error) {
@@ -69,13 +69,13 @@ function* getAstrologerSkill(action) {
 };
 
 
-function* getAstrologerMainExpertise(action) {
+function* getAstrologerExpertises(action) {
     try {
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
-        const { data } = yield getAPI(get_astrologer_main_expertise);
+        const { data } = yield getAPI(GET_ASTROLOGER_EXPERTISES);
         console.log('Get Astrologer MainExpertise Saga Response ::: ', data);
 
-        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER_MAIN_EXPERTISE, payload: data?.mainExpertise });
+        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER_EXPERTISES, payload: data?.mainExpertise });
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
 
     } catch (error) {
@@ -121,11 +121,11 @@ function* getAstrologerFollowedStatusByCustomer(action) {
 };
 
 export default function* astrologerSaga() {
-    yield takeLeading(actionTypes?.GET_ASTROLOGER, getAstrologer);
-    yield takeLeading(actionTypes?.GET_ASTROLOGER_BY_ID, getAstrologerById);
-    yield takeLeading(actionTypes?.GET_ASTROLOGER_REVIEW_BY_ID, getAstrologerReviewById);
-    yield takeLeading(actionTypes?.GET_ASTROLOGER_SKILL, getAstrologerSkill);
-    yield takeLeading(actionTypes?.GET_ASTROLOGER_MAIN_EXPERTISE, getAstrologerMainExpertise);
+    yield takeLeading(actionTypes?.GET_ASTROLOGERS, getAstrologers);
+    yield takeLeading(actionTypes?.GET_ASTROLOGER_DETAILS, getAstrologerDetails);
+    yield takeLeading(actionTypes?.GET_ASTROLOGER_REVIEWS, getAstrologerReviews);
+    yield takeLeading(actionTypes?.GET_ASTROLOGER_SKILLS, getAstrologerSkills);
+    yield takeLeading(actionTypes?.GET_ASTROLOGER_EXPERTISES, getAstrologerExpertises);
 
     yield takeLeading(actionTypes?.FOLLOW_UNFOLLOW_ASTROLOGER, followUnfollowAstrologer);
     yield takeLeading(actionTypes?.GET_ASTROLOGER_FOLLOWED_STATUS_BY_CUSTOMER, getAstrologerFollowedStatusByCustomer);

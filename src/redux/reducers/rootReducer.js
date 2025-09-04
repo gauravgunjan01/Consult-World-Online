@@ -5,13 +5,13 @@ import userReducer from "./userReducer";
 import profileReducer from "./profileReducer";
 import astrologerReducer from "./astrologerReducer";
 import consultationReducer from "./consultationReducer";
-import kundliReducer from "./kundliReducer";
-import astrologyApiReducer from "./astrologyApiReducer";
-import ecommerceReducer from "./ecommerceReducer";
-import astromallReducer from "./astromallReducer";
-import blogreducer from "./blogReducer";
-import staticPageReducer from "./staticPageReducer";
-import astrologerDashboardReducer from "./astrologerDashboardReducer";
+// import kundliReducer from "./kundliReducer";
+// import astrologyApiReducer from "./astrologyApiReducer";
+// import ecommerceReducer from "./ecommerceReducer";
+// import astromallReducer from "./astromallReducer";
+// import blogreducer from "./blogReducer";
+// import staticPageReducer from "./staticPageReducer";
+// import astrologerDashboardReducer from "./astrologerDashboardReducer";
 
 const rootReducer = combineReducers({
     commonReducer,
@@ -20,13 +20,13 @@ const rootReducer = combineReducers({
     profileReducer,
     astrologerReducer,
     consultationReducer,
-    kundliReducer,
-    astrologyApiReducer,
-    ecommerceReducer,
-    astromallReducer,
-    blogreducer,
-    staticPageReducer,
-    astrologerDashboardReducer
+    // kundliReducer,
+    // astrologyApiReducer,
+    // ecommerceReducer,
+    // astromallReducer,
+    // blogreducer,
+    // staticPageReducer,
+    // astrologerDashboardReducer
 });
 
 export default rootReducer;

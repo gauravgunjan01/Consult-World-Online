@@ -1,54 +1,18 @@
 import * as actionTypes from "../action-types";
 
-export const getAstrologer = payload => ({
-    type: actionTypes.GET_ASTROLOGER, payload
-});
+//! Astrologer List
+export const getAstrologers = payload => ({ type: actionTypes.GET_ASTROLOGERS, payload });
+export const setAstrologers = payload => ({ type: actionTypes.SET_ASTROLOGERS, payload });
+export const getAstrologerDetails = payload => ({ type: actionTypes.GET_ASTROLOGER_DETAILS, payload });
+export const setAstrologerDetails = payload => ({ type: actionTypes.SET_ASTROLOGER_DETAILS, payload });
 
-export const setAstrolosr = payload => ({
-    type: actionTypes.SET_ASTROLOGER, payload
-});
+export const getAstrologerReviews = payload => ({ type: actionTypes.GET_ASTROLOGER_REVIEWS, payload });
+export const setAstrologerReviews = payload => ({ type: actionTypes.SET_ASTROLOGER_REVIEWS, payload });
 
-export const getAstrologerById = payload => ({
-    type: actionTypes.GET_ASTROLOGER_BY_ID, payload
-});
-
-export const setAstrologerById = payload => ({
-    type: actionTypes.SET_ASTROLOGER_BY_ID, payload
-});
-
-
-export const getAstrologerReviewById = payload => ({
-    type: actionTypes.GET_ASTROLOGER_REVIEW_BY_ID, payload
-});
-
-export const setAstrologerReviewById = payload => ({
-    type: actionTypes.SET_ASTROLOGER_REVIEW_BY_ID, payload
-});
-
-export const getAstrologerSkill = payload => ({
-    type: actionTypes.GET_ASTROLOGER_SKILL, payload
-});
-
-export const setAstrologerSkill = payload => ({
-    type: actionTypes.SET_ASTROLOGER_SKILL, payload
-});
-
-export const getAstrologerMainExpertise = payload => ({
-    type: actionTypes.GET_ASTROLOGER_MAIN_EXPERTISE, payload
-});
-
-export const setAstrologerMainExpertise = payload => ({
-    type: actionTypes.SET_ASTROLOGER_MAIN_EXPERTISE, payload
-});
-
-export const followUnfollowAstrologer = payload => ({
-    type: actionTypes.FOLLOW_UNFOLLOW_ASTROLOGER, payload
-});
-
-export const getAstrologerFollowedStatusByCustomer = payload => ({
-    type: actionTypes.GET_ASTROLOGER_FOLLOWED_STATUS_BY_CUSTOMER, payload
-});
-
-export const setAstrologerFollowedStatusByCustomer = payload => ({
-    type: actionTypes.SET_ASTROLOGER_FOLLOWED_STATUS_BY_CUSTOMER, payload
-});
+export const getAstrologerSkills = payload => ({ type: actionTypes.GET_ASTROLOGER_SKILLS, payload });
+export const setAstrologerSkills = payload => ({ type: actionTypes.SET_ASTROLOGER_SKILLS, payload });
+export const getAstrologerExpertises = payload => ({ type: actionTypes.GET_ASTROLOGER_EXPERTISES, payload });
+export const setAstrologerExpertises = payload => ({ type: actionTypes.SET_ASTROLOGER_EXPERTISES, payload });
+export const followUnfollowAstrologer = payload => ({ type: actionTypes.FOLLOW_UNFOLLOW_ASTROLOGER, payload });
+export const getAstrologerFollowedStatusByCustomer = payload => ({ type: actionTypes.GET_ASTROLOGER_FOLLOWED_STATUS_BY_CUSTOMER, payload });
+export const setAstrologerFollowedStatusByCustomer = payload => ({ type: actionTypes.SET_ASTROLOGER_FOLLOWED_STATUS_BY_CUSTOMER, payload });

@@ -107,12 +107,12 @@ const Header = () => {
 
                             {userAstrologerDetails &&
                                 <div className='group relative text-black max-lg:hidden'>
-                                    <div className='flex items-center gap-1 cursor-pointer'>{userAstrologerDetails?.profileImage ? <img src={api_urls + userAstrologerDetails?.profileImage} className='h-9 w-9 rounded-full' /> : <ProfileSvg h='40' w='40' />}</div>
+                                    <div className='flex items-center gap-1 cursor-pointer'>{userAstrologerDetails?.image ? <img src={api_urls + userAstrologerDetails?.image} className='h-9 w-9 rounded-full' /> : <ProfileSvg h='40' w='40' />}</div>
 
                                     <div className='font-normal absolute overflow-hidden top-[85px] right-0 bg-white w-52 h-0 rounded-lg group-hover:h-[400px] text-nowrap custom-zero-scrollbar overflow-y-scroll transition-all duration-500 ease-in group-hover:border-b-[5px] group-hover:border-t border-primary shadow-2xl'>
                                         <div className='flex flex-col items-center gap-1.5 py-5'>
-                                            {userAstrologerDetails?.profileImage ? <img src={api_urls + userAstrologerDetails?.profileImage} className='h-11 w-11 rounded-full' /> : <ProfileSvg h='40' w='40' />}
-                                            <div className='text-[16px]'>{userAstrologerDetails?.astrologerName}</div>
+                                            {userAstrologerDetails?.image ? <img src={api_urls + userAstrologerDetails?.image} className='h-11 w-11 rounded-full' /> : <ProfileSvg h='40' w='40' />}
+                                            <div className='text-[16px]'>{userAstrologerDetails?.name}</div>
                                             <div className='text-sm'>XXXXXX{userAstrologerDetails?.phoneNumber?.toString()?.substring(6, 10)}</div>
                                         </div>
                                         <div onClick={() => navigate('/astrologer-dashboard/my-account')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Account</div></div>
@@ -134,7 +134,7 @@ const Header = () => {
                                     <div className='font-normal absolute overflow-hidden top-[85px] right-0 bg-white w-56 h-0 rounded-lg group-hover:h-[400px] overflow-y-scroll custom-zero-scrollbar transition-all duration-500 ease-in group-hover:border-b-[5px] group-hover:border-t border-primary shadow-2xl'>
                                         <div className='flex flex-col items-center gap-1.5 py-5'>
                                             {userCustomerDetails?.image ? <img src={api_urls + 'uploads/' + userCustomerDetails?.image} className='h-11 w-11 object-contain rounded-full bg-gray-100' /> : <ProfileSvg h='40' w='40' />}
-                                            <div className='text-[16px]'>{userCustomerDetails?.customerName}</div>
+                                            <div className='text-[16px]'>{userCustomerDetails?.name}</div>
                                             <div className='text-sm'>XXXXXX{userCustomerDetails?.phoneNumber?.toString()?.substring(6, 10)}</div>
                                         </div>
                                         <div onClick={() => navigate('/my-account?active-tab=update-profile')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Account</div></div>

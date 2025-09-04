@@ -5,7 +5,7 @@ import { Autocomplete } from '@react-google-maps/api';
 import TopHeaderSection from '../../components/common/TopHeaderSection';
 import { toaster } from '../../utils/services/toast-service';
 import { website_name } from '../../utils/constants';
-import * as AuthActions from '../../redux/actions/authAction';
+import * as userAction from '../../redux/actions/userAction';
 import { api_urls } from '../../utils/api-urls';
 import Logo from '../../assets/images/logo/logo.png';
 
@@ -111,7 +111,7 @@ const MyAccount = () => {
         };
 
         //! Dispatching API To Update Customer Profile 
-        handleValidation() && dispatch(AuthActions?.customerUpdateProfile(payload));
+        handleValidation() && dispatch(userAction?.updateUserCustomerProfile(payload));
     };
 
     //! Handle Submit : Change Profile Picture
@@ -127,7 +127,7 @@ const MyAccount = () => {
             }
 
             //! Dispatching API To Update Customer Profile Picture
-            dispatch(AuthActions?.customerChangePicture(payload));
+            dispatch(userAction?.updateUserCustomerProfile(payload));
 
         } else {
             toaster.warning({ text: 'Please Select Profile Picture' });

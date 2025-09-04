@@ -7,7 +7,7 @@ import PageHeading from '../../../components/common/PageHeading';
 import TopHeaderSection from '../../../components/common/TopHeaderSection';
 import { SearchSvg, SwitchOffSvg, SwitchOnSvg, WalletSvg } from '../../../assets/svg';
 import { DeepSearchSpace, IndianRupee, SecondToHMS } from '../../../utils/common-function';
-import UserAstrologerWithdrawalRequest from '../../../components/modal/UserAstrologerWithdrawalRequest';
+// import UserAstrologerWithdrawalRequest from '../../../components/modal/UserAstrologerWithdrawalRequest';
 import * as UserActions from '../../../redux/actions/userAction';
 import DataNotFound from '../../../components/common/DataNotFound';
 
@@ -21,7 +21,7 @@ const MyAccount = () => {
     const [withdrawalModelOpen, setWithdrawalModelOpen] = useState(false);
 
     useEffect(() => {
-        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerTransactionHistory({ count: 5 }));
+        // userAstrologerDetails && dispatch(UserActions?.getUserAstrologerTransactionHistory({ count: 5 }));
     }, [userAstrologerDetails]);
 
     return (
@@ -40,9 +40,9 @@ const MyAccount = () => {
                 </div>
 
                 <div className='flex flex-col gap-2 min-w-64'>
-                    <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Chat Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerChatStatus({ data: { astrologerId: userAstrologerDetails?._id, chat_status: userAstrologerDetails?.chat_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDetails?.chat_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div>
+                    {/* <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Chat Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerChatStatus({ data: { astrologerId: userAstrologerDetails?._id, chat_status: userAstrologerDetails?.chat_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDetails?.chat_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div>
                     <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Call Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerCallStatus({ data: { astrologerId: userAstrologerDetails?._id, call_status: userAstrologerDetails?.call_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDetails?.call_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div>
-                    <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Video Call Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerVideoCallStatus({ data: { astrologerId: userAstrologerDetails?._id, video_call_status: userAstrologerDetails?.video_call_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDetails?.video_call_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div>
+                    <div className='flex items-center gap-2 cursor-pointer'><div className='basis-[75%] text-nowrap'>Change Video Call Status: </div> <div onClick={() => dispatch(UserActions?.changeUserAstrologerVideoCallStatus({ data: { astrologerId: userAstrologerDetails?._id, video_call_status: userAstrologerDetails?.video_call_status == "online" ? "offline" : "online" }, }))} className='basis-[20%]'>{userAstrologerDetails?.video_call_status == "online" ? <SwitchOnSvg /> : <SwitchOffSvg />}</div> </div> */}
                 </div>
             </div>
 
@@ -96,7 +96,7 @@ const MyAccount = () => {
                 </main>
             </section>
 
-            <UserAstrologerWithdrawalRequest isOpen={withdrawalModelOpen} handleClose={() => setWithdrawalModelOpen(false)} />
+            {/* <UserAstrologerWithdrawalRequest isOpen={withdrawalModelOpen} handleClose={() => setWithdrawalModelOpen(false)} /> */}
         </section>
     )
 }

@@ -59,17 +59,17 @@ const onMessageListener = (navigate, dispatch) => {
         localStorage?.removeItem('initiatedRequestPrice');
         localStorage?.removeItem('initiatedRequestAstrologerData');
         dispatch(ConsultationActions?.initiatedRequestData({ initiated: false, timer: 60, astrologer_data: null, data: null }));
-        dispatch(ConsultationActions?.hideChatMessageInputField(false));
+        // dispatch(ConsultationActions?.hideChatMessageInputField(false));
         return;
 
       case 'call_invoice':
-        dispatch(ConsultationActions?.setCallInvoiceVisibility(true));
-        dispatch(ConsultationActions?.setCallInvoiceData(JSON.parse(notificationData?.data)));
+        // dispatch(ConsultationActions?.setCallInvoiceVisibility(true));
+        // dispatch(ConsultationActions?.setCallInvoiceData(JSON.parse(notificationData?.data)));
         return;
 
       case 'VideoCall':
-        dispatch(ConsultationActions?.setVideocallInvoiceVisibility(true));
-        dispatch(ConsultationActions?.setVideocallInvoiceData(notificationData));
+        // dispatch(ConsultationActions?.setVideocallInvoiceVisibility(true));
+        // dispatch(ConsultationActions?.setVideocallInvoiceData(notificationData));
         return;
 
       case 'voice_call_request': //* For Astrologer
@@ -178,7 +178,7 @@ const onMessageListener = (navigate, dispatch) => {
             localStorage?.removeItem('initiatedRequestAstrologerData');
             localStorage?.setItem('initiatedRequestData', JSON.stringify(notificationData));
             dispatch(ConsultationActions?.initiatedRequestData({ initiated: false, timer: 60, astrologer_data: null, data: notificationData }));
-            dispatch(ConsultationActions?.hideChatMessageInputField(false));
+            // dispatch(ConsultationActions?.hideChatMessageInputField(false));
 
             //! New Logic
             // dispatch(ConversationActions?.setChatRoomData(notificationData));

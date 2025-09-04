@@ -27,7 +27,7 @@ const InitiatedRequest = () => {
             toaster.info({ text: 'Astrologer is busy, please try again later!' });
 
             setTimeout(() => {
-                dispatch(AstrologerActions?.getAstrologer({ page: 1, search: '' }));
+                dispatch(AstrologerActions?.getAstrologers({ page: 1, search: '' }));
             }, 2000);
         }
 

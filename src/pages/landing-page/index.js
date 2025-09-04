@@ -25,7 +25,7 @@ const LandingPage = () => {
     const { t } = useTranslation();
 
     const { astroBlogData } = useSelector(state => state?.blogreducer);
-    const { astrologerData } = useSelector(state => state?.astrologerReducer);
+    const { astrologersData } = useSelector(state => state?.astrologerReducer);
 
     const handleViewBlog = (data) => {
         dispatch(BlogActions?.incrementAstroBlogViewCount({ blogId: data?._id }))
@@ -37,7 +37,7 @@ const LandingPage = () => {
         dispatch(BlogActions.getAstroblog({ page: 1, limit: 3, search: '', categoryId: '' }));
 
         //! Dispatching API for Get Astrologers
-        dispatch(AstrologerActions.getAstrologer());
+        dispatch(AstrologerActions.getAstrologers());
     }, [dispatch]);
 
     return (
@@ -64,7 +64,7 @@ const LandingPage = () => {
                         <h2 className="text-2xl font-medium text-secondary">Consult Astrologer on Call & Chat</h2>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            {astrologerData?.map((astrologer, index) => <ConsultantCard key={index} astrologer={astrologer} />)}
+                            {astrologersData?.map((astrologer, index) => <ConsultantCard key={index} astrologer={astrologer} />)}
                         </div>
                     </div> */}
                 </section>
