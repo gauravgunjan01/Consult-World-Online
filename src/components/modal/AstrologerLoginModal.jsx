@@ -1,10 +1,12 @@
 import Modal from 'react-modal';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CrossSvg } from '../../assets/svg';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { CrossSvg, LeftArrowSvg } from '../../assets/svg';
+
+import Logo from '../../assets/images/logo/logo.png';
 import AuthBg from '../../assets/images/auth/auth-bg.png';
-import LoginImage from '../../assets/images/auth/login-image.png';
 import * as AuthActions from '../../redux/actions/authAction';
 
 Modal.setAppElement('#root');
@@ -22,7 +24,7 @@ const AstrologerLoginModal = () => {
 
     const handleCloseModal = () => dispatch(AuthActions.toggleAstrologerLoginModal(false));
 
-    const handleLoginAstrolger = async () => {
+    const handleLogin = async () => {
         console.log(astroFieldDetail);
         const { email, password } = astroFieldDetail;
 
@@ -37,45 +39,31 @@ const AstrologerLoginModal = () => {
         dispatch(AuthActions.astrologerLogin(payload));
     };
 
-    const [minHeight, setMinHeight] = useState('initial');
-
-    useEffect(() => {
-        const handleResize = () => setMinHeight(window.innerHeight * 0.95);
-
-        window.addEventListener('resize', handleResize);
-        handleResize();
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
     return (
         <>
-            <Modal isOpen={isAstrologerLoginModalOpen} className="modal-content" onRequestClose={handleCloseModal} overlayClassName="modal-overlay" closeTimeoutMS={200} style={{ content: { backgroundColor: 'transparent' } }}>
-                <section className="relative flex items-center justify-center max-md:p-5 bg-white rounded-lg">
-                    <div onClick={() => handleCloseModal()} className='cursor-pointer absolute text-primary right-5 top-5 z-10' ><CrossSvg strokeWidth='3' /></div>
+            <Modal isOpen={isAstrologerLoginModalOpen} className="modal-content-small" onRequestClose={handleCloseModal} overlayClassName="modal-overlay" closeTimeoutMS={200} style={{ content: { backgroundColor: 'transparent' } }}>
+                <section className="relative flex items-center justify-center bg-white rounded-lg">
+                    <div onClick={() => handleCloseModal()} className='absolute bg-red-600 text-white p-[5px] rounded-full right-5 top-5 cursor-pointer'><CrossSvg h={16} w={16} /></div>
 
-                    <article className="rounded-lg overflow-hidden max-w-4xl w-full">
-                        <main className="rounded-lg max-w-4xl w-full flex bg-contain bg-center bg-no-repeat" style={{ backgroundImage: `url(${AuthBg})` }}>
-                            <div className='basis-full md:basis-[55%] flex flex-col p-8 max-md:px-0 pt-16 pb-32'>
-                                <div className='flex flex-col items-center gap-5 px-10 text-center'>
-                                    <div className='text-black text-[30px] font-[500] text-center'>Continue with email</div>
-                                    <div className='flex flex-col gap-4'>
-                                        <input name='email' value={astroFieldDetail?.email} onChange={handleInputFieldAstrolger} type='email' placeholder='Email' className='w-full text-sm px-4 py-2 border border-gray-300  focus:border-primary rounded-md focus:outline-none' />
+                    <main className="rounded-lg max-w-4xl w-full px-10 py-10 space-y-2.5 bg-contain bg-center bg-no-repeat" style={{ backgroundImage: `url(${AuthBg})` }}>
+                        <div className='h-12'><img className="object-contain h-full w-full" src={Logo} /></div>
 
-                                        <input name='password' value={astroFieldDetail?.password} onChange={handleInputFieldAstrolger} type='text' placeholder='Password' className='w-full text-sm px-4 py-2 border border-gray-300 focus:border-primary rounded-md focus:outline-none' />
-
-                                        <button onClick={handleLoginAstrolger} className="w-full shadow-lg bg-primary hover:bg-primary focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded transition duration-300 transform hover:scale-95" type="submit">Login</button>
-
-                                        <div className='text-[14px] font-[500] text-[#0858F7]'>By Signing, you agree to our <Link to={'/terms-conditions'} onClick={() => handleCloseModal()} className='underline'>Terms of Use</Link> and <Link to={'/privacy-policy'} onClick={() => handleCloseModal()} className='underline'>Privacy Policy</Link></div>
-                                    </div>
-                                </div>
+                        <main className='space-y-4 py-5'>
+                            <div className='space-y-1.5'>
+                                <h2 className='flex items-center gap-3'><div onClick={() => handleCloseModal()} className='pt-0.5 cursor-pointer'><LeftArrowSvg /></div> <h6 className='text-black text-xl font-medium text-center tracking-tight'>Continue with Email</h6></h2>
+                                <p className='text-grey text-[14px]'>Enter your credentials to manage consultations</p>
                             </div>
 
-                            <div className='basis-[45%] hidden md:flex justify-center'>
-                                <div className='absolute top-10'><img className="object-contain w-[80%] h-[80%]" src={LoginImage} /></div>
+                            <div className='space-y-3'>
+                                <input name='email' value={astroFieldDetail?.email} onChange={handleInputFieldAstrolger} type='email' placeholder='Email' className='w-full text-sm px-4 py-2 border border-gray-300  focus:border-primary rounded focus:outline-none' />
+                                <input name='password' value={astroFieldDetail?.password} onChange={handleInputFieldAstrolger} type='text' placeholder='Password' className='w-full text-sm px-4 py-2 border border-gray-300 focus:border-primary rounded focus:outline-none' />
+
+                                <button onClick={handleLogin} className="w-full shadow-lg bg-gradient-to-r from-primary to-secondary hover:brightness-125 focus:shadow-outline focus:outline-none text-white py-2 px-4 rounded transition duration-500 transform" type="submit">GET OTP</button>
                             </div>
                         </main>
-                    </article>
+
+                        <div className='text-xs text-center text-[#0858F7] font-medium'>By Signing, you agree to our <Link to={'/terms-of-use'} onClick={() => handleCloseModal()} className=''>Terms of Use</Link> and <Link to={'/privacy-policy'} onClick={() => handleCloseModal()} className=''>Privacy Policy</Link></div>
+                    </main>
                 </section>
             </Modal>
         </>

@@ -1,21 +1,53 @@
 //! Auth
-//* Customer Auth
+//* Customer
 export const customer_login = 'api/auth/send-otp-to-customer';
 export const customer_login_otp = 'api/auth/verify-customer-otp';
-export const customer_update_profile = 'api/customers/update_profile_intake';
-export const customer_change_picture = 'api/customers/change_profile';
 
-//* Astrologer Auth
+//* Astrologer
 export const astrologer_login = 'api/auth/astrologer-login';
 
 //* Logout
 export const user_logout = 'api/logout';
 
+
+//! User
+//* Customer
+export const get_user_customer_details = 'api/auth/customer-details';
+export const update_user_customer_profile = 'api/customers/update_profile_intake';
+export const get_user_customer_consultation_history = 'api/auth/customer-details';
+
+//* Astrologer
+export const get_user_astrologer_details = 'api/auth/astrologer-details';
+export const update_user_astrologer_profile = 'api/astrologers/update_profile_intake';
+export const get_user_astrologer_consultation_history = 'api/auth/astrologer-details';
+
+
+//! Astrologer
+export const get_astrologers = 'api/astrologer/astrologer_filter?page=1&limit=4';
+export const get_astrologer_details = 'api/astrologer/get-astrologer-details';
+export const get_astrologer_reviews = 'api/admin/get-astrologer-review';
+export const get_astrologer_skills = 'api/admin/get-skill';
+export const get_astrologer_expertises = 'api/admin/get-all-main-expertise';
+export const follow_unfollow_astrologer = 'api/customers/follow_astrolgoer';
+export const get_astrologer_followed_status_by_customer = 'api/customers/check_customer_following';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //* Enquiry Premium Service
 export const enquiry_premium_service = 'api/customers/customer_consult';
 
 //! User
-export const get_user_customer_details = 'api/auth/customer-details';
 export const recharge_user_customer_wallet = 'api/customers/check_razorpay_payment_status';
 export const get_user_customer_completed_queue_list = 'api/customers/get_customer_completed_queues';
 export const update_user_customer_completed_queue_list_read_status = 'api/customers/update_queue_read_status';
@@ -29,7 +61,6 @@ export const create_user_customer_address = 'api/puja/add_address_puja';
 export const update_user_customer_address = 'api/puja/update_address_puja';
 export const delete_user_customer_address = 'api/puja/delete_address_puja';
 
-export const get_user_astrologer_details = 'api/auth/astrologer-details';
 export const change_user_astrologer_chat_status = 'api/astrologer/change-chat-status';
 export const change_user_astrologer_call_status = 'api/astrologer/change-call-status';
 export const change_user_astrologer_video_call_status = 'api/admin/change_videocall_status';
@@ -46,14 +77,6 @@ export const complete_booked_puja_history = 'api/ecommerce/complete_astrologer_p
 
 export const get_user_queue_predefined_message = 'api/admin/get_predefined_message';
 
-//! Astrologer
-export const get_astrologer = 'api/astrologer/astrologer_filter?page=1&limit=4';
-export const get_astrologer_by_id = 'api/astrologer/get-astrologer-details';
-export const get_astrologer_review_by_id = 'api/admin/get-astrologer-review';
-export const get_astrologer_skill = 'api/admin/get-skill';
-export const get_astrologer_main_expertise = 'api/admin/get-all-main-expertise';
-export const follow_unfollow_astrologer = 'api/customers/follow_astrolgoer';
-export const get_astrologer_followed_status_by_customer = 'api/customers/check_customer_following';
 
 // TODO : Consultation
 export const get_linked_profile_for_consultation = 'api/customers/get-linked-profile';

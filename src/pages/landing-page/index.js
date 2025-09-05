@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { api_urls } from '../../utils/api-urls/index.js';
 import { CelebritiesData, ComplimentaryAstrologyServicesData, ServicesData, TestimonialsData } from '../../utils/static-data/index.js';
 
-import * as BlogActions from "../../redux/actions/blogAction";
 import * as AstrologerActions from "../../redux/actions/astrologerAction";
 
 import ReviewSwiper from "./components/ReviewSwiper.jsx";
@@ -23,20 +22,10 @@ const LandingPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { t } = useTranslation();
-
-    const { astroBlogData } = useSelector(state => state?.blogreducer);
     const { astrologersData } = useSelector(state => state?.astrologerReducer);
 
-    const handleViewBlog = (data) => {
-        dispatch(BlogActions?.incrementAstroBlogViewCount({ blogId: data?._id }))
-        navigate(`/blog/blog-details?title=${data?.title?.split(' ')?.join('-')?.toLowerCase()}&id=${data?._id}`)
-    };
-
     useEffect(() => {
-        //! Dispatching API for Get Blogs
-        dispatch(BlogActions.getAstroblog({ page: 1, limit: 3, search: '', categoryId: '' }));
-
-        //! Dispatching API for Get Astrologers
+        //! Dispatching API
         dispatch(AstrologerActions.getAstrologers());
     }, [dispatch]);
 
@@ -86,7 +75,7 @@ const LandingPage = () => {
                         </div>
                     </div>
 
-                    <div className='px-2 py-3 space-y-3 bg-cream'>
+                    {/* <div className='px-2 py-3 space-y-3 bg-cream'>
                         <div className='space-y-1'>
                             <div className='text-lg lg:text-xl font-medium text-center tracking-tight uppercase'>Latest From Blog</div>
                             <div className='text-[13px] lg:text-sm font-medium text-center'>Top Astrologers. 24 * 7 customer support. Happy to help</div>
@@ -108,7 +97,7 @@ const LandingPage = () => {
                                 </div>
                             ))}
                         </main>
-                    </div>
+                    </div> */}
                 </aside>
             </section>
 

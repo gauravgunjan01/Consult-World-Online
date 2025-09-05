@@ -14,7 +14,7 @@ function* createKundliMatchingProfile(action) {
         console.log("Create Kundli Matching Profile Saga Response ::: ", data);
 
         if (data?.success) {
-            yield put({ type: actionTypes.SET_KUNDLI_MATCHING_PROFILE, payload: data?.results });
+            yield put({ type: actionTypes.SET_KUNDLI_MATCHING_PROFILES, payload: data?.results });
             toaster?.success({ text: 'Profile created successfully' });
             if (payload?.onComplete && data?.results?._id) yield call(payload.onComplete, data.results._id);
         }
@@ -27,7 +27,7 @@ function* createKundliMatchingProfile(action) {
     }
 };
 
-function* getKundliMatchingProfile(action) {
+function* getKundliMatchingProfiles(action) {
     try {
         const { payload } = action;
         console.log("Get Kundli Matching Profile Payload ::: ", payload);
@@ -37,7 +37,7 @@ function* getKundliMatchingProfile(action) {
         console.log("Get Kundli Matching Profile Saga Response ::: ", data);
 
         if (data?.success) {
-            yield put({ type: actionTypes.SET_KUNDLI_MATCHING_PROFILE, payload: data?.data });
+            yield put({ type: actionTypes.SET_KUNDLI_MATCHING_PROFILES, payload: data?.data });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
 
@@ -48,7 +48,7 @@ function* getKundliMatchingProfile(action) {
 };
 
 
-function* getKundliMatchingProfileById(action) {
+function* getKundliMatchingProfileDetails(action) {
     try {
         const { payload } = action;
         console.log("Get Kundli Matching Profile By Id Payload ::: ", payload);
@@ -58,7 +58,7 @@ function* getKundliMatchingProfileById(action) {
         console.log("Get Kundli Matching Profile By Id Saga Response ::: ", data);
 
         if (data?.success) {
-            yield put({ type: actionTypes.SET_KUNDLI_MATCHING_PROFILE_BY_ID, payload: data?.data });
+            yield put({ type: actionTypes.SET_KUNDLI_MATCHING_PROFILE_DETAILS, payload: data?.data });
         }
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
 
@@ -71,6 +71,6 @@ function* getKundliMatchingProfileById(action) {
 
 export default function* profileSaga() {
     yield takeLeading(actionTypes.CREATE_KUNDLI_MATCHING_PROFILE, createKundliMatchingProfile);
-    yield takeLeading(actionTypes.GET_KUNDLI_MATCHING_PROFILE, getKundliMatchingProfile);
-    yield takeLeading(actionTypes.GET_KUNDLI_MATCHING_PROFILE_BY_ID, getKundliMatchingProfileById);
+    yield takeLeading(actionTypes.GET_KUNDLI_MATCHING_PROFILES, getKundliMatchingProfiles);
+    yield takeLeading(actionTypes.GET_KUNDLI_MATCHING_PROFILE_DETAILS, getKundliMatchingProfileDetails);
 };

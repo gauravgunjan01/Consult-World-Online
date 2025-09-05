@@ -129,43 +129,43 @@ function* customerLoginOtp(action) {
     }
 };
 
-function* customerUpdateProfile(action) {
-    try {
-        const { payload } = action;
-        console.log('Payload ::: ', payload);
+// function* customerUpdateProfile(action) {
+//     try {
+//         const { payload } = action;
+//         console.log('Payload ::: ', payload);
 
-        const { data } = yield axios.post(api_urls + customer_update_profile, payload);
-        console.log('Customer Update Profile Saga Response ::: ', data);
+//         const { data } = yield axios.post(api_urls + customer_update_profile, payload);
+//         console.log('Customer Update Profile Saga Response ::: ', data);
 
-        if (data?.status) {
-            toaster.success({ text: 'Profile updated successfully!!!' });
-            yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: payload?.customerId } });
-        }
+//         if (data?.status) {
+//             toaster.success({ text: 'Profile updated successfully!!!' });
+//             yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: payload?.customerId } });
+//         }
 
-    } catch (error) {
-        toaster.error({ text: 'Failed to updated profile!!!' });
-        console.log('Customer Update Profile Saga Error ::: ', error)
-    }
-};
+//     } catch (error) {
+//         toaster.error({ text: 'Failed to updated profile!!!' });
+//         console.log('Customer Update Profile Saga Error ::: ', error)
+//     }
+// };
 
-function* customerChangePicture(action) {
-    try {
-        const { payload } = action;
-        console.log('Payload ::: ', payload);
+// function* customerChangePicture(action) {
+//     try {
+//         const { payload } = action;
+//         console.log('Payload ::: ', payload);
 
-        const { data } = yield axios.post(api_urls + customer_change_picture, payload?.data);
-        console.log('Customer Change Picture Saga Response ::: ', data);
+//         const { data } = yield axios.post(api_urls + customer_change_picture, payload?.data);
+//         console.log('Customer Change Picture Saga Response ::: ', data);
 
-        if (data?.status) {
-            toaster.success({ text: 'Profile picture updated successfully!!!' });
-            yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: payload?.customerId } });
-        }
+//         if (data?.status) {
+//             toaster.success({ text: 'Profile picture updated successfully!!!' });
+//             yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: payload?.customerId } });
+//         }
 
-    } catch (error) {
-        toaster.error({ text: 'Failed to change profile picture!!!' });
-        console.log('Customer Change Picture Saga Error ::: ', error)
-    }
-};
+//     } catch (error) {
+//         toaster.error({ text: 'Failed to change profile picture!!!' });
+//         console.log('Customer Change Picture Saga Error ::: ', error)
+//     }
+// };
 
 function* userLogout(action) {
     try {
@@ -199,7 +199,7 @@ export default function* authSaga() {
     yield takeLeading(actionTypes.REQUEST_TOGGLE_CUSTOMER_LOGIN_MODAL, requestToggleCustomerLoginModal);
     yield takeLeading(actionTypes.CUSTOMER_LOGIN, customerLogin);
     yield takeLeading(actionTypes.CUSTOMER_LOGIN_OTP, customerLoginOtp);
-    yield takeLeading(actionTypes.CUSTOMER_UPDATE_PROFILE, customerUpdateProfile);
-    yield takeLeading(actionTypes.CUSTOMER_CHANGE_PICTURE, customerChangePicture);
+    // yield takeLeading(actionTypes.CUSTOMER_UPDATE_PROFILE, customerUpdateProfile);
+    // yield takeLeading(actionTypes.CUSTOMER_CHANGE_PICTURE, customerChangePicture);
     yield takeLeading(actionTypes.USER_LOGOUT, userLogout);
 };

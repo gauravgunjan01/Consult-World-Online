@@ -21,7 +21,7 @@ import {
 import SocketService from '../../utils/services/socket-service';
 
 // TODO : Consultation Request
-function* getLinkedProfileForConsultation(action) {
+function* getLinkedConsultationProfile(action) {
     try {
         const { payload } = action;
         console.log("Get Linked Profile For Chat Payload ::: ", payload);
@@ -30,7 +30,7 @@ function* getLinkedProfileForConsultation(action) {
         console.log("Get Linked Profile For Chat Saga Response ::: ", data);
 
         if (data?.success) {
-            yield put({ type: actionTypes.SET_LINKED_PROFILE_FOR_CONSULTATION, payload: data?.data });
+            yield put({ type: actionTypes.SET_LINKED_CONSULTATION_PROFILE, payload: data?.data });
         }
 
     } catch (error) {
@@ -476,7 +476,7 @@ function* suggestRemediesDuringChat(action) {
 
 export default function* consultationSaga() {
     // TODO : Consultation Request
-    yield takeLeading(actionTypes?.GET_LINKED_PROFILE_FOR_CONSULTATION, getLinkedProfileForConsultation);
+    yield takeLeading(actionTypes?.GET_LINKED_CONSULTATION_PROFILE, getLinkedConsultationProfile);
     yield takeLeading(actionTypes?.INITIATE_REQUEST, initiateRequest);
     yield takeLeading(actionTypes?.HANDLE_INCOMING_REQUEST_BY_CONSULTANT, handleIncomingRequestByConsultant);
     yield takeLeading(actionTypes?.END_CURRENT_REQUEST, endCurrentRequest);

@@ -325,14 +325,14 @@ const App = () => {
         <AstrologerLoginModal />
         <CustomerLoginModal />
         <DownloadApp />
-        <CallInvoiceModal />
-        <VideocallInvoiceModal />
-        {localStorage.getItem('user_type') == 'customer' && astrologerRatingVisibility?.type == 'VIDEO_CALL' && astrologerRatingVisibility?.ratingVisible && <ChatRating />}
-        {localStorage.getItem('user_type') == 'customer' && astrologerRatingVisibility?.type == 'CHAT' && astrologerRatingVisibility?.ratingVisible && <ChatRating />}
+        {/* <CallInvoiceModal />
+        <VideocallInvoiceModal /> */}
+        {/* {localStorage.getItem('user_type') == 'customer' && astrologerRatingVisibility?.type == 'VIDEO_CALL' && astrologerRatingVisibility?.ratingVisible && <ChatRating />}
+        {localStorage.getItem('user_type') == 'customer' && astrologerRatingVisibility?.type == 'CHAT' && astrologerRatingVisibility?.ratingVisible && <ChatRating />} */}
         {initiatedRequestData?.initiated && <InitiatedRequest />}
         {incomingRequestData?.incoming && <IncomingRequest />}
         <ToastContainer />
-        {astrologerRatingVisibility?.type == 'CALL' && <CallRating />}
+        {/* {astrologerRatingVisibility?.type == 'CALL' && <CallRating />} */}
 
         {callIntakeDetailData?.visible && location?.pathname !== '/kundli' && location?.pathname !== '/kundli/kundli-details' && <div onClick={() => navigate(`/kundli/kundli-details?kundliId=${callIntakeDetailData?.profileId}&type=intake-details`)} className='p-5 py-2 right-[50px] bottom-[50px] bg-primary fixed z-[1000] cursor-pointer rounded-md text-white'>Intake Detail</div>}
       </LoadScript>
