@@ -27,7 +27,7 @@ const Astrologer = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { userCustomerDetails } = useSelector(state => state?.userReducer);
-    const { astrologerSkillData, astrologerMainExpertiseData } = useSelector(state => state?.astrologerReducer);
+    const { astrologersData, astrologerSkillData, astrologerMainExpertiseData } = useSelector(state => state?.astrologerReducer);
     const [showFilter, setShowFilter] = useState(false);
 
     const [astrologerData, setAstrologerData] = useState([]);
@@ -38,65 +38,66 @@ const Astrologer = () => {
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
 
-    const fetchAstrologers = async (pageNum = 1, reset = false) => {
-        try {
-            setLoading(true);
-            const params = new URLSearchParams({
-                page: pageNum,
-                astrologerName: searchText,
-                limit: 10,
-                mainExpertise: selectedOption.main_expertise.join(","),
-                skill: selectedOption.skill.join(","),
-                language: selectedOption.language.join(","),
-                gender: selectedOption.gender.join(","),
-            });
-            const { data } = await axios.get(`${api_urls}api/astrologer/astrologer_filter`, { params });
+    // const fetchAstrologers = async (pageNum = 1, reset = false) => {
+    //     try {
+    //         setLoading(true);
+    //         const params = new URLSearchParams({
+    //             page: pageNum,
+    //             astrologerName: searchText,
+    //             limit: 10,
+    //             mainExpertise: selectedOption.main_expertise.join(","),
+    //             skill: selectedOption.skill.join(","),
+    //             language: selectedOption.language.join(","),
+    //             gender: selectedOption.gender.join(","),
+    //         });
+    //         const { data } = await axios.get(`${api_urls}api/astrologer/astrologer_filter`, { params });
 
-            setAstrologerData((prevData) => {
-                const newData = reset ? data.results : [...prevData, ...data.results];
-                return Array.from(new Set(newData.map((item) => item._id))).map((id) =>
-                    newData.find((item) => item._id === id)
-                );
-            });
-            setTotalPage(data.totalPages);
-        } catch (error) {
-            console.error("Error fetching astrologer data:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    //         setAstrologerData((prevData) => {
+    //             const newData = reset ? data.results : [...prevData, ...data.results];
+    //             return Array.from(new Set(newData.map((item) => item._id))).map((id) =>
+    //                 newData.find((item) => item._id === id)
+    //             );
+    //         });
+    //         setTotalPage(data.totalPages);
+    //     } catch (error) {
+    //         console.error("Error fetching astrologer data:", error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchAstrologers(1, true); // Fetch initial data
+    // }, [selectedOption, sortBy, searchText]);
+
+    // useEffect(() => {
+    //     if (page > 1) {
+    //         fetchAstrologers(page);
+    //     }
+    // }, [page]);
+
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         if (loading) return;
+
+    //         const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    //         const clientHeight = window.innerHeight;
+    //         const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+    //         const isNearBottom = scrollTop + clientHeight >= scrollHeight - 50;
+
+    //         if (isNearBottom && page < totalPage) {
+    //             setPage((prevPage) => prevPage + 1);
+    //         }
+    //     };
+
+    //     window.addEventListener("scroll", handleScroll);
+    //     return () => window.removeEventListener("scroll", handleScroll);
+    // }, [loading, page, totalPage]);
 
     useEffect(() => {
-        fetchAstrologers(1, true); // Fetch initial data
-    }, [selectedOption, sortBy, searchText]);
-
-    useEffect(() => {
-        if (page > 1) {
-            fetchAstrologers(page);
-        }
-    }, [page]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (loading) return;
-
-            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            const clientHeight = window.innerHeight;
-            const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-            const isNearBottom = scrollTop + clientHeight >= scrollHeight - 50;
-
-            if (isNearBottom && page < totalPage) {
-                setPage((prevPage) => prevPage + 1);
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [loading, page, totalPage]);
-
-    useEffect(() => {
-        dispatch(AstrologerActions.getAstrologerSkill());
-        dispatch(AstrologerActions.getAstrologerMainExpertise());
+        dispatch(AstrologerActions.getAstrologers());
+        dispatch(AstrologerActions.getAstrologerSkills());
+        dispatch(AstrologerActions.getAstrologerExpertises());
     }, [dispatch]);
 
     const handleSelectOption = (category, data) => {
@@ -124,11 +125,10 @@ const Astrologer = () => {
 
     return (
         <>
-            <section className='flex max-lg:flex-col gap-3 justify-between min-h-screen'>
-                {showFilter && <div className="max-lg:w-full max-lg:max-h-60 overflow-y-scroll custom-scrollbar max-lg:px-10 lg:min-w-60 lg:max-w-60 space-y-6 bg-white text-gray-500 p-3">
+            <section className='p-5 bg-white flex max-lg:flex-col gap-3 justify-between min-h-screen'>
+                {/* {showFilter && <div className="max-lg:w-full max-lg:max-h-60 overflow-y-scroll custom-scrollbar max-lg:px-10 lg:min-w-60 lg:max-w-60 space-y-6 bg-white text-gray-500 p-3">
                     <div className='flex items-center gap-2'>
                         <h5 className="font-medium text-lg text-black">Select Filters</h5>
-                        {/* <button><SyncSvg h={20} w={20} /></button> */}
                     </div>
 
                     <div className='space-y-2.5'>
@@ -202,9 +202,9 @@ const Astrologer = () => {
                             ))}
                         </div>
                     </div>
-                </div>}
+                </div>} */}
 
-                <div className='flex-1 bg-white p-3 space-y-3'>
+                <div className='flex-1 space-y-3'>
                     <div className='flex gap-4 max-md:flex-col justify-between'>
                         <div className='flex-1 rounded-md flex items-center'>
                             <input value={searchText} onChange={(e) => setSearchText(e?.target?.value)} type='search' placeholder='Search here..' className='border border-[#DDDDDD] outline-none px-3 py-2.5 text-[16px] max-md:text-[16px] rounded-s-[3px] h-full w-[100%] md:w-[200px] lg:w-[300px]' />
@@ -222,10 +222,10 @@ const Astrologer = () => {
                         {loading ?
                             Array(20).fill('').map((_, index) => <AstrologerSkeletonCard key={index} />)
                             :
-                            astrologerData?.map((astrologer, index) => <ConsultantCard key={index} astrologer={astrologer} />)
+                            astrologersData?.map((astrologer, index) => <ConsultantCard key={index} astrologer={astrologer} />)
                         }
                     </main>
-                    {astrologerData?.length <= 0 && <DataNotFound />}
+                    {astrologersData?.length <= 0 && <DataNotFound />}
                 </div>
             </section>
         </>

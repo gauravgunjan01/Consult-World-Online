@@ -66,9 +66,9 @@ const AstrologerMyAccount = lazy(() => import('./pages/astrologer-dashboard/my-a
 // const AstrologerBookPujaHistory = lazy(() => import('./pages/astrologer-dashboard/book-puja-history'));
 
 // //! Astrologer
-// const Astrologer = lazy(() => import('./pages/astrologer'));
-// const SingleAstrologer = lazy(() => import('./pages/astrologer/name'));
-// const IntakeForm = lazy(() => import('./pages/astrologer/intake-form'));
+const Astrologer = lazy(() => import('./pages/astrologer'));
+const SingleAstrologer = lazy(() => import('./pages/astrologer/name'));
+const IntakeForm = lazy(() => import('./pages/astrologer/intake-form'));
 
 // //! Consultation
 // const ChatConsultation = lazy(() => import('./pages/consultation/chat-consultation'));
@@ -210,8 +210,8 @@ const App = () => {
           <Header />
           {!location?.pathname.startsWith('/astrologer-dashboard') && < Breadcrumbs />}
           <ScrollToTop>
-            <section className="w-full bg-fixed bg-cover bg-center px-4 lg:px-10 min-h-screen"
-              style={{ backgroundImage: `url(${BgBanner})` }}
+            <section className="w-full bg-fixed bg-cover bg-center px-5 min-h-screen"
+            // style={{ backgroundImage: `url(${BgBanner})` }}
             >
               <Routes>
                 <Route path='*' element={<NotFound />} />
@@ -251,11 +251,11 @@ const App = () => {
                 </Route>
 
                 {/* Astrologer */}
-                {/* <Route path='/astrologer' element={<Astrologer />} />
                 <Route path='/talk-to-consultant' element={<Astrologer />} />
                 <Route path='/chat-with-consultant' element={<Astrologer />} />
                 <Route path='/video-call-with-consultant' element={<Astrologer />} />
                 <Route path='/astrologer/details' element={<SingleAstrologer />} />
+                {/* <Route path='/astrologer' element={<Astrologer />} />
                 <Route path='/astrologer/intake-form/:astrologerId' element={<ProtectedRouteCustomer><IntakeForm /></ProtectedRouteCustomer>} /> */}
 
                 {/* Consultation */}

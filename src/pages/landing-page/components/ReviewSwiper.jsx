@@ -51,7 +51,7 @@ const ReviewSwiper = ({ navigation, pagination, data }) => {
             >
                 {data?.map((value, index) => (
                     <SwiperSlide key={index}>
-                        <div className='py-10 pt-20'>
+                        <div key={index} className='py-10 pt-20'>
                             <div className="flex flex-col border border-primary/30 rounded-2xl shadow-sm bg-white hover:shadow-md transition-all duration-300">
                                 <div className="flex justify-center -mt-10">
                                     <img src={value.image} alt={value.name} className="h-20 w-20 rounded-full border-2 border-primary object-cover shadow-md" />

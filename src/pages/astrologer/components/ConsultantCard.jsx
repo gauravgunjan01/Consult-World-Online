@@ -21,15 +21,13 @@ const ConsultantCard = ({ astrologer }) => {
         <>
             <div className="relative overflow-hidden bg-white rounded-[3px] p-4 flex gap-4 border border-secondary" >
                 <div className='max-md:hidden bg-black text-[#AE852C] px-5 py-0.5 absolute z-10 -rotate-[40deg] w-44 top-[30px] -left-[45px] text-nowrap text-center text-xs'>{astrologer?.title || 'Rising Star'}</div>
-                <Link to={`/astrologer/details?name=${astrologer?.astrologerName?.split(' ')?.join('-')?.toLowerCase()}&id=${astrologer?._id}`} className=' self-end'><img src={astrologer?.profileImage ? api_urls + astrologer?.profileImage : WebLogo} alt={astrologer?.astrologerName} className="max-md:hidden w-16 h-16 rounded-full object-cover border-2 border-green-500" /></Link>
+                <Link to={`/astrologer/details?name=${astrologer?.name?.split(' ')?.join('-')?.toLowerCase()}&id=${astrologer?._id}`} className=' self-end'><img src={astrologer?.image ? api_urls + astrologer?.image : WebLogo} alt={astrologer?.name} className="max-md:hidden w-16 h-16 rounded-full object-cover border-2 border-green-500" /></Link>
 
                 <div className="flex-1 text-sm text-gray-600">
-                    <Link to={`/astrologer/details?name=${astrologer?.astrologerName?.split(' ')?.join('-')?.toLowerCase()}&id=${astrologer?._id}`} className='space-y-1'>
-                        <h3 className="font-semibold text-lg text-[#000]">{astrologer?.astrologerName}</h3>
-                        <p className="text-sm text-gray-700">{astrologer?.expertise}</p>
-
-                        <p className='line-clamp-1'>{astrologer?.skill?.length > 0 && astrologer?.skill?.map(item => item?.skill)?.join(' , ')}</p>
-                        <p>Language: {astrologer?.language.length > 0 ? astrologer?.language.join(', ') : "Hindi"}</p>
+                    <Link to={`/astrologer/details?name=${astrologer?.name?.split(' ')?.join('-')?.toLowerCase()}&id=${astrologer?._id}`} className='space-y-1'>
+                        <h3 className="font-semibold text-lg text-[#000]">{astrologer?.name}</h3>
+                        <p className='line-clamp-1'>{astrologer?.skill?.length > 0 && astrologer?.skill?.map(item => item?.title)?.join(' , ')}</p>
+                        <p className='line-clamp-1'>{astrologer?.language?.length > 0 && astrologer?.language?.map(item => item?.title)?.join(' , ')}</p>
 
                         <div className='flex items-center flex-wrap text-nowrap gap-1 text-primary font-medium'>
                             {(location?.pathname === '/chat-with-consultant') && (

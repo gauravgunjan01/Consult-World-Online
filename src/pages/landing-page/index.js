@@ -1,13 +1,11 @@
-import moment from 'moment';
 import { useEffect } from 'react';
 import ReactPlayer from "react-player";
-import { Eye, FileText } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { api_urls } from '../../utils/api-urls/index.js';
-import { CelebritiesData, ComplimentaryAstrologyServicesData, ServicesData, TestimonialsData } from '../../utils/static-data/index.js';
+import { CelebritiesData, ComplimentaryAstrologyServicesData, MediaSpotLightData, ServicesData, TestimonialsData } from '../../utils/static-data/index.js';
 
 import * as AstrologerActions from "../../redux/actions/astrologerAction";
 
@@ -17,12 +15,14 @@ import LandingBanner from '../../assets/images/landing-page/landing-banner.jpg';
 import LandingBannerSmall from '../../assets/images/landing-page/landing-banner-small.jpg';
 
 import '../../assets/css/swiper.css';
+import ConsultantCard from '../astrologer/components/ConsultantCard.jsx';
 
 const LandingPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { astrologersData } = useSelector(state => state?.astrologerReducer);
+    console.log({ astrologersData });
 
     useEffect(() => {
         //! Dispatching API
@@ -40,7 +40,7 @@ const LandingPage = () => {
 
                     <div className='grid grid-cols-2 lg:grid-cols-4 gap-3'>
                         {ServicesData?.map((value, index) => (
-                            <div onClick={() => value?.title == 'Astro Shop' ? window.open(value?.path) : navigate(`/${value?.path}`)} className='flex justify-center items-center cursor-pointer'>
+                            <div key={index} onClick={() => value?.title == 'Astro Shop' ? window.open(value?.path) : navigate(`/${value?.path}`)} className='flex justify-center items-center cursor-pointer'>
                                 <div key={index} className='bg-white w-full h-[150px] rounded-sm flex flex-col items-center pt-5 gap-3'>
                                     <div className='bg-primary text-white h-20 w-20 rounded-full flex items-center justify-center'>{value?.icon}</div>
                                     <div className='text-primary font-[500]'>{value?.title}</div>
@@ -49,13 +49,13 @@ const LandingPage = () => {
                         ))}
                     </div>
 
-                    {/* <div className="px-2 pt-4 pb-2.5 space-y-8 bg-cream">
+                    <div className="px-2 pt-4 pb-2.5 space-y-8 bg-cream">
                         <h2 className="text-2xl font-medium text-secondary">Consult Astrologer on Call & Chat</h2>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                             {astrologersData?.map((astrologer, index) => <ConsultantCard key={index} astrologer={astrologer} />)}
                         </div>
-                    </div> */}
+                    </div>
                 </section>
 
                 <aside className='flex-1 space-y-3 lg:flex-[0.25]'>
@@ -141,37 +141,9 @@ const LandingPage = () => {
                     <SectionHeading title={'Media Spotlight'} paragraph={'Recognized by trusted media platforms for our impactful spiritual guidance.'} />
 
                     <div className="flex justify-center flex-wrap gap-6 px-6">
-                        {[
-                            {
-                                src: 'https://lifechangingastro.com/cdn/shop/files/Untitled_design_1-removebg-preview_c1f309e8-0d86-4e50-85c8-d5587c8950f5.png?v=1748352241&width=400',
-                                alt: 'Life Changing Astro'
-                            },
-                            {
-                                src: 'https://lifechangingastro.com/cdn/shop/files/Dainik_Bhaskar_Logo-removebg-preview.png?v=1748348240&width=400',
-                                alt: 'Dainik Bhaskar'
-                            },
-                            {
-                                src: 'https://lifechangingastro.com/cdn/shop/files/Rajasthan-patrika-logo-removebg-preview.png?v=1748348281&width=400',
-                                alt: 'Rajasthan Patrika'
-                            },
-                            {
-                                src: 'https://lifechangingastro.com/cdn/shop/files/news18-logo-vector-removebg-preview.png?v=1748348645&width=400',
-                                alt: 'News 18'
-                            },
-                            {
-                                src: 'https://lifechangingastro.com/cdn/shop/files/images-removebg-preview.png?v=1748348670&width=312',
-                                alt: 'Jagran'
-                            },
-                        ].map((logo, index) => (
-                            <div
-                                key={index}
-                                className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl p-4 sm:p-6 w-36 sm:w-48 h-24 sm:h-28 flex items-center justify-center shadow-md hover:scale-105 transition-all duration-300"
-                            >
-                                <img
-                                    src={logo.src}
-                                    alt={logo.alt}
-                                    className="max-h-full max-w-full object-contain"
-                                />
+                        {MediaSpotLightData.map((logo, index) => (
+                            <div key={index} className="bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl p-4 sm:p-6 w-36 sm:w-48 h-24 sm:h-28 flex items-center justify-center shadow-md hover:scale-105 transition-all duration-300">
+                                <img src={logo.src} alt={logo.alt} className="max-h-full max-w-full object-contain" />
                             </div>
                         ))}
                     </div>

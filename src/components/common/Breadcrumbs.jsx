@@ -44,9 +44,9 @@ const Breadcrumbs = () => {
 
     return (
         <>
-            <div className='h-[72px] max-lg:h-[50px] bg-secondary'></div>
+            <div className='h-[72px] max-lg:h-[50px] bg-gradient-to-r from-primary to-secondary'></div>
             {location?.pathname !== '/' && (
-                <div className='bg-secondary flex items-center px-5 lg:px-10 text-white py-0.5 capitalize space-x-1'>
+                <div className='bg-gradient-to-r from-primary to-secondary flex items-center px-5 lg:px-10 text-white pt-1.5 pb-1 capitalize space-x-1'>
                     <Link to="/" className='flex items-center'>
                         <p>Home</p>
                         <p className='-mt-1'><HomeSvg h={20} w={20} /></p>

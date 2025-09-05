@@ -116,3 +116,26 @@ export const TestimonialsData = [
             "Stress aur work-life balance ke liye guidance chahiye thi. Consult World Online ke wellness experts ne bohot practical advice di. Ab main apni life ko better handle kar pa raha hoon."
     }
 ];
+
+export const MediaSpotLightData = [
+    {
+        src: 'https://lifechangingastro.com/cdn/shop/files/Untitled_design_1-removebg-preview_c1f309e8-0d86-4e50-85c8-d5587c8950f5.png?v=1748352241&width=400',
+        alt: 'Life Changing Astro'
+    },
+    {
+        src: 'https://lifechangingastro.com/cdn/shop/files/Dainik_Bhaskar_Logo-removebg-preview.png?v=1748348240&width=400',
+        alt: 'Dainik Bhaskar'
+    },
+    {
+        src: 'https://lifechangingastro.com/cdn/shop/files/Rajasthan-patrika-logo-removebg-preview.png?v=1748348281&width=400',
+        alt: 'Rajasthan Patrika'
+    },
+    {
+        src: 'https://lifechangingastro.com/cdn/shop/files/news18-logo-vector-removebg-preview.png?v=1748348645&width=400',
+        alt: 'News 18'
+    },
+    {
+        src: 'https://lifechangingastro.com/cdn/shop/files/images-removebg-preview.png?v=1748348670&width=312',
+        alt: 'Jagran'
+    },
+];

@@ -1,9 +1,9 @@
 import * as actionTypes from "../action-types";
 
 const initialState = {
-    customerDetails: null,
+    userCustomerDetails: null,
     userCustomerConsultationHistoryData: [],
-    astrologerDetails: null,
+    userAstrologerDetails: null,
     userAstrologerConsultationHistoryData: [],
 };
 
@@ -13,14 +13,14 @@ const userReducer = (state = initialState, action) => {
     switch (type) {
         //! Customer
         case actionTypes.SET_USER_CUSTOMER_DETAILS:
-            return { ...state, customerDetails: payload };
+            return { ...state, userCustomerDetails: payload };
 
         case actionTypes.SET_USER_CUSTOMER_CONSULTATION_HISTORY:
             return { ...state, userCustomerConsultationHistoryData: payload };
 
         //! Astrologer
         case actionTypes.SET_USER_ASTROLOGER_DETAILS:
-            return { ...state, astrologerDetails: payload };
+            return { ...state, userAstrologerDetails: payload };
 
         case actionTypes.SET_USER_ASTROLOGER_CONSULTATION_HISTORY:
             return { ...state, userAstrologerConsultationHistoryData: payload };

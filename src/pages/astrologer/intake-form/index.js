@@ -108,7 +108,7 @@ const IntakeForm = () => {
 
     useEffect(() => {
         //! Dispatching API For Getting Single Astrologer
-        dispatch(AstrologerActions.getAstrologerById({ astrologerId }));
+        dispatch(AstrologerActions.getAstrologerDetails({ astrologerId }));
     }, [astrologerId]);
 
     return (

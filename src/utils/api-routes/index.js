@@ -23,8 +23,8 @@ export const get_user_astrologer_consultation_history = 'api/auth/astrologer-det
 
 
 //! Astrologer
-export const get_astrologers = 'api/astrologer/astrologer_filter?page=1&limit=4';
-export const get_astrologer_details = 'api/astrologer/get-astrologer-details';
+export const get_astrologers = 'api/astrologer/get-astrologer';
+export const get_astrologer_details = ({ astrologerId }) => `api/astrologer/get-astrologer/${astrologerId}`;
 export const get_astrologer_reviews = 'api/admin/get-astrologer-review';
 export const get_astrologer_skills = 'api/admin/get-skill';
 export const get_astrologer_expertises = 'api/admin/get-all-main-expertise';

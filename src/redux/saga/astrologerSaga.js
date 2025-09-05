@@ -11,7 +11,7 @@ function* getAstrologers() {
         const { data } = yield getAPI(get_astrologers);
         console.log('Get Astrologer Saga Response ::: ', data);
 
-        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGERS, payload: data?.results });
+        if (data?.status) yield put({ type: actionTypes.SET_ASTROLOGERS, payload: data?.result });
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
 
     } catch (error) {
@@ -23,16 +23,12 @@ function* getAstrologers() {
 function* getAstrologerDetails(action) {
     try {
         const { payload } = action;
-
         yield put({ type: actionTypes.SET_IS_LOADING, payload: true });
-        yield delay(100);
-        const { data } = yield postAPI(get_astrologer_details, payload);
 
-        if (data?.success) {
-            yield put({ type: actionTypes.SET_ASTROLOGER_DETAILS, payload: { ...data?.astrologer, totalChatTime: ((data?.totalChatTime) / 6000)?.toFixed(1), totalCallTime: ((data?.totalCallTime) / 6000)?.toFixed(0) } });
-        } else {
-            toaster.info({ text: data?.message })
-        }
+        yield delay(100);
+        const { data } = yield getAPI(get_astrologer_details(payload));
+
+        if (data?.status) yield put({ type: actionTypes.SET_ASTROLOGER_DETAILS, payload: data?.result });
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
 
     } catch (error) {
@@ -46,7 +42,7 @@ function* getAstrologerReviews(action) {
         const { payload } = action;
 
         const { data } = yield postAPI(get_astrologer_reviews, payload);
-        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER_REVIEWS, payload: data?.reviews?.reverse() });
+        if (data?.status) yield put({ type: actionTypes.SET_ASTROLOGER_REVIEWS, payload: data?.reviews?.reverse() });
 
     } catch (error) {
         yield put({ type: actionTypes.SET_ASTROLOGER_REVIEWS, payload: [] });
@@ -59,7 +55,7 @@ function* getAstrologerSkills(action) {
         const { data } = yield getAPI(get_astrologer_skills);
         console.log('Get Astrologer Skill Saga Response ::: ', data);
 
-        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER_SKILLS, payload: data?.skills });
+        if (data?.status) yield put({ type: actionTypes.SET_ASTROLOGER_SKILLS, payload: data?.skills });
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
 
     } catch (error) {
@@ -75,7 +71,7 @@ function* getAstrologerExpertises(action) {
         const { data } = yield getAPI(get_astrologer_expertises);
         console.log('Get Astrologer MainExpertise Saga Response ::: ', data);
 
-        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER_EXPERTISES, payload: data?.mainExpertise });
+        if (data?.status) yield put({ type: actionTypes.SET_ASTROLOGER_EXPERTISES, payload: data?.mainExpertise });
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
 
     } catch (error) {
@@ -93,7 +89,7 @@ function* followUnfollowAstrologer(action) {
         const { data } = yield postAPI(follow_unfollow_astrologer, payload);
         console.log("Follow Unfollow Astrologer Saga Response ::: ", data);
 
-        if (data?.success) {
+        if (data?.status) {
             toaster.success({ text: `Astrologer ${payload?.action} successfully!!!` });
             yield put({ type: actionTypes.GET_ASTROLOGER_FOLLOWED_STATUS_BY_CUSTOMER, payload: { customerId: payload?.customerId, astrologerId: payload?.astrologerId } });
         }
@@ -113,7 +109,7 @@ function* getAstrologerFollowedStatusByCustomer(action) {
         const { data } = yield postAPI(get_astrologer_followed_status_by_customer, payload);
         console.log('Get Astrologer Followed Status By Customer Saga Response ::: ', data);
 
-        if (data?.success) yield put({ type: actionTypes.SET_ASTROLOGER_FOLLOWED_STATUS_BY_CUSTOMER, payload: data?.follow });
+        if (data?.status) yield put({ type: actionTypes.SET_ASTROLOGER_FOLLOWED_STATUS_BY_CUSTOMER, payload: data?.follow });
 
     } catch (error) {
         console.log("Get Astrologer Followed Status By Customer Saga Error ::: ", error);

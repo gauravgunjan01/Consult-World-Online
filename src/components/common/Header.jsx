@@ -72,7 +72,7 @@ const Header = () => {
                         <nav className='flex gap-5 items-center max-lg:hidden'>
                             <NavLink to="/video-call-with-consultant" className={`max-xl:hidden`}>
                                 {({ isActive, isPending }) => (
-                                    <div className={isPending ? "pending" : isActive ? "bg-secondary text-white px-7 py-2.5 rounded-md border border-secondary" : "bg-white text-secondary px-7 py-2.5 border border-secondary rounded-md hover:text-secondary"} >
+                                    <div className={isPending ? "pending" : isActive ? "bg-gradient-to-r from-primary to-secondary text-white px-7 py-2.5 rounded-md border border-secondary" : "bg-white text-secondary px-7 py-2.5 border border-secondary rounded-md hover:text-secondary"} >
                                         <div className="flex items-center gap-3">
                                             <Video size={20} />
                                             <p>Videocall with Consultant</p>
@@ -83,7 +83,7 @@ const Header = () => {
 
                             <NavLink to="/talk-to-consultant">
                                 {({ isActive, isPending }) => (
-                                    <div className={isPending ? "pending" : isActive ? "bg-secondary text-white px-7 py-2.5 rounded-md border border-secondary" : "bg-white text-secondary px-7 py-2.5 border border-secondary rounded-md hover:text-secondary"} >
+                                    <div className={isPending ? "pending" : isActive ? "bg-gradient-to-r from-primary to-secondary text-white px-7 py-2.5 rounded-md border border-secondary" : "bg-white text-secondary px-7 py-2.5 border border-secondary rounded-md hover:text-secondary"} >
                                         <div className="flex items-center gap-3">
                                             <PhoneCall size={19} />
                                             <p>Talk to Consultant</p>
@@ -94,7 +94,7 @@ const Header = () => {
 
                             <NavLink to="/chat-with-consultant" className={`max-xl:hidden`}>
                                 {({ isActive, isPending }) => (
-                                    <div className={isPending ? "pending" : isActive ? "bg-secondary text-white px-7 py-2.5 rounded-md border border-secondary" : "bg-white text-secondary px-7 py-2.5 border border-secondary rounded-md hover:text-secondary"} >
+                                    <div className={isPending ? "pending" : isActive ? "bg-gradient-to-r from-primary to-secondary text-white px-7 py-2.5 rounded-md border border-secondary" : "bg-white text-secondary px-7 py-2.5 border border-secondary rounded-md hover:text-secondary"} >
                                         <div className="flex items-center gap-3">
                                             <MessageCircleMore size={22} />
                                             <p>Chat with Consultant</p>
