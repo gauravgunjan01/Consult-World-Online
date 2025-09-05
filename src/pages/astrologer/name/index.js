@@ -69,8 +69,8 @@ const SingleAstrologer = () => {
 
                             <div className='flex gap-2'>
                                 <button className={`bg-secondary text-white text-sm outline-none py-2 px-5 rounded-full transition duration-500 transform`}>Start Chat</button>
-                                <button className={`bg-secondary text-white text-sm outline-none py-2 px-5 rounded-full transition duration-500 transform`}>Start Chat</button>
-                                <button className={`bg-secondary text-white text-sm outline-none py-2 px-5 rounded-full transition duration-500 transform`}>Start Chat</button>
+                                <button className={`bg-secondary text-white text-sm outline-none py-2 px-5 rounded-full transition duration-500 transform`}>Start Voice Call</button>
+                                <button className={`bg-secondary text-white text-sm outline-none py-2 px-5 rounded-full transition duration-500 transform`}>Start Video Call</button>
                             </div>
 
                             <div className="grid grid-cols-2 gap-10">

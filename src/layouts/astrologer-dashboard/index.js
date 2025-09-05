@@ -34,7 +34,7 @@ const AstrologerDashboard = () => {
             <div className="flex">
                 <AstrologerSidebar />
                 <div className="flex-1 h-screen overflow-y-auto custom-scrollbar relative">
-                    <main className="text-black bg-[#F4F5F9] min-h-full p-4 pt-24 relative">
+                    <main className="text-black min-h-full p-5 relative">
                         <Outlet />
                         <div onClick={() => dispatch(AstrologerDashboardActions.setIsSidebarOpen(!isSidebarOpen))} className="w-[5px] bg-primary h-full absolute left-0 top-0 z-[100] cursor-ew-resize" />
                     </main>

@@ -105,65 +105,38 @@ const Header = () => {
 
                             {!userCustomerDetails && !userAstrologerDetails && <div onClick={() => dispatch(AuthActions.requestToggleCustomerLoginModal())} className='flex items-center gap-1.5 cursor-pointer text-black py-2.5 rounded-full'><div className='-mt-1'><div className='h-9 w-9 border border-primary rounded-full flex items-center justify-center bg-primary text-white'><PersonSvg h='20' w='20' /></div></div><div>Sign In</div></div>}
 
-                            {userAstrologerDetails &&
-                                <div className='group relative text-black max-lg:hidden'>
-                                    <div className='flex items-center gap-1 cursor-pointer'>{userAstrologerDetails?.image ? <img src={api_urls + userAstrologerDetails?.image} className='h-9 w-9 rounded-full' /> : <ProfileSvg h='40' w='40' />}</div>
-
-                                    <div className='font-normal absolute overflow-hidden top-[85px] right-0 bg-white w-52 h-0 rounded-lg group-hover:h-[400px] text-nowrap custom-zero-scrollbar overflow-y-scroll transition-all duration-500 ease-in group-hover:border-b-[5px] group-hover:border-t border-primary shadow-2xl'>
-                                        <div className='flex flex-col items-center gap-1.5 py-5'>
-                                            {userAstrologerDetails?.image ? <img src={api_urls + userAstrologerDetails?.image} className='h-11 w-11 rounded-full' /> : <ProfileSvg h='40' w='40' />}
-                                            <div className='text-[16px]'>{userAstrologerDetails?.name}</div>
-                                            <div className='text-sm'>XXXXXX{userAstrologerDetails?.phoneNumber?.toString()?.substring(6, 10)}</div>
-                                        </div>
-                                        <div onClick={() => navigate('/astrologer-dashboard/my-account')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Account</div></div>
-                                        <div onClick={() => navigate('/astrologer-dashboard/queue-list')} className='flex items-center gap-1 border-t py-2 px-5 cursor-pointer hover:text-primary'><p>Queue List</p></div>
-                                        <div onClick={() => navigate('/astrologer-dashboard/my-message')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Message</div></div>
-                                        <div onClick={() => navigate('/astrologer-dashboard/transaction-history')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Transaction History</div></div>
-                                        <div onClick={() => navigate('/register-puja')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Register Puja</div></div>
-                                        <div onClick={() => navigate('/astrologer-dashboard/register-puja-history')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Register Puja History</div></div>
-                                        <div onClick={() => navigate('/astrologer-dashboard/assigned-puja-history')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Assigned Puja History</div></div>
-                                        <div onClick={() => dispatch(AuthActions.userLogout({ onComplete: () => navigate('/') }))} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Logout</div></div>
-                                    </div>
-                                </div>
-                            }
+                            {userAstrologerDetails && <Link to={'/astrologer-dashboard/my-account'} className='flex items-center gap-1 cursor-pointer'>{userAstrologerDetails?.image ? <img src={api_urls + userAstrologerDetails?.image} className='h-9 w-9 rounded-full' /> : <ProfileSvg h='40' w='40' />}</Link>}
 
                             {userCustomerDetails &&
                                 <div className='group relative text-black max-lg:hidden'>
                                     <div className='flex items-center gap-1 cursor-pointer text-black'>{userCustomerDetails?.image ? <img src={api_urls + 'uploads/' + userCustomerDetails?.image} className='h-14 w-14 object-contain rounded-full bg-primary shadow-md' /> : <ProfileSvg h='40' w='40' />}</div>
 
-                                    <div className='font-normal absolute overflow-hidden top-[85px] right-0 bg-white w-56 h-0 rounded-lg group-hover:h-[400px] overflow-y-scroll custom-zero-scrollbar transition-all duration-500 ease-in group-hover:border-b-[5px] group-hover:border-t border-primary shadow-2xl'>
+                                    <div className='font-normal absolute overflow-hidden top-[55px] right-0 bg-white w-56 h-0 rounded-lg group-hover:h-[350px] overflow-y-scroll custom-zero-scrollbar transition-all duration-500 ease-in group-hover:border-b-[5px] group-hover:border-t border-primary shadow-2xl'>
                                         <div className='flex flex-col items-center gap-1.5 py-5'>
                                             {userCustomerDetails?.image ? <img src={api_urls + 'uploads/' + userCustomerDetails?.image} className='h-11 w-11 object-contain rounded-full bg-gray-100' /> : <ProfileSvg h='40' w='40' />}
                                             <div className='text-[16px]'>{userCustomerDetails?.name}</div>
                                             <div className='text-sm'>XXXXXX{userCustomerDetails?.phoneNumber?.toString()?.substring(6, 10)}</div>
                                         </div>
-                                        <div onClick={() => navigate('/my-account?active-tab=update-profile')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Account</div></div>
-                                        <div onClick={() => navigate('/my-message')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><p>My Message</p></div>
-                                        <div onClick={() => navigate('/wallet-history')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Wallet</div></div>
-                                        <div onClick={() => navigate('/transaction-history')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Transaction</div></div>
-                                        {/* <div onClick={() => navigate('/suggested-puja')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Suggested Puja</div></div> */}
-                                        <div onClick={() => navigate('/my-order/puja')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Order</div></div>
-                                        <div onClick={() => navigate('/cart')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>My Cart</div></div>
+                                        <div onClick={() => navigate('/my-account?active-tab=update-profile')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Account</div></div>
+                                        <div onClick={() => navigate('/wallet-history')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Wallet History</div></div>
+                                        <div onClick={() => navigate('/transaction-history')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Transaction History</div></div>
                                         <div onClick={() => dispatch(AuthActions.userLogout({ onComplete: () => navigate('/') }))} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Logout</div></div>
-                                        {/* <div onClick={() => navigate('/book-puja')} className='flex items-center gap-3 border-t py-2 px-5 cursor-pointer hover:text-primary'><div>Book Puja</div></div> */}
                                     </div>
                                 </div>
                             }
                         </nav>
-
                         <div onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} className={`cursor-pointer lg:hidden ${isHamburgerMenuOpen == true && 'invisible'}`}><HamburgerSvg h={'30'} w={'30'} /></div>
                     </main>
 
 
                     <main ref={navRef} className={`pb-40 flex flex-col gap-5 p-5 absolute h-full bg-white text-black border-r border-primary shadow-lg top-0 z-50 min-h-[100vh] w-[80vw] transition-all duration-500 overflow-y-scroll ${isHamburgerMenuOpen ? 'left-0' : 'left-[-200vw]'}`}>
-
                         <div onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} className='flex items-center justify-center gap-2 text-sm font-semibold cursor-pointer'>CLOSE <CrossSvg w={'20'} /></div>
                         <div className='text-center font-semibold text-sm'>WHAT ARE YOU LOOKING FOR?</div>
 
                         <div className='flex flex-col'>
                             {userCustomerDetails && <>
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/my-account?active-tab=update-profile" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Account</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/my-account?active-tab=update-profile" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Account</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
@@ -175,61 +148,21 @@ const Header = () => {
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/my-message" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}><div className='flex gap-1 items-center'><p>My Message</p></div></NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/wallet-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Wallet History</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/book-puja" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Book Puja</NavLink>
-                                </div>
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astro-mall" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Astromall</NavLink>
-                                </div>
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/wallet-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Wallet</NavLink>
-                                </div>
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/transaction-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Transaction</NavLink>
-                                </div>
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/my-order/puja" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Order</NavLink>
-                                </div>
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/cart" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Cart</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/transaction-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Transaction History</NavLink>
                                 </div>
                             </>}
 
                             {userAstrologerDetails && <>
                                 <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/my-account" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Account</NavLink>
-                                </div>
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/queue-list" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}><div className='flex gap-1 items-center'><p>Queue List</p> </div></NavLink>
-                                </div>
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/my-message" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>My Message</NavLink>
+                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/my-account" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Account</NavLink>
                                 </div>
 
                                 <div className='flex items-center  border-b py-4 px-1'>
                                     <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/transaction-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Transaction History</NavLink>
-                                </div>
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/register-puja" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Register Puja</NavLink>
-                                </div>
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/register-puja-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Register Puja History</NavLink>
-                                </div>
-
-                                <div className='flex items-center  border-b py-4 px-1'>
-                                    <NavLink onClick={() => dispatch(CommonActions.toggleHamburgerMenu(!isHamburgerMenuOpen))} to="/astrologer-dashboard/assigned-puja-history" className={({ isActive, isPending }) => isPending ? "pending" : isActive ? "text-primary" : "text-black"}>Assigned Puja History</NavLink>
                                 </div>
                             </>}
 

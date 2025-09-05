@@ -244,3 +244,30 @@ export const KundliFormatDateAndTime = (dateOfBirth, timeOfBirth) => {
 
     return { day, month, year, hour, min };
 };
+
+export const FormatSlotDate = (slot) => {
+    if (!slot?.date || !slot?.fromTime) return "Not Available";
+
+    const today = moment().startOf("day");
+    const tomorrow = moment().add(1, "day").startOf("day");
+    const slotDate = moment(slot?.date).startOf("day");
+
+    let label = "";
+    if (slotDate.isSame(today, "day")) {
+        label = "Today";
+    } else if (slotDate.isSame(tomorrow, "day")) {
+        label = "Tomorrow";
+    } else {
+        label = slotDate.format("DD MMM");
+    }
+
+    let time = moment(slot?.fromTime, "HH:mm").format("hh:mm A");
+    if (slot?.toTime) {
+        time += ` - ${moment(slot?.toTime, "HH:mm").format("hh:mm A")}`;
+    }
+
+    return <div className='flex flex-col'>
+        <span>{label}</span>
+        <span>{time}</span>
+    </div>;
+};

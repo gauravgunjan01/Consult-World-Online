@@ -11,7 +11,7 @@ import consultationReducer from "./consultationReducer";
 // import astromallReducer from "./astromallReducer";
 // import blogreducer from "./blogReducer";
 // import staticPageReducer from "./staticPageReducer";
-// import astrologerDashboardReducer from "./astrologerDashboardReducer";
+import astrologerDashboardReducer from "./astrologerDashboardReducer";
 
 const rootReducer = combineReducers({
     commonReducer,
@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
     // astromallReducer,
     // blogreducer,
     // staticPageReducer,
-    // astrologerDashboardReducer
+    astrologerDashboardReducer
 });
 
 export default rootReducer;

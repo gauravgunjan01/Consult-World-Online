@@ -207,12 +207,11 @@ const App = () => {
     <>
       <LoadScript googleMapsApiKey={google_api_keys} libraries={LIBRARIES} loadingElement={<Loading />}>
         <Suspense fallback={<Loading />}>
-          <Header />
+          {!location?.pathname.startsWith('/astrologer-dashboard') && <Header />}
+
           {!location?.pathname.startsWith('/astrologer-dashboard') && < Breadcrumbs />}
           <ScrollToTop>
-            <section className="w-full bg-fixed bg-cover bg-center px-5 min-h-screen"
-            // style={{ backgroundImage: `url(${BgBanner})` }}
-            >
+            <section className={`w-full bg-fixed bg-cover bg-center ${!location?.pathname?.startsWith('/astrologer-dashboard') && 'px-5'} min-h-screen`}>
               <Routes>
                 <Route path='*' element={<NotFound />} />
                 <Route path='/' element={<LandingPage />} />
@@ -251,6 +250,7 @@ const App = () => {
                 </Route>
 
                 {/* Astrologer */}
+                <Route path='/consultant' element={<Astrologer />} />
                 <Route path='/talk-to-consultant' element={<Astrologer />} />
                 <Route path='/chat-with-consultant' element={<Astrologer />} />
                 <Route path='/video-call-with-consultant' element={<Astrologer />} />
@@ -319,9 +319,9 @@ const App = () => {
           </ScrollToTop>
         </Suspense>
         {/* {(location?.pathname !== '/chat' && location?.pathname !== '/transaction-history/chat-summary' && location?.pathname !== '/transaction-history/whatsapp-chat-summary') && <NewsLetter />} */}
-        {(location?.pathname !== '/chat' && location?.pathname !== '/consultation/chat-consultation' && location?.pathname !== '/transaction-history/chat-summary' && location?.pathname !== '/transaction-history/whatsapp-chat-summary') && <Footer scrollToSection={scrollToSection} />}
+        {(location?.pathname !== '/chat' && location?.pathname !== '/consultation/chat-consultation' && location?.pathname !== '/transaction-history/chat-summary' && location?.pathname !== '/transaction-history/whatsapp-chat-summary' && !location?.pathname.startsWith('/astrologer-dashboard')) && <Footer scrollToSection={scrollToSection} />}
 
-        <SocialMedia />
+        {!location?.pathname.startsWith('/astrologer-dashboard') && <SocialMedia />}
         <AstrologerLoginModal />
         <CustomerLoginModal />
         <DownloadApp />

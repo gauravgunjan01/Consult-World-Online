@@ -1,16 +1,23 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useLocation } from "react-router-dom";
-import { ChevronDown, Home, Building, FileText, ClipboardList, UserPlus, Wallet, FileInput, FileOutput } from "lucide-react";
+import { ChevronDown, Building, UserPlus, LogOut } from "lucide-react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+
+import Logo from '../../../assets/images/logo/logo.png';
+import * as AuthActions from "../../../redux/actions/authAction";
 import * as AstrologerDashboardActions from "../../../redux/actions/astrologerDashboardAction";
 
 const AstrologerSidebar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isSidebarOpen, sidebarWidth } = useSelector(state => state?.astrologerDashboardReducer);
 
   return (
     <>
-      <div style={{ width: isSidebarOpen ? `${sidebarWidth}px` : '0px' }} className='transition-all duration-300 bg-primary h-screen text-white overflow-y-auto overflow-x-hidden scroll-smooth custom-scrollbar-zero relative'>
-        <section className='p-[100px_15px] flex flex-col gap-8 text-nowrap'>
+      <div style={{ width: isSidebarOpen ? `${sidebarWidth}px` : '0px' }} className='bg-primary text-white h-screen transition-all duration-300 select-none'>
+        <Link to={'/'} className='flex items-center gap-2 py-2'><img className='h-16 max-lg:h-10' src={Logo} /></Link>
+
+        <section className='p-4 flex flex-col gap-8 text-nowrap h-[calc(100vh-80px)] overflow-y-auto overflow-x-hidden scroll-smooth custom-scrollbar-zero relative'>
           {routeName?.map((section, index) => (
             <div key={index} className='flex flex-col gap-[5px]'>
               <p className='text-[13px] p-[0_5px] mb-[5px]'>{section?.title}</p>
@@ -27,6 +34,8 @@ const AstrologerSidebar = () => {
               })}
             </div>
           ))}
+
+          <button onClick={() => dispatch(AuthActions.userLogout({ onComplete: () => navigate('/') }))} className='flex items-center gap-2.5 text-white py-2 px-2.5 hover:bg-[#2A2F4A] rounded-sm'><LogOut size={16} />  Logout</button>
         </section>
       </div>
     </>
@@ -121,6 +130,24 @@ export const routeName = [
       { label: "Queue Message", path: "queue-list", icon: <Building style={{ height: "16px", width: "16px" }} /> },
     ],
   },
+  {
+    title: "History",
+    routes: [
+      { label: "Transaction", path: "transaction-history", icon: <UserPlus style={{ height: '16px', width: '16px' }} /> },
+      { label: "Register Puja", path: "register-puja-history", icon: <Building style={{ height: "16px", width: "16px" }} /> },
+      { label: "Assigned Puja", path: "assigned-puja-history", icon: <Building style={{ height: "16px", width: "16px" }} /> },
+    ],
+  },
+
+  {
+    title: "History",
+    routes: [
+      { label: "Transaction", path: "transaction-history", icon: <UserPlus style={{ height: '16px', width: '16px' }} /> },
+      { label: "Register Puja", path: "register-puja-history", icon: <Building style={{ height: "16px", width: "16px" }} /> },
+      { label: "Assigned Puja", path: "assigned-puja-history", icon: <Building style={{ height: "16px", width: "16px" }} /> },
+    ],
+  },
+
   {
     title: "History",
     routes: [
