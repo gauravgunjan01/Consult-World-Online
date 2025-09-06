@@ -81,7 +81,7 @@ export const get_user_queue_predefined_message = 'api/admin/get_predefined_messa
 // TODO : Consultation
 export const get_linked_profile_for_consultation = 'api/customers/get-linked-profile';
 export const create_profile_for_chat = 'api/customers/add-profile';
-export const initiate_chat_message = 'api/customers/initiate-chat';
+export const initiate_chat_message = 'api/conversation/initiate-chat';
 
 //* Video Call
 export const initiate_video_call = 'api/customers/initiateVideoCall';

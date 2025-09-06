@@ -255,8 +255,7 @@ const App = () => {
                 <Route path='/chat-with-consultant' element={<Astrologer />} />
                 <Route path='/video-call-with-consultant' element={<Astrologer />} />
                 <Route path='/astrologer/details' element={<SingleAstrologer />} />
-                {/* <Route path='/astrologer' element={<Astrologer />} />
-                <Route path='/astrologer/intake-form/:astrologerId' element={<ProtectedRouteCustomer><IntakeForm /></ProtectedRouteCustomer>} /> */}
+                <Route path='/astrologer/intake-form/:astrologerId' element={<ProtectedRouteCustomer><IntakeForm /></ProtectedRouteCustomer>} />
 
                 {/* Consultation */}
                 {/* <Route path='/consultation/chat-consultation' element={<ChatConsultation />} />

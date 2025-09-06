@@ -43,23 +43,23 @@ function* initiateRequest(action) {
         const { payload } = action;
         console.log("Initiate Request Payload ::: ", payload);
 
-        let profileId = '67d7313eab47e48b68197972';
-        // let profileId = payload?.selectedProfileId;
+        console.log('isNewProfile', payload?.isNewProfile);
+        let profileId = payload?.selectedProfileId;
 
-        // if (payload?.isNewProfile) {
-        //     const register_response = yield axios.post(api_urls + create_profile_for_chat, { ...payload?.profileData, customerId: localStorage.getItem('current_user_id') })
+        if (payload?.isNewProfile) {
+            const register_response = yield axios.post(api_urls + create_profile_for_chat, { ...payload?.profileData, customerId: localStorage.getItem('current_user_id') })
 
-        //     console.log('register_response', register_response?.data)
-        //     if (register_response?.data?.success) {
-        //         profileId = register_response?.data?.data;
-        //         console.log('register_response?.data?.data', register_response?.data?.data)
-        //     }
-        // }
-        // console.log('profileId', profileId);
+            console.log('register_response', register_response?.data)
+            if (register_response?.data?.success) {
+                profileId = register_response?.data?.data;
+                console.log('register_response?.data?.data', register_response?.data?.data)
+            }
+        }
+        console.log('profileId', profileId);
 
         switch (payload?.type) {
             case 'chat':
-                const send_request = yield axios.post(api_urls + initiate_chat_message, { astrologerId: payload?.astrologerId, customerId: payload?.customerId, profileId, chatPrice: payload?.chatPrice, })
+                const send_request = yield axios.post(api_urls + initiate_chat_message, { astrologerId: payload?.astrologerId, customerId: localStorage.getItem('current_user_id'), formId: profileId, chatPrice: payload?.chatPrice, })
                 console.log('send_request', send_request?.data)
 
                 if (send_request?.data?.success) {

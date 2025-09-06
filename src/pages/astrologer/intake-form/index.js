@@ -17,11 +17,11 @@ const IntakeForm = () => {
     const type = query.get('type') || 'Chat';
 
     const { userCustomerDetails } = useSelector(state => state?.userReducer);
-    const { AstrologerDetails } = useSelector(state => state?.astrologerReducer);
+    const { astrologerDetails } = useSelector(state => state?.astrologerReducer);
 
     const autocompleteRef = useRef(null);
     const [connectionType, setConnectionType] = useState(type);
-    const [chatIntakeDetail, setChatIntakeDetail] = useState({ isNewProfile: true, first_name: userCustomerDetails?.customerName?.split(' ')[0] || '', last_name: userCustomerDetails?.customerName?.split(' ')[1] || '', gender: userCustomerDetails?.gender || '', date_of_birth: moment(userCustomerDetails?.dateOfBirth)?.format('YYYY-MM-DD') || '', time_of_birth: moment(userCustomerDetails?.timeOfBirth)?.format('HH:mm') || '', place_of_birth: userCustomerDetails?.address?.birthPlace || '', marital_status: 'Unmarried', type_of_concern: 'Career', latitude: userCustomerDetails?.address?.latitude || '', longitude: userCustomerDetails?.address?.longitude || '', description: 'Description' });
+    const [chatIntakeDetail, setChatIntakeDetail] = useState({ isNewProfile: true, first_name: userCustomerDetails?.name?.split(' ')[0] || '', last_name: userCustomerDetails?.name?.split(' ')[1] || '', gender: userCustomerDetails?.gender || '', date_of_birth: moment(userCustomerDetails?.dateOfBirth)?.format('YYYY-MM-DD') || '', time_of_birth: moment(userCustomerDetails?.timeOfBirth)?.format('HH:mm') || '', place_of_birth: userCustomerDetails?.address?.birthPlace || '', marital_status: 'Unmarried', type_of_concern: 'Career', latitude: userCustomerDetails?.address?.latitude || '', longitude: userCustomerDetails?.address?.longitude || '', description: 'Description' });
 
     const handleChatIntakeDetail = (e) => setChatIntakeDetail({ ...chatIntakeDetail, [e.target?.name]: e.target?.value }) //* Handle Input : Chat Intake Form Data
 
@@ -91,10 +91,11 @@ const IntakeForm = () => {
                 isNewProfile,
                 profileData: { firstName: first_name, lastName: last_name, gender: gender, dateOfBirth: date_of_birth, timeOfBirth: ParseDateTime(date_of_birth, time_of_birth), placeOfBirth: place_of_birth, maritalStatus: marital_status, topic_of_concern: type_of_concern, latitude, longitude, description },
                 selectedProfileId: null,
-                chatPrice: Number(AstrologerDetails?.chat_price) + Number(AstrologerDetails?.commission_chat_price),
+                chatPrice: Number(astrologerDetails?.chat_price) + Number(astrologerDetails?.commission_chat_price),
                 astrologerId: astrologerId,
-                astrologerName: AstrologerDetails?.astrologerName?.toLowerCase(),
-                astrologerProfileImage: AstrologerDetails?.profileImage,
+                customerId: userCustomerDetails?._id,
+                astrologerName: astrologerDetails?.astrologerName?.toLowerCase(),
+                astrologerProfileImage: astrologerDetails?.profileImage,
                 customerName: userCustomerDetails?.customerName,
                 customerProfileImage: 'uploads/' + userCustomerDetails?.image,
                 type: connectionType,
@@ -192,7 +193,7 @@ const IntakeForm = () => {
                 </main>
 
                 <div className='flex justify-center pb-5'>
-                    <button onClick={() => handleSubmitChatIntakeForm()} className='self-center cursor-pointer bg-primary border border-primary text-center text-white rounded-mds px-14 py-2 transition-all duration-500'>Start {connectionType?.split('-')?.join(' ')} with <span className='capitalize'>{AstrologerDetails?.astrologerName?.toLowerCase()}</span></button>
+                    <button onClick={() => handleSubmitChatIntakeForm()} className='self-center cursor-pointer bg-primary border border-primary text-center text-white rounded-mds px-14 py-2 transition-all duration-500'>Start {connectionType?.split('-')?.join(' ')} with <span className='capitalize'>{astrologerDetails?.astrologerName?.toLowerCase()}</span></button>
                 </div>
             </section>
         </>

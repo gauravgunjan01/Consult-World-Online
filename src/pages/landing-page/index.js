@@ -22,7 +22,6 @@ const LandingPage = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { astrologersData } = useSelector(state => state?.astrologerReducer);
-    console.log({ astrologersData });
 
     useEffect(() => {
         //! Dispatching API

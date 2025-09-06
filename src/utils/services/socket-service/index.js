@@ -2,6 +2,7 @@ import { io } from 'socket.io-client';
 import { api_urls } from '../../api-urls';
 import * as ConsultationActions from '../../../redux/actions/consultationAction';
 import * as CommonActions from '../../../redux/actions/commonAction';
+import { toaster } from '../toast-service';
 
 const SOCKET_URL = api_urls;
 
@@ -39,6 +40,75 @@ class SocketService {
                 dispatch(CommonActions?.setSocketConnectionStatus(false));
                 if (reason === 'io server disconnect') {
                     this.socket.connect();
+                }
+            });
+
+            //! Listen for notification event from the server
+            this.socket.on('notification', (message) => {
+                console.log('Received notification !!!  ::: ', message);
+                const notification_type = message?.data?.type;
+
+                switch (notification_type) {
+                    // Todo : Customer
+                    case 'chat_accepted':
+                        //! Navigate to chat screen
+                        console.log('Chat Accepted!!!  ::: ', message);
+                        // dispatch(ConversationActions?.setChatRoomData(message?.data));
+                        // AsyncStorage.setItem(chatId, message?.data?.chatId);
+                        // this.emit('join-room', message?.data?.chatId);
+                        // this.emit('start-chat-timer', message?.data?.chatId);
+                        // navigation?.navigate('Chat');
+                        break;
+                    case 'chat_invoice':
+                        //! Dispatching Action
+                        break;
+                    case 'call_invoice':
+                        //! Dispatching Action
+                        break;
+                    case 'videocall_accepted':
+                        console.log("Videocall accepted! ", message?.data);
+                        // dispatch(ConversationActions?.setVideocallRoomData(message?.data));
+                        // this.emit('join-videocall-room', message?.data?.roomId);
+                        // this.emit('start-videocall-timer', message?.data?.roomId);
+                        // navigation?.navigate('Videocall');
+                        break;
+                    case 'videocall_reject':
+                        console.log("Videocall rejected! ", message?.data);
+                        // dispatch(ConversationActions?.setVideocallRoomData(message?.data));
+
+                        // if (ZegoExpressEngine?.instance()) {
+                        //     console.log("Engine found for destroy.");
+                        //     ZegoExpressEngine?.destroyEngine();
+                        //     navigation?.goBack();
+                        // } else {
+                        //     console.log("Engine not found to destroy.");
+                        //     navigation?.goBack();
+                        // }
+                        break;
+                    // Todo : Astrologer
+                    case 'chat_request':
+                        //! Dispatching Action
+                        console.log("Chat request received! ", message?.data);
+                        // displayChatNotification(message?.title, message?.data);
+                        // displayChatNotification(message?.title, dispatch, navigation, message?.data);
+
+                        break;
+                    case 'chat_invoice':
+                        //! Dispatching Action
+                        break;
+                    case 'call_invoice':
+                        //! Dispatching Action
+                        break;
+                    case 'videocall_request':
+                        //! Dispatching Action
+                        console.log("Videocall request received! ", message?.data);
+                        // displayVideocallNotification(message?.title, message?.data);
+                        // displayVideocallNotification(message?.title, dispatch, navigation, message?.data);
+
+                        break;
+                    default:
+                        toaster.success(message?.title, { duration: 5000 });
+                        break;
                 }
             });
 
