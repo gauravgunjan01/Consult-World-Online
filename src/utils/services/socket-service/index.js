@@ -47,30 +47,43 @@ class SocketService {
             this.socket.on('notification', (message) => {
                 console.log('Received notification !!!  ::: ', message);
                 const notification_type = message?.data?.type;
+                const notification_data = message?.data;
+                console.log('Notification Data !!!  ::: ', notification_data);
 
                 switch (notification_type) {
                     // Todo : Customer
                     case 'chat_accepted':
-                        //! Navigate to chat screen
                         console.log('Chat Accepted!!!  ::: ', message);
-                        // dispatch(ConversationActions?.setChatRoomData(message?.data));
-                        // AsyncStorage.setItem(chatId, message?.data?.chatId);
-                        // this.emit('join-room', message?.data?.chatId);
-                        // this.emit('start-chat-timer', message?.data?.chatId);
-                        // navigation?.navigate('Chat');
+                        navigate(`/consultation/chat-consultation?peer-id=${notification_data.astrologerId}&customer=${notification_data.customerId}&astrologer=${notification_data.astrologerId}&chatId=${notification_data?.chatId}&profileId=${notification_data?.profileId || "67ebbdaf8bc2fa603ca7ec5a"}`, { replace: true }); //* Navigate to chat screen
+                        localStorage?.removeItem('requestInitiated');
+                        localStorage?.removeItem('initiatedRequestTimer');
+                        localStorage?.removeItem('initiatedRequestPrice');
+                        localStorage?.removeItem('initiatedRequestAstrologerData');
+                        localStorage?.setItem('initiatedRequestData', JSON.stringify(notification_data));
+                        dispatch(ConsultationActions?.initiatedRequestData({ initiated: false, timer: 60, astrologer_data: null, data: notification_data }));
+                        this.emit('join-room', notification_data?.chatId);
+                        this.emit('start-chat-timer', notification_data?.chatId);
+                        break;
+
+                    case 'chat_reject':
+                        console.log("Chat Rejected! ", message?.data);
+                        toaster.info({ text: message?.title });
+
+                        localStorage?.removeItem('requestInitiated');
+                        localStorage?.removeItem('initiatedRequestTimer');
+                        localStorage?.removeItem('initiatedRequestPrice');
+                        localStorage?.removeItem('initiatedRequestAstrologerData');
+                        dispatch(ConsultationActions?.initiatedRequestData({ initiated: false, timer: 60, astrologer_data: null, data: null }));
                         break;
                     case 'chat_invoice':
                         //! Dispatching Action
                         break;
+
                     case 'call_invoice':
                         //! Dispatching Action
                         break;
                     case 'videocall_accepted':
                         console.log("Videocall accepted! ", message?.data);
-                        // dispatch(ConversationActions?.setVideocallRoomData(message?.data));
-                        // this.emit('join-videocall-room', message?.data?.roomId);
-                        // this.emit('start-videocall-timer', message?.data?.roomId);
-                        // navigation?.navigate('Videocall');
                         break;
                     case 'videocall_reject':
                         console.log("Videocall rejected! ", message?.data);
@@ -85,17 +98,23 @@ class SocketService {
                         //     navigation?.goBack();
                         // }
                         break;
+
                     // Todo : Astrologer
                     case 'chat_request':
                         //! Dispatching Action
                         console.log("Chat request received! ", message?.data);
                         // displayChatNotification(message?.title, message?.data);
                         // displayChatNotification(message?.title, dispatch, navigation, message?.data);
-
+                        localStorage?.setItem('requestIncoming', true);
+                        localStorage?.setItem('incomingRequestTimer', 10);
+                        localStorage?.setItem('incomingRequestData', JSON.stringify(message?.data));
+                        localStorage?.setItem('incomingRequestCustomerData', JSON.stringify({ name: notification_data?.customer_name, image: message?.image, type: 'chat' }));
+                        dispatch(ConsultationActions?.incomingRequestData({ incoming: true, timer: 10, customer_data: { name: notification_data?.customer_name, image: message?.image, type: 'chat' }, data: notification_data }));
                         break;
                     case 'chat_invoice':
                         //! Dispatching Action
                         break;
+
                     case 'call_invoice':
                         //! Dispatching Action
                         break;
@@ -107,20 +126,20 @@ class SocketService {
 
                         break;
                     default:
-                        toaster.success(message?.title, { duration: 5000 });
+                        toaster.success({ text: message?.title });
                         break;
                 }
             });
 
             //! Chat
-            this.socket.on('updateChatTimer', data => {
+            this.socket.on('update-chat-timer', data => {
                 // console.log("Timer Data ::: ", data);
                 dispatch(ConsultationActions.currentRequestTimerCountDown(data));
             });
 
-            this.socket.on('timerStopped', async () => {
-                console.log("Timer Stopped Event Run !!!");
-                dispatch(ConsultationActions.closeCurrentRequest({ type: 'chat', roomId: localStorage?.getItem('chatId'), onComplete: () => navigate('/', { replace: true }) }));
+            this.socket.on('stop-chat-timer', async () => {
+                console.log("Stop Time Event Run !!!");
+                dispatch(ConsultationActions.closeCurrentRequest({ type: 'chat', onComplete: () => navigate('/', { replace: true }) }));
             });
 
             this.socket.on('chatEnded', () => {

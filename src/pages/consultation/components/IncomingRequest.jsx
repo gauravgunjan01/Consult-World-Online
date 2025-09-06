@@ -11,6 +11,7 @@ const IncomingRequest = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { incomingRequestData } = useSelector(state => state?.consultationReducer);
+    // console.log({ incomingRequestData });
 
     const audioRef = useRef(null);
     const [isSoundPlaying, setIsSoundPlaying] = useState(false);
@@ -41,7 +42,7 @@ const IncomingRequest = () => {
                 localStorage?.removeItem('incomingRequestCustomerData');
             },
             onReject: () => {
-                navigate(`/`);
+                // navigate(`/`);
                 dispatch(ConsultationActions?.incomingRequestData({ incoming: false, timer: 60, customer_data: null, data: null }));
                 localStorage?.removeItem('requestIncoming');
                 localStorage?.removeItem('incomingRequestTimer');
@@ -49,7 +50,7 @@ const IncomingRequest = () => {
                 localStorage?.removeItem('incomingRequestData');
             },
             onMissed: () => {
-                navigate(`/`);
+                // navigate(`/`);
                 dispatch(ConsultationActions?.incomingRequestData({ incoming: false, timer: 60, customer_data: null, data: null }));
                 localStorage?.removeItem('requestIncoming');
                 localStorage?.removeItem('incomingRequestTimer');

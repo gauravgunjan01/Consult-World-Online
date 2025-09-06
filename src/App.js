@@ -71,7 +71,7 @@ const SingleAstrologer = lazy(() => import('./pages/astrologer/name'));
 const IntakeForm = lazy(() => import('./pages/astrologer/intake-form'));
 
 // //! Consultation
-// const ChatConsultation = lazy(() => import('./pages/consultation/chat-consultation'));
+const ChatConsultation = lazy(() => import('./pages/consultation/chat-consultation'));
 // const VideocallConsultation = lazy(() => import('./pages/consultation/video-call-consultation'));
 // const VoiceCallConsultation = lazy(() => import('./pages/consultation/voice-call-consulation'));
 
@@ -258,8 +258,8 @@ const App = () => {
                 <Route path='/astrologer/intake-form/:astrologerId' element={<ProtectedRouteCustomer><IntakeForm /></ProtectedRouteCustomer>} />
 
                 {/* Consultation */}
-                {/* <Route path='/consultation/chat-consultation' element={<ChatConsultation />} />
-                <Route path='/consultation/video-call-consultation' element={<VideocallConsultation />} />
+                <Route path='/consultation/chat-consultation' element={<ChatConsultation />} />
+                {/* <Route path='/consultation/video-call-consultation' element={<VideocallConsultation />} />
                 <Route path='/consultation/voice-call-consultation' element={<VoiceCallConsultation />} /> */}
 
                 {/* Free Kundli */}

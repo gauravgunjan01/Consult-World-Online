@@ -59,32 +59,44 @@ function* initiateRequest(action) {
 
         switch (payload?.type) {
             case 'chat':
-                const send_request = yield axios.post(api_urls + initiate_chat_message, { astrologerId: payload?.astrologerId, customerId: payload?.customerId, profileId, chatPrice: payload?.chatPrice, })
-                console.log('send_request', send_request?.data)
+                const { data: send_request } = yield axios.post(api_urls + initiate_chat_message, { astrologerId: payload?.astrologerId, customerId: payload?.customerId, profileId, chat_price: payload?.chat_price, })
+                console.log('send_request', send_request)
 
-                if (send_request?.data?.success) {
-                    toaster.success({ text: "Chat request send successfully." });
-                    SocketService.emit('createChatRoom', {
-                        roomID: send_request?.data?.newChat?._id,
-                        chatPrice: send_request?.data?.newChat?.chatPrice,
-                        customerID: send_request?.data?.newChat?.customerId,
-                        astroID: send_request?.data?.newChat?.astrologerId,
-                        duration: send_request?.data?.duration,
-                        newUser: false,
-                        profileId: profileId
+                if (send_request?.status) {
+                    Swal.fire({ icon: 'success', text: send_request?.message, showConfirmButton: false, timer: 2000 });
+                    console.log({
+                        chatId: send_request?.result?.data?.chatId,
+                        per_min_price: send_request?.result?.data?.per_min_price,
+                        per_min_commission_price: send_request?.result?.data?.per_min_commission_price,
+                        customerId: send_request?.result?.data?.customerId,
+                        astrologerId: send_request?.result?.data?.astrologerId,
+                        profileId: send_request?.result?.data?.profileId || profileId,
+                        invoiceId: send_request?.result?.data?.invoiceId,
+                        max_duration: send_request?.result?.data?.max_duration
+                    })
+                    SocketService.emit('create-chat-room', {
+                        chatId: send_request?.result?.data?.chatId,
+                        // roomId: data?.result?.data?.roomId,
+                        per_min_price: send_request?.result?.data?.per_min_price,
+                        per_min_commission_price: send_request?.result?.data?.per_min_commission_price,
+                        customerId: send_request?.result?.data?.customerId,
+                        astrologerId: send_request?.result?.data?.astrologerId,
+                        profileId: send_request?.result?.data?.profileId || profileId,
+                        invoiceId: send_request?.result?.data?.invoiceId,
+                        max_duration: send_request?.result?.data?.max_duration
                     });
-                    SocketService.emit('joinChatRoom', send_request?.data?.newChat?._id);
+                    // SocketService.emit('joinChatRoom', send_request?.data?.newChat?._id);
 
                     localStorage?.setItem('requestInitiated', true);
-                    localStorage?.setItem('initiatedRequestTimer', 60);
-                    localStorage.setItem('initiatedRequestPrice', send_request?.data?.newChat?.chatPrice);
-                    localStorage?.setItem('initiatedRequestAstrologerData', JSON.stringify({ name: payload?.astrologerName, image: payload?.astrologerProfileImage, price: payload?.chatPrice, type: 'Chat' }));
-                    yield put({ type: actionTypes.INITIATED_REQUEST_DATA, payload: { initiated: true, timer: 60, astrologer_data: { name: payload?.astrologerName, image: payload?.astrologerProfileImage, price: payload?.chatPrice, type: 'Chat' } } });
+                    localStorage?.setItem('initiatedRequestTimer', 10);
+                    localStorage.setItem('initiatedRequestPrice', send_request?.data?.newChat?.chat_price);
+                    localStorage?.setItem('initiatedRequestAstrologerData', JSON.stringify({ name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: payload?.chat_price, type: 'Chat' }));
+                    yield put({ type: actionTypes.INITIATED_REQUEST_DATA, payload: { initiated: true, timer: 10, astrologer_data: { name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: payload?.chat_price, type: 'Chat' } } });
 
                 } else {
-                    toaster.error({ text: send_request?.data?.message });
+                    Swal.fire({ icon: 'info', text: send_request?.message, showConfirmButton: false, timer: 2000 });
                 }
-                yield call(payload?.onComplete);
+                // yield call(payload?.onComplete);
                 return;
 
             case 'video-call':
@@ -107,8 +119,8 @@ function* initiateRequest(action) {
                     localStorage?.setItem('requestInitiated', true);
                     localStorage?.setItem('initiatedRequestTimer', 60);
                     localStorage?.setItem('initiatedRequestPrice', Number(send_video_call_request?.data?.videcallPrice) + Number(send_video_call_request?.data?.videocommissionPrice));
-                    localStorage?.setItem('initiatedRequestAstrologerData', JSON.stringify({ name: payload?.astrologerName, image: payload?.astrologerProfileImage, price: Number(send_video_call_request?.data?.videcallPrice) + Number(send_video_call_request?.data?.videocommissionPrice), type: 'Video call' }));
-                    yield put({ type: actionTypes.INITIATED_REQUEST_DATA, payload: { initiated: true, timer: 60, astrologer_data: { name: payload?.astrologerName, image: payload?.astrologerProfileImage, price: Number(send_video_call_request?.data?.videcallPrice) + Number(send_video_call_request?.data?.videocommissionPrice), type: 'Video call' } } });
+                    localStorage?.setItem('initiatedRequestAstrologerData', JSON.stringify({ name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: Number(send_video_call_request?.data?.videcallPrice) + Number(send_video_call_request?.data?.videocommissionPrice), type: 'Video call' }));
+                    yield put({ type: actionTypes.INITIATED_REQUEST_DATA, payload: { initiated: true, timer: 60, astrologer_data: { name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: Number(send_video_call_request?.data?.videcallPrice) + Number(send_video_call_request?.data?.videocommissionPrice), type: 'Video call' } } });
 
                 } else {
                     toaster.error({ text: send_video_call_request?.message });
@@ -136,8 +148,8 @@ function* initiateRequest(action) {
                     localStorage?.setItem('requestInitiated', true);
                     localStorage?.setItem('initiatedRequestTimer', 60);
                     localStorage?.setItem('initiatedRequestPrice', Number(send_voice_call_request?.data?.callPrice) + Number(send_voice_call_request?.data?.commissionPrice));
-                    localStorage?.setItem('initiatedRequestAstrologerData', JSON.stringify({ name: payload?.astrologerName, image: payload?.astrologerProfileImage, price: Number(send_voice_call_request?.data?.callPrice) + Number(send_voice_call_request?.data?.commissionPrice), type: 'Voice call' }));
-                    yield put({ type: actionTypes.INITIATED_REQUEST_DATA, payload: { initiated: true, timer: 60, astrologer_data: { name: payload?.astrologerName, image: payload?.astrologerProfileImage, price: Number(send_voice_call_request?.data?.callPrice) + Number(send_voice_call_request?.data?.commissionPrice), type: 'Voice call' } } });
+                    localStorage?.setItem('initiatedRequestAstrologerData', JSON.stringify({ name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: Number(send_voice_call_request?.data?.callPrice) + Number(send_voice_call_request?.data?.commissionPrice), type: 'Voice call' }));
+                    yield put({ type: actionTypes.INITIATED_REQUEST_DATA, payload: { initiated: true, timer: 60, astrologer_data: { name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: Number(send_voice_call_request?.data?.callPrice) + Number(send_voice_call_request?.data?.commissionPrice), type: 'Voice call' } } });
 
                 } else {
                     toaster.error({ text: send_voice_call_request?.message });
@@ -167,86 +179,82 @@ function* handleIncomingRequestByConsultant(action) {
                 console.log("Handle Incoming Request By Consultant Chat!!!");
 
                 if (payload?.data?.status == 'Accept') {
-                    yield postAPI('api/customers/accept_chat', { chatId: payload?.data?.requested_data?.chatId, type: 'astrologer' });
-
                     //! Storing Message Start
-                    const chat_id = `customer_${payload?.data?.requested_data?.user_id}_astro_${payload?.data?.requested_data?.astroID}`;
+                    // const chat_id = `customer_${payload?.data?.requested_data?.user_id}_astro_${payload?.data?.requested_data?.astroID}`;
+                    // const { data } = yield postAPI('api/customers/get_linked_profile', { profileId: payload?.data?.requested_data?.profileId });
 
-                    const { data } = yield postAPI('api/customers/get_linked_profile', { profileId: payload?.data?.requested_data?.profileId });
+                    // if (data?.success) {
+                    //     const { firstName, lastName, dateOfBirth, timeOfBirth, placeOfBirth, maritalStatus, gender, topic_of_concern, description } = data?.data;
 
-                    if (data?.success) {
-                        const { firstName, lastName, dateOfBirth, timeOfBirth, placeOfBirth, maritalStatus, gender, topic_of_concern, description } = data?.data;
+                    //     const message_customer = {
+                    //         _id: Math.random().toString(36).substr(2, 9),
+                    //         text: `Hi, 
+                    //             Below are my details:
+                    //             Name: ${firstName + ' ' + lastName}
+                    //             Gender: ${gender}
+                    //             DOB: ${dateOfBirth}
+                    //             Time: ${timeOfBirth}
+                    //             Address: ${placeOfBirth}
+                    //             Marital Status: ${maritalStatus}
+                    //             Topic of Concern: ${topic_of_concern}
+                    //             Description: ${description}
+                    //         `,
+                    //         user: {
+                    //             _id: 'customer_' + payload?.data?.requested_data?.user_id,
+                    //             name: payload?.data?.requested_data?.customerName,
+                    //             image: api_urls + 'uploads/' + payload?.data?.requested_data?.customerImage
+                    //         },
+                    //         createdAt: new Date().getTime(),
+                    //         addedAt: serverTimestamp(),
+                    //     };
 
-                        const message_customer = {
-                            _id: Math.random().toString(36).substr(2, 9),
-                            text: `Hi, 
-                    Below are my details:
-                    Name: ${firstName + ' ' + lastName}
-                    Gender: ${gender}
-                    DOB: ${dateOfBirth}
-                    Time: ${timeOfBirth}
-                    Address: ${placeOfBirth}
-                    Marital Status: ${maritalStatus}
-                    Topic of Concern: ${topic_of_concern}
-                    Description: ${description}
-                    `,
-                            user: {
-                                _id: 'customer_' + payload?.data?.requested_data?.user_id,
-                                name: payload?.data?.requested_data?.customerName,
-                                image: api_urls + 'uploads/' + payload?.data?.requested_data?.customerImage
-                            },
-                            createdAt: new Date().getTime(),
-                            addedAt: serverTimestamp(),
-                        };
+                    //     console.log("Welcome Message Data In Notification ::: ", message_customer);
 
-                        console.log("Welcome Message Data In Notification ::: ", message_customer);
+                    //     const chatNodeCustomer = push(ref(database, `ChatMessages/${chat_id}`));
+                    //     const newKeyCustomer = chatNodeCustomer.key;
+                    //     const chatRefCustomer = ref(database, `ChatMessages/${chat_id}/${newKeyCustomer}`);
+                    //     yield set(chatRefCustomer, { ...message_customer, pending: false, sent: true, received: false });
+                    // }
 
-                        const chatNodeCustomer = push(ref(database, `ChatMessages/${chat_id}`));
-                        const newKeyCustomer = chatNodeCustomer.key;
-                        const chatRefCustomer = ref(database, `ChatMessages/${chat_id}/${newKeyCustomer}`);
-                        yield set(chatRefCustomer, { ...message_customer, pending: false, sent: true, received: false });
-                    }
+                    // const message = {
+                    //     _id: Math.random().toString(36).substr(2, 9),
+                    //     text: payload?.data?.requested_data?.message,
+                    //     user: {
+                    //         _id: 'astro_' + payload?.data?.requested_data?.astroID,
+                    //         name: payload?.data?.requested_data?.astrologer_name,
+                    //         image: api_urls + payload?.data?.requested_data?.astrologerImage
+                    //     },
+                    //     createdAt: new Date().getTime(),
+                    //     addedAt: serverTimestamp(),
+                    // };
 
-                    const message = {
-                        _id: Math.random().toString(36).substr(2, 9),
-                        text: payload?.data?.requested_data?.message,
-                        user: {
-                            _id: 'astro_' + payload?.data?.requested_data?.astroID,
-                            name: payload?.data?.requested_data?.astrologerName,
-                            image: api_urls + payload?.data?.requested_data?.astrologerImage
-                        },
-                        createdAt: new Date().getTime(),
-                        addedAt: serverTimestamp(),
-                    };
+                    // console.log("Welcome Message Data In Notification ::: ", message);
 
-                    console.log("Welcome Message Data In Notification ::: ", message);
-
-                    const chatNode = push(ref(database, `ChatMessages/${chat_id}`));
-                    const newKey = chatNode.key;
-                    const chatRef = ref(database, `ChatMessages/${chat_id}/${newKey}`);
-                    yield set(chatRef, { ...message, pending: false, sent: true, received: false });
+                    // const chatNode = push(ref(database, `ChatMessages/${chat_id}`));
+                    // const newKey = chatNode.key;
+                    // const chatRef = ref(database, `ChatMessages/${chat_id}/${newKey}`);
+                    // yield set(chatRef, { ...message, pending: false, sent: true, received: false });
                     //! Storing Message End
 
-                    localStorage.setItem('chatId', payload?.data?.requested_data?.chatId);
-                    SocketService.emit('onAstroAccept', payload?.data?.requested_data?.chatId);
-                    SocketService.emit('joinChatRoom', payload?.data?.requested_data?.chatId);
-                    yield put({ type: actionTypes.HIDE_CHAT_MESSAGE_INPUT_FIELD, payload: false });
+                    SocketService.emit('accept-chat-request', payload?.data?.requested_data?.chatId);
+                    SocketService.emit('join-room', payload?.data?.requested_data?.chatId);
                     yield call(payload?.onAcceptChat);
                     return;
                 }
-                if (payload?.data?.status == 'Missed') {
-                    const data = { roomID: payload?.data?.requested_data?.chatId, actionBy: 'astro' };
-                    SocketService.emit('missedChat', data);
+                else if (payload?.data?.status == 'Missed') {
+                    SocketService.emit('missed-chat-request', payload?.data?.requested_data?.chatId);
+                    toaster.info({ text: 'You have missed the incoming request.' });
                     yield call(payload?.onMissed);
-                    yield postAPI('api/customers/reject_chat', { chatId: payload?.data?.requested_data?.chatId, type: 'astrologer' });
+                    yield put({ type: actionTypes.GET_USER_ASTROLOGER_DETAILS, payload: null });
+                    return;
                 }
                 else {
-                    const data = { roomID: payload?.data?.requested_data?.chatId, actionBy: 'astro' };
-                    SocketService.emit('declinedChat', data);
+                    SocketService.emit('reject-chat-request', payload?.data?.requested_data?.chatId);
+                    toaster.info({ text: 'Request has been declined by you.' });
                     yield call(payload?.onReject);
-                    yield postAPI('api/customers/reject_chat', { chatId: payload?.data?.requested_data?.chatId, type: 'astrologer' });
+                    yield put({ type: actionTypes.GET_USER_ASTROLOGER_DETAILS, payload: null });
+                    return;
                 }
-                return;
 
             case 'video-call':
                 console.log("Handle Incoming Request By Consultant Video Call!!!");
@@ -347,9 +355,8 @@ function* endCurrentRequest(action) {
                 const chatRef = ref(database, `ChatMessages/${payload?.chat_id}/${newKey}`);
                 yield set(chatRef, { ...message, pending: false, sent: true, received: false });
 
-                SocketService.emit('endChat', { roomID: payload?.roomId });
-                yield put({ type: actionTypes.CLOSE_CHAT_MESSAGE, payload: null });  //* Let check to remove this.
-                return;
+                SocketService.emit('end-chat', { chatId: payload?.chatId, closed_by: 'Customer' });
+                yield put({ type: actionTypes.CLOSE_CHAT_MESSAGE, payload: null });
 
             case 'video-call':
                 SocketService.emit('endVideoCall', { roomID: payload?.roomId });
@@ -375,77 +382,77 @@ function* closeCurrentRequest(action) {
         const user_type = localStorage.getItem('user_type');
         console.log("User Type ::: ", user_type);
 
-        if (!payload) return;
-        switch (payload?.type) {
-            case 'chat':
-                console.log("Close Current Request Saga Run For Chat!!!");
-                localStorage.removeItem('chatId');
-                yield put({ type: actionTypes.HIDE_CHAT_MESSAGE_INPUT_FIELD, payload: true });
+        // if (!payload) return;
+        // switch (payload?.type) {
+        //     case 'chat':
+        //         console.log("Close Current Request Saga Run For Chat!!!");
+        //         localStorage.removeItem('chatId');
+        //         yield put({ type: actionTypes.HIDE_CHAT_MESSAGE_INPUT_FIELD, payload: true });
 
-                const close_chat_reponse = yield axios.post(api_urls + 'api/customers/get_chat_details', { chatId: payload?.roomId });
-                console.log('close_chat_reponse', close_chat_reponse?.data);
+        //         const close_chat_reponse = yield axios.post(api_urls + 'api/customers/get_chat_details', { chatId: payload?.roomId });
+        //         console.log('close_chat_reponse', close_chat_reponse?.data);
 
-                if (close_chat_reponse?.data?.success) {
-                    yield put({ type: actionTypes.CURRENT_REQUEST_TIMER_COUNTDOWN, payload: 0 });
-                    yield put({ type: actionTypes.SET_CHAT_INVOICE_DATA, payload: { ...close_chat_reponse?.data?.chatHistory, serviceId: payload?.roomId } });
+        //         if (close_chat_reponse?.data?.success) {
+        //             yield put({ type: actionTypes.CURRENT_REQUEST_TIMER_COUNTDOWN, payload: 0 });
+        //             yield put({ type: actionTypes.SET_CHAT_INVOICE_DATA, payload: { ...close_chat_reponse?.data?.chatHistory, serviceId: payload?.roomId } });
 
-                    if (user_type == 'customer') {
-                        localStorage.removeItem('initiatedRequestData');
-                        yield put({ type: actionTypes.SET_CHAT_INVOICE_VISIBILITY, payload: true });
-                        yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } });
-                    }
-                    if (user_type == 'astrologer') {
-                        localStorage.removeItem('incomingRequestData');
-                        yield put({ type: actionTypes.SET_ASTROLOGER_CHAT_INVOICE_VISIBILITY, payload: true });
-                        console.log("Invoice Open Astrolgoer !!!")
-                    }
-                }
-                // yield call(payload?.onComplete);
-                return;
+        //             if (user_type == 'customer') {
+        //                 localStorage.removeItem('initiatedRequestData');
+        //                 yield put({ type: actionTypes.SET_CHAT_INVOICE_VISIBILITY, payload: true });
+        //                 yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } });
+        //             }
+        //             if (user_type == 'astrologer') {
+        //                 localStorage.removeItem('incomingRequestData');
+        //                 yield put({ type: actionTypes.SET_ASTROLOGER_CHAT_INVOICE_VISIBILITY, payload: true });
+        //                 console.log("Invoice Open Astrolgoer !!!")
+        //             }
+        //         }
+        //         // yield call(payload?.onComplete);
+        //         return;
 
-            case 'video-call':
-                console.log("Close Current Request Saga Run For Video Call!!!");
-                // const { data: video_call_reponse } = yield axios.post(api_urls + 'api/customers/get_chat_details', { chatId: payload?.chatId });
-                // console.log('video_call_reponse', video_call_reponse);
+        //     case 'video-call':
+        //         console.log("Close Current Request Saga Run For Video Call!!!");
+        //         // const { data: video_call_reponse } = yield axios.post(api_urls + 'api/customers/get_chat_details', { chatId: payload?.chatId });
+        //         // console.log('video_call_reponse', video_call_reponse);
 
-                // if (video_call_reponse?.success) {
-                yield put({ type: actionTypes.CURRENT_REQUEST_TIMER_COUNTDOWN, payload: 0 });
-                // yield put({ type: actionTypes.SET_CHAT_INVOICE_DATA, payload: { ...video_call_reponse?.chatHistory, serviceId: payload?.chatId } });
+        //         // if (video_call_reponse?.success) {
+        //         yield put({ type: actionTypes.CURRENT_REQUEST_TIMER_COUNTDOWN, payload: 0 });
+        //         // yield put({ type: actionTypes.SET_CHAT_INVOICE_DATA, payload: { ...video_call_reponse?.chatHistory, serviceId: payload?.chatId } });
 
-                if (user_type == 'customer') {
-                    localStorage.removeItem('roomId');
-                    localStorage.removeItem('initiatedRequestData');
-                    // yield put({ type: actionTypes.SET_CHAT_INVOICE_VISIBILITY, payload: true });
-                    // yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } });
-                }
-                if (user_type == 'astrologer') {
-                    localStorage.removeItem('roomId');
-                    localStorage.removeItem('incomingRequestData');
-                    // yield put({ type: actionTypes.SET_ASTROLOGER_CHAT_INVOICE_VISIBILITY, payload: true });
-                }
-                // }
-                yield call(payload?.onComplete);
-                toaster.success({ text: 'Current video call session ended.' });
-                return;
+        //         if (user_type == 'customer') {
+        //             localStorage.removeItem('roomId');
+        //             localStorage.removeItem('initiatedRequestData');
+        //             // yield put({ type: actionTypes.SET_CHAT_INVOICE_VISIBILITY, payload: true });
+        //             // yield put({ type: actionTypes.GET_USER_CUSTOMER_DETAILS, payload: { customerId: localStorage.getItem('current_user_id') } });
+        //         }
+        //         if (user_type == 'astrologer') {
+        //             localStorage.removeItem('roomId');
+        //             localStorage.removeItem('incomingRequestData');
+        //             // yield put({ type: actionTypes.SET_ASTROLOGER_CHAT_INVOICE_VISIBILITY, payload: true });
+        //         }
+        //         // }
+        //         yield call(payload?.onComplete);
+        //         toaster.success({ text: 'Current video call session ended.' });
+        //         return;
 
-            case 'voice-call':
-                console.log("Close Current Request Saga Run For Voice Call!!!");
-                yield put({ type: actionTypes.CURRENT_REQUEST_TIMER_COUNTDOWN, payload: 0 });
-                if (user_type == 'customer') {
-                    localStorage.removeItem('roomId');
-                    localStorage.removeItem('initiatedRequestData');
-                }
-                if (user_type == 'astrologer') {
-                    localStorage.removeItem('roomId');
-                    localStorage.removeItem('incomingRequestData');
-                }
-                yield call(payload?.onComplete);
-                toaster.success({ text: 'Current voice call session ended.' });
-                return;
+        //     case 'voice-call':
+        //         console.log("Close Current Request Saga Run For Voice Call!!!");
+        //         yield put({ type: actionTypes.CURRENT_REQUEST_TIMER_COUNTDOWN, payload: 0 });
+        //         if (user_type == 'customer') {
+        //             localStorage.removeItem('roomId');
+        //             localStorage.removeItem('initiatedRequestData');
+        //         }
+        //         if (user_type == 'astrologer') {
+        //             localStorage.removeItem('roomId');
+        //             localStorage.removeItem('incomingRequestData');
+        //         }
+        //         yield call(payload?.onComplete);
+        //         toaster.success({ text: 'Current voice call session ended.' });
+        //         return;
 
-            default:
-                return;
-        }
+        //     default:
+        //         return;
+        // }
     } catch (error) {
         console.log('Close Current Request Payload ::: ', error?.response?.data);
     }

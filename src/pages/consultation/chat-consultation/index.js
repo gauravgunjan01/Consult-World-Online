@@ -1,26 +1,27 @@
-import Swal from 'sweetalert2';
 import axios from 'axios';
 import moment from 'moment';
-import { useLocation, useNavigate } from 'react-router-dom';
-import React, { useEffect, useRef, useState } from 'react';
-import { database, ref, push, onValue, serverTimestamp, set } from '../../../config/firebase-config';
-import { api_urls, web_urls } from '../../../utils/api-urls';
-import ChatBg from '../../../assets/images/chat/chat-bg.png';
-import { AttachmentBtnSvg, ChatCloseSvg, CrossSvg, DownArrowHeadSvg, PujaSvg, RightArrowHeadSvg, SendBtnSvg } from '../../../assets/svg';
-import { generateRandomNumber, GroupMessagesByDate } from '../../../utils/common-function';
-import ChatInvoiceModal from '../../../components/modal/ChatInvoiceModal';
+import Swal from 'sweetalert2';
+import Zoom from 'react-medium-image-zoom';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ChatRating from '../../../components/features/ChatRating';
-import ChatInvoiceAstrologerModal from '../../../components/modal/ChatInvoiceAstrologerModal';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import { Color } from '../../../assets/colors';
+import { api_urls, web_urls } from '../../../utils/api-urls';
+import { toaster } from '../../../utils/services/toast-service';
+import { generateRandomNumber, GroupMessagesByDate } from '../../../utils/common-function';
+import { database, ref, push, onValue, serverTimestamp, set } from '../../../config/firebase-config';
+import { AttachmentBtnSvg, ChatCloseSvg, CrossSvg, DownArrowHeadSvg, RightArrowHeadSvg, SendBtnSvg } from '../../../assets/svg';
+
+import ChatBg from '../../../assets/images/chat/chat-bg.png';
+import RecordNotFound from '../../../components/features/RecordNotFound';
+import CurrentRequestTimerCountDown from '../components/CurrentRequestTimerCountDown';
+
+import * as UserActions from '../../../redux/actions/userAction';
 import SocketService from '../../../utils/services/socket-service';
 import * as ConsultationActions from '../../../redux/actions/consultationAction';
-import Zoom from 'react-medium-image-zoom';
+
 import 'react-medium-image-zoom/dist/styles.css';
-import { Color } from '../../../assets/colors';
-import { toaster } from '../../../utils/services/toast-service';
-import RecordNotFound from '../../../components/features/RecordNotFound';
-import * as UserActions from '../../../redux/actions/userAction';
-import CurrentRequestTimerCountDown from '../components/CurrentRequestTimerCountDown';
 
 const Chat = () => {
     const navigate = useNavigate();
@@ -187,7 +188,7 @@ const Chat = () => {
             const chatRef = ref(database, `ChatMessages/${chat_id}/${newKey}`);
             await set(chatRef, { ...message, pending: false, sent: true, received: false });
 
-            dispatch(ConsultationActions.endChatMessage({ chatId }));
+            dispatch(ConsultationActions.endCurrentRequest({ chatId }));
         }
     };
 
@@ -207,9 +208,9 @@ const Chat = () => {
 
     let [showRegisterPuja, setShowRegisterPuja] = useState(false);
 
-    useEffect(() => {
-        userAstrologerDetails && dispatch(UserActions?.getUserAstrologerRegisteredPujaHistory());
-    }, [userAstrologerDetails]);
+    // useEffect(() => {
+    //     userAstrologerDetails && dispatch(UserActions?.getUserAstrologerRegisteredPujaHistory());
+    // }, [userAstrologerDetails]);
 
     // !Scroll Down the Chat
     useEffect(() => {
@@ -224,8 +225,7 @@ const Chat = () => {
 
     // Todo : Emitting 'join-room' Event On Page Mount or Page Relaoding
     useEffect(() => {
-        const local_chatId = localStorage.getItem('chatId');
-        if (local_chatId) SocketService?.emit('joinChatRoom', local_chatId);
+        if (chatId) SocketService?.emit('join-room', chatId);
         else navigate('/');
     }, [socketConnectionStatus]);
 
@@ -247,7 +247,7 @@ const Chat = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <button onClick={() => dispatch(ConsultationActions.endCurrentRequest({ roomId: localStorage.getItem('chatId'), currentUser, chat_id, type: 'chat' }))} className="bg-red-600 p-2 rounded-full cursor-pointer">
+                        <button onClick={() => dispatch(ConsultationActions.endCurrentRequest({ roomId: chatId, chatId, currentUser, chat_id, type: 'chat' }))} className="bg-red-600 p-2 rounded-full cursor-pointer">
                             <ChatCloseSvg color={Color?.white} />
                         </button>
                     </div>
@@ -367,7 +367,7 @@ const Chat = () => {
                                                     setShowRegisterPuja(false)
                                                 }
                                             }
-                                            dispatch(ConsultationActions?.suggestRemediesDuringChat(payload))
+                                            // dispatch(ConsultationActions?.suggestRemediesDuringChat(payload))
                                         }} className='flex items-center cursor-pointer'>Send <RightArrowHeadSvg w={20} h={20} /></div>
                                     </div>
                                 </div>
@@ -389,10 +389,6 @@ const Chat = () => {
                     <button onClick={() => handleSend(inputField)} className="p-2 text-primary rounded-lg"><SendBtnSvg /></button>
                 </div>}
             </div>
-
-            <ChatInvoiceModal />
-            <ChatInvoiceAstrologerModal />
-            {/* {astrologerRatingVisibility?.ratingVisible && <ChatRating />} */}
         </>
     );
 };
