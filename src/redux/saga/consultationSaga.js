@@ -15,7 +15,8 @@ import {
     initiate_video_call, accept_video_call, reject_video_call,
     accept_voice_call,
     reject_voice_call,
-    initiate_voice_call
+    initiate_voice_call,
+    initiate_consultation_request
 } from '../../utils/api-routes';
 
 import SocketService from '../../utils/services/socket-service';
@@ -43,127 +44,35 @@ function* initiateRequest(action) {
         const { payload } = action;
         console.log("Initiate Request Payload ::: ", payload);
 
-        let profileId = '67d7313eab47e48b68197972';
-        // let profileId = payload?.selectedProfileId;
+        const { data: send_request } = yield axios.post(api_urls + initiate_consultation_request, { astrologerId: payload?.astrologerId, customerId: payload?.customerId, requested_data: {}, consultation_type: payload?.type })
+        console.log('send_request', send_request)
 
-        // if (payload?.isNewProfile) {
-        //     const register_response = yield axios.post(api_urls + create_profile_for_chat, { ...payload?.profileData, customerId: localStorage.getItem('current_user_id') })
+        if (send_request?.status) {
+            Swal.fire({ icon: 'success', text: send_request?.message, showConfirmButton: false, timer: 2000 });
+            SocketService.emit('create-consultation-room', {
+                roomId: send_request?.result?.data?.roomId,
+                per_min_price: send_request?.result?.data?.per_min_price,
+                per_min_commission_price: send_request?.result?.data?.per_min_commission_price,
+                customerId: send_request?.result?.data?.customerId,
+                astrologerId: send_request?.result?.data?.astrologerId,
+                invoiceId: send_request?.result?.data?.invoiceId,
+                max_duration: send_request?.result?.data?.max_duration
+            });
 
-        //     console.log('register_response', register_response?.data)
-        //     if (register_response?.data?.success) {
-        //         profileId = register_response?.data?.data;
-        //         console.log('register_response?.data?.data', register_response?.data?.data)
-        //     }
-        // }
-        // console.log('profileId', profileId);
+            localStorage?.setItem('requestInitiated', true);
+            localStorage?.setItem('initiatedRequestTimer', 10);
+            localStorage.setItem('initiatedRequestPrice', send_request?.data?.newChat?.chat_price);
+            localStorage?.setItem('initiatedRequestAstrologerData', JSON.stringify({ name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: payload?.chat_price, type: payload?.type }));
+            yield put({ type: actionTypes.INITIATED_REQUEST_DATA, payload: { initiated: true, timer: 10, astrologer_data: { name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: payload?.chat_price, type: payload?.type } } });
 
-        switch (payload?.type) {
-            case 'chat':
-                const { data: send_request } = yield axios.post(api_urls + initiate_chat_message, { astrologerId: payload?.astrologerId, customerId: payload?.customerId, profileId, chat_price: payload?.chat_price, })
-                console.log('send_request', send_request)
-
-                if (send_request?.status) {
-                    Swal.fire({ icon: 'success', text: send_request?.message, showConfirmButton: false, timer: 2000 });
-                    console.log({
-                        chatId: send_request?.result?.data?.chatId,
-                        per_min_price: send_request?.result?.data?.per_min_price,
-                        per_min_commission_price: send_request?.result?.data?.per_min_commission_price,
-                        customerId: send_request?.result?.data?.customerId,
-                        astrologerId: send_request?.result?.data?.astrologerId,
-                        profileId: send_request?.result?.data?.profileId || profileId,
-                        invoiceId: send_request?.result?.data?.invoiceId,
-                        max_duration: send_request?.result?.data?.max_duration
-                    })
-                    SocketService.emit('create-chat-room', {
-                        chatId: send_request?.result?.data?.chatId,
-                        // roomId: data?.result?.data?.roomId,
-                        per_min_price: send_request?.result?.data?.per_min_price,
-                        per_min_commission_price: send_request?.result?.data?.per_min_commission_price,
-                        customerId: send_request?.result?.data?.customerId,
-                        astrologerId: send_request?.result?.data?.astrologerId,
-                        profileId: send_request?.result?.data?.profileId || profileId,
-                        invoiceId: send_request?.result?.data?.invoiceId,
-                        max_duration: send_request?.result?.data?.max_duration
-                    });
-                    // SocketService.emit('joinChatRoom', send_request?.data?.newChat?._id);
-
-                    localStorage?.setItem('requestInitiated', true);
-                    localStorage?.setItem('initiatedRequestTimer', 10);
-                    localStorage.setItem('initiatedRequestPrice', send_request?.data?.newChat?.chat_price);
-                    localStorage?.setItem('initiatedRequestAstrologerData', JSON.stringify({ name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: payload?.chat_price, type: 'Chat' }));
-                    yield put({ type: actionTypes.INITIATED_REQUEST_DATA, payload: { initiated: true, timer: 10, astrologer_data: { name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: payload?.chat_price, type: 'Chat' } } });
-
-                } else {
-                    Swal.fire({ icon: 'info', text: send_request?.message, showConfirmButton: false, timer: 2000 });
-                }
-                // yield call(payload?.onComplete);
-                return;
-
-            case 'video-call':
-                const { data: send_video_call_request } = yield axios.post(api_urls + initiate_video_call, { astrologerId: payload?.astrologerId, customerId: localStorage.getItem('current_user_id'), formId: profileId })
-                console.log('send_video_call_request', send_video_call_request);
-
-                if (send_video_call_request?.success) {
-                    toaster.success({ text: "Video call request send successfully." });
-                    SocketService.emit('createVideoCallRoom', {
-                        roomID: send_video_call_request?.data?.callId,
-                        videoCallPrice: Number(send_video_call_request?.data?.videcallPrice) + Number(send_video_call_request?.data?.videocommissionPrice),
-                        customerID: send_video_call_request?.data?.customerId,
-                        astroID: send_video_call_request?.data?.astrologerId,
-                        duration: send_video_call_request?.data?.talkTimeInMinutes,
-                        profileId: send_video_call_request?.data?.formId || profileId,
-                        newUser: false
-                    });
-                    SocketService.emit('joinVideoCallRoom', send_video_call_request?.data?.callId);
-
-                    localStorage?.setItem('requestInitiated', true);
-                    localStorage?.setItem('initiatedRequestTimer', 60);
-                    localStorage?.setItem('initiatedRequestPrice', Number(send_video_call_request?.data?.videcallPrice) + Number(send_video_call_request?.data?.videocommissionPrice));
-                    localStorage?.setItem('initiatedRequestAstrologerData', JSON.stringify({ name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: Number(send_video_call_request?.data?.videcallPrice) + Number(send_video_call_request?.data?.videocommissionPrice), type: 'Video call' }));
-                    yield put({ type: actionTypes.INITIATED_REQUEST_DATA, payload: { initiated: true, timer: 60, astrologer_data: { name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: Number(send_video_call_request?.data?.videcallPrice) + Number(send_video_call_request?.data?.videocommissionPrice), type: 'Video call' } } });
-
-                } else {
-                    toaster.error({ text: send_video_call_request?.message });
-                }
-                yield call(payload?.onComplete);
-                return;
-
-            case 'voice-call':
-                const { data: send_voice_call_request } = yield axios.post(api_urls + initiate_voice_call, { astrologerId: payload?.astrologerId, customerId: localStorage.getItem('current_user_id'), formId: profileId })
-                console.log('send_voice_call_request', send_voice_call_request);
-
-                if (send_voice_call_request?.success) {
-                    toaster.success({ text: "Voice call request send successfully." });
-                    SocketService.emit('createVoiceCallRoom', {
-                        roomID: send_voice_call_request?.data?.callId,
-                        voiceCallPrice: Number(send_voice_call_request?.data?.callPrice) + Number(send_voice_call_request?.data?.commissionPrice),
-                        customerID: send_voice_call_request?.data?.customerId,
-                        astroID: send_voice_call_request?.data?.astrologerId,
-                        duration: send_voice_call_request?.data?.talkTimeInMinutes,
-                        profileId: send_voice_call_request?.data?.formId || profileId,
-                        newUser: false
-                    });
-                    SocketService.emit('joinVoiceCallRoom', send_voice_call_request?.data?.callId);
-
-                    localStorage?.setItem('requestInitiated', true);
-                    localStorage?.setItem('initiatedRequestTimer', 60);
-                    localStorage?.setItem('initiatedRequestPrice', Number(send_voice_call_request?.data?.callPrice) + Number(send_voice_call_request?.data?.commissionPrice));
-                    localStorage?.setItem('initiatedRequestAstrologerData', JSON.stringify({ name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: Number(send_voice_call_request?.data?.callPrice) + Number(send_voice_call_request?.data?.commissionPrice), type: 'Voice call' }));
-                    yield put({ type: actionTypes.INITIATED_REQUEST_DATA, payload: { initiated: true, timer: 60, astrologer_data: { name: payload?.astrologer_name, image: payload?.astrologer_profile_image, price: Number(send_voice_call_request?.data?.callPrice) + Number(send_voice_call_request?.data?.commissionPrice), type: 'Voice call' } } });
-
-                } else {
-                    toaster.error({ text: send_voice_call_request?.message });
-                }
-                yield call(payload?.onComplete);
-                return;
-
-            default:
-                toaster.warning({ text: 'Invalid consutlation request.' })
-                return;
-        };
+        } else {
+            Swal.fire({ icon: 'info', text: send_request?.message, showConfirmButton: false, timer: 2000 });
+        }
+        // yield call(payload?.onComplete);
+        return;
 
     } catch (error) {
-        toaster.error({ text: 'Failed to send request.' });
+        Swal.fire({ icon: 'info', text: error?.response?.data?.message || 'Failed to send request.', showConfirmButton: false, timer: 2000 });
         yield put({ type: actionTypes.SET_IS_LOADING, payload: false });
         console.log("Initiate Request Saga Error ::: ", error);
     }

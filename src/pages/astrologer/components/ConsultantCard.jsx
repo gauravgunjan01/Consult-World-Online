@@ -112,7 +112,7 @@ const ConsultantCard = ({ astrologer }) => {
                         </button>}
 
                         {(location?.pathname === '/video-call-with-consultant' || (location?.pathname !== '/chat-with-consultant' && location?.pathname !== '/talk-to-consultant' && location?.pathname !== '/video-call-with-consultant')) && <button onClick={async () => {
-                            if (Number(userCustomerDetails?.wallet_balance) < (Number(astrologer?.video_call_price) + Number(astrologer?.video_call_commission_price)) * 50000) {
+                            if (Number(userCustomerDetails?.wallet_balance) < (Number(astrologer?.video_call_price) + Number(astrologer?.video_call_commission_price)) * 5) {
                                 const result = await Swal.fire({ icon: "warning", text: "Please Recharge Your Wallet", showConfirmButton: true, timer: 20000, confirmButtonText: "Recharge", cancelButtonText: "Cancel", showCancelButton: true });
                                 if (result.isConfirmed) navigate('/recharge');
                             } else {

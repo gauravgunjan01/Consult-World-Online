@@ -32,6 +32,8 @@ export const follow_unfollow_astrologer = 'api/customers/follow_astrolgoer';
 export const get_astrologer_followed_status_by_customer = 'api/customers/check_customer_following';
 
 
+// TODO : Consultation
+export const initiate_consultation_request = 'api/consultation/initiate-consultation-request';
 
 
 

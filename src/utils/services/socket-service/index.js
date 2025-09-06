@@ -111,6 +111,7 @@ class SocketService {
                         localStorage?.setItem('incomingRequestCustomerData', JSON.stringify({ name: notification_data?.customer_name, image: message?.image, type: 'chat' }));
                         dispatch(ConsultationActions?.incomingRequestData({ incoming: true, timer: 10, customer_data: { name: notification_data?.customer_name, image: message?.image, type: 'chat' }, data: notification_data }));
                         break;
+                        
                     case 'chat_invoice':
                         //! Dispatching Action
                         break;
